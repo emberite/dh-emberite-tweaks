@@ -7,7 +7,7 @@ A Foundry VTT module for [Daggerheart](https://www.daggerheart.com) with two too
 
 Every tool and feature has its own switch in the module settings, so you can turn one off as soon as the system does the same thing.
 
-![Choosing a class: every class shows its two subclass portraits](docs/screenshots/06-creation-classes.webp)
+![Choosing a class: each class heads its two subclass cards, shown as the system's own cards](docs/screenshots/06-creation-classes-v2.webp)
 
 ## Requirements
 
@@ -27,32 +27,37 @@ https://github.com/emberite/dh-emberite-tweaks/releases/latest/download/module.j
 
 ## Character creation
 
-When a new character's sheet shows **Character Setup**, it opens a full-screen wizard instead of the system's dialog. A list of steps runs down the left, with your choices so far under it. The backdrop is a blurred view of whatever you just picked.
+When a new character's sheet shows **Character Setup**, it opens a full-screen wizard instead of the system's dialog. It wears the Daggerheart Core Rulebook module's sheet design (its theme colours and fonts, the wireframe frame and cut-corner buttons). Every choice is the system's own card, the same one its tooltips show, so you read the whole feature before you pick it. A list of steps runs down the left, with your character so far under it: your portrait if the character has one, otherwise your subclass's portrait.
 
-1. **Class:** each class shows its two subclass portraits, its domains, Hit Points and Evasion. Pick one, then pick a subclass card below it.
-2. **Ancestry:** illustrated cards. Turn on **mixed ancestry** to take the first feature from one ancestry and the second from another, and name the mix.
+1. **Class and subclass:** each class is a heading (with its domains, Hit Points and Evasion) over its two subclass cards. Pick a subclass card; that picks the class too.
+2. **Ancestry:** turn on **mixed ancestry** to take the first feature from one ancestry and the second from another, and name the mix.
 3. **Community.**
 4. **Traits:** each trait gets one value from the trait array (+2, +1, +1, +0, +0, −1, or your homebrew array); used values grey out. One click fills in your class's suggestion.
-5. **Experiences:** name two, each +2.
+5. **Experiences:** name two, each +2, with an optional description. Tab moves on to the next field.
 6. **Domain cards:** two level 1 cards from your class's domains, under their domain banners.
-7. **Equipment:** take the class's suggested kit, or **Choose my own** to pick tier 1 primary and secondary weapons and armor from a searchable gallery inside the wizard (filter weapons by trait). Pick the class's "take one" items here too.
-8. **Review:** your subclass portrait and every choice. **Create character** writes it.
+7. **Equipment:** take the class's suggested kit, or **Choose my own** to pick tier 1 primary and secondary weapons and armor from a searchable gallery inside the wizard. Pick the class's "take one" items here too; your starting currency is listed.
+8. **Background** (optional): pronouns, age and faith, answers to your class's background and connection questions, and questions of your own. They go into the biography with the answers under each question.
+9. **Review:** your subclass in front of your community, and the cards you chose. **Create character** writes it.
 
-Hover any card for its full text. You can go back to any finished step. The character is created by the system's own character creation code, so the items, features and links are exactly what the built-in dialog makes. The wizard lists every class, ancestry, community, domain card and piece of gear in the world and its compendiums, minus what the GM excluded in the system's compendium browser settings.
+You can go back to any finished step. The character is created by the system's own character creation code, so the items, features and links are exactly what the built-in dialog makes. The wizard lists every class, ancestry, community, domain card and piece of gear in the world and its compendiums, minus what the GM excluded in the system's compendium browser settings.
 
-![Domain cards under their domain banners](docs/screenshots/07-creation-domains.webp)
+![Domain cards under their domain banners](docs/screenshots/07-creation-domains-v2.webp)
+
+![The review: your subclass over your community, and every card you chose](docs/screenshots/09-creation-review.webp)
 
 ## Level up
 
 The level up button opens a full-screen level up as well. If no level is pending, pick how far to go first; several levels at once is fine. Then, level by level:
 
 - **Tier achievements** when you enter a new tier: name your new experience; Proficiency goes up by itself.
-- **Advancements:** each option is a tile with its slots. Click to take one, ↺ to give it back. Options you've used up earlier in the tier are greyed out. Then make the follow-up choice right below: which two traits (traits raised earlier in the tier are locked), which experiences, which subclass to upgrade (with what it unlocks), or the class, domain and subclass of a multiclass.
-- **Your new domain card**, from your domains up to the right level.
+- **Advancements:** each option is a tile with its slots. Click to take one, ↺ to give it back. Options you've used up earlier in the tier are greyed out. Then make the follow-up choice right below: which two traits (traits raised earlier in the tier are locked), which experiences, which subclass to upgrade (its card shows what it unlocks), or a multiclass (other classes head their subclass cards, then pick the domain).
+- **Your new domain cards** in one gallery: the level's card, plus one more if you took the extra domain card advancement. New cards go into your loadout while it has room (5 cards by default) and into the vault after that.
 
-The review lists every level's choices, and **Level up** applies them with the system's own level-up code.
+The review lists every level's choices next to the cards you chose, and **Level up** applies them with the system's own level-up code.
 
-![A level: tier achievements, advancement tiles and the trait choice](docs/screenshots/08-levelup.webp)
+![A level: advancement tiles, the trait choice and the new domain cards](docs/screenshots/08-levelup-v2.webp)
+
+![The level-up review with the chosen cards](docs/screenshots/10-levelup-review.webp)
 
 ## Class features drawer
 
