@@ -26,7 +26,7 @@ https://github.com/emberite/dh-emberite-tweaks/releases/latest/download/module.j
 
 The tab sits on the sheet's right edge and follows the window when you move, resize or minimise it. If the sheet is too close to the right side of the screen, the drawer opens on the left instead. Clicking the tab folds the drawer away; the next sheet you open remembers whether it was open. Only the character's owners and the GM see it.
 
-![Folded away, only the Class tab shows on the sheet edge](docs/screenshots/04-folded.webp)
+![Folded away, only the Class tab shows on the sheet edge](docs/screenshots/04-folded-v2.webp)
 
 ## Features
 
