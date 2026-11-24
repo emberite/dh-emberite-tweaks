@@ -212,15 +212,19 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     /** One gallery for all of this level's card slots: the chosen cards first, then everything still allowed. */
     async #cardGallery(selectedUuids) {
         const domainsConfig = CONFIG.DH.DOMAIN.allDomains?.() ?? {};
-        const eligible = this.#eligibleCards(null);
-        const selected = (await Promise.all(selectedUuids.map(u => fromUuid(u)))).filter(Boolean);
-        const cards = [...selected, ...eligible];
-        const byDomain = new Map();
+        // Stable order: chosen cards stay where they are (the glow and check mark show them), and the domains
+        // follow the class's order with a multiclass domain last.
+        const allowed = new Set([...this.#eligibleCards(null).map(c => c.uuid), ...selectedUuids]);
+        const cards = (this._allCards ?? []).filter(c => allowed.has(c.uuid));
+        const multi = this.levelup.classUpgradeChoices.multiclass?.domain;
+        const order = [...(this.actor.system.domains ?? []), ...(multi ? [multi] : [])];
+        const byDomain = new Map(order.map(d => [d, []]));
         for (const card of cards) {
             const d = card.system.domain;
             if (!byDomain.has(d)) byDomain.set(d, []);
             byDomain.get(d).push(card);
         }
+        for (const [d, list] of byDomain) if (!list.length) byDomain.delete(d);
         return Promise.all(
             [...byDomain.entries()].map(async ([domain, list]) => ({
                 id: domain,
