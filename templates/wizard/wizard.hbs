@@ -19,7 +19,8 @@
             {{/each}}
         </ol>
         <div class="dhet-wz-sofar">
-            {{#if summary.cutout}}<img class="dhet-wz-sofar-cutout" src="{{summary.cutout}}" alt="" />
+            {{#if summary.portrait}}<img class="dhet-wz-sofar-portrait" src="{{summary.portrait}}" alt="" />
+            {{else if summary.cutout}}<img class="dhet-wz-sofar-cutout" src="{{summary.cutout}}" alt="" />
             {{else if summary.art}}<img class="dhet-wz-sofar-art" src="{{summary.art}}" alt="" />{{/if}}
             {{#each summary.lines}}<span>{{this}}</span>{{/each}}
         </div>

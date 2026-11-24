@@ -1,7 +1,7 @@
 import { MODULE_ID } from '../rules.mjs';
 import { L } from '../actor.mjs';
 import { describe } from '../view.mjs';
-import { cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
+import { actorPortrait, cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
 import { loadCandidates, subclassesOf } from './data.mjs';
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
@@ -257,8 +257,9 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             actorName: actor.name,
             core: coreActive(),
             themeStyle: (this._theme ??= coreThemeStyle(actor)),
-            backdrop: isArt(subclass?.img) ? subclass.img : stepBackdrop('levelup'),
-            cutout: subclassCutout(subclass),
+            backdrop: actorPortrait(actor) ?? (isArt(subclass?.img) ? subclass.img : stepBackdrop('levelup')),
+            portrait: actorPortrait(actor),
+            cutout: actorPortrait(actor) ? null : subclassCutout(subclass),
             className: actor.system.class?.value?.name,
             subclassName: subclass?.name,
             currentLevel: actor.system.levelData.level.current

@@ -1,7 +1,7 @@
 import { MODULE_ID } from '../rules.mjs';
 import { L } from '../actor.mjs';
 import { describe } from '../view.mjs';
-import { cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
+import { actorPortrait, cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
 import { domainCards, loadCandidates, loadGear, subclassesOf, traitArray } from './data.mjs';
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
@@ -268,7 +268,8 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                 ancestry: s.primaryAncestry?.img,
                 community: s.community?.img
             }[step] ?? null;
-        const backdrop = isArt(selectedArt) ? selectedArt : stepBackdrop(step);
+        // The character's own art (if set) is the backdrop throughout; otherwise what was just picked, or splash art.
+        const backdrop = actorPortrait(this.actor) ?? (isArt(selectedArt) ? selectedArt : stepBackdrop(step));
 
         const stepContext = await this.#stepContext(step);
         const stepHtml = await foundry.applications.handlebars.renderTemplate(T(`step-${step}`), {
@@ -305,8 +306,11 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     /** The little "so far" panel under the stepper. */
     #summary() {
         const s = this.setup;
+        const portrait = actorPortrait(this.actor);
         return {
-            cutout: subclassCutout(s.subclass),
+            // The character's own portrait wins over the subclass cutout.
+            portrait,
+            cutout: portrait ? null : subclassCutout(s.subclass),
             art: isArt(s.subclass?.img) ? s.subclass.img : null,
             lines: [
                 s.class && `${s.class.name}${s.subclass ? ` · ${s.subclass.name}` : ''}`,

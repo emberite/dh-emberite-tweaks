@@ -1725,3 +1725,15 @@ body.dhet-wizard-open .dhet-drawer {
     grid-template-columns: 1fr;
   }
 }
+
+/* The character's own portrait (framed: unlike the cutouts it isn't transparent). */
+.dhet-wz-sofar-portrait {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  border: 2px solid var(--wz-gold-soft);
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+  margin-bottom: 6px;
+}
+

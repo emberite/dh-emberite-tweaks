@@ -26,7 +26,8 @@
         </ol>
         {{/if}}
         <div class="dhet-wz-sofar">
-            {{#if cutout}}<img class="dhet-wz-sofar-cutout" src="{{cutout}}" alt="" />{{else if backdrop}}<img class="dhet-wz-sofar-art" src="{{backdrop}}" alt="" />{{/if}}
+            {{#if portrait}}<img class="dhet-wz-sofar-portrait" src="{{portrait}}" alt="" />
+            {{else if cutout}}<img class="dhet-wz-sofar-cutout" src="{{cutout}}" alt="" />{{else if backdrop}}<img class="dhet-wz-sofar-art" src="{{backdrop}}" alt="" />{{/if}}
             <span>{{className}} · {{subclassName}}</span>
             <span>{{localize "DHET.LevelUp.Level" level=currentLevel}}</span>
         </div>

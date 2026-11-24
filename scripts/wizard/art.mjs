@@ -129,3 +129,17 @@ export async function cardHtml(doc) {
         return null;
     }
 }
+
+/** Whether an image is one of Foundry's or the system's placeholders rather than a picture someone chose. */
+function isPlaceholder(img) {
+    if (!img) return true;
+    const defaults = [CONST.DEFAULT_TOKEN, foundry.documents.BaseActor?.DEFAULT_ICON, CONFIG.Actor?.documentClass?.DEFAULT_ICON].filter(Boolean);
+    return defaults.includes(img) || img.includes('mystery-man') || img.startsWith('icons/svg/') || img.includes('/assets/icons/');
+}
+
+/** The character's own portrait, or its token image, if one was set (else null). */
+export function actorPortrait(actor) {
+    if (!actor) return null;
+    const candidates = [actor.img, actor.prototypeToken?.texture?.src];
+    return candidates.find(img => !isPlaceholder(img)) ?? null;
+}
