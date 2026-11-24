@@ -673,8 +673,14 @@
 }
 .dhet-wz-domains-cols {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  /* Always two columns, so a lone domain (or a narrow gallery) keeps card-sized columns. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 28px;
+}
+@media (max-width: 1100px) {
+  .dhet-wz-domains-cols {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 .dhet-wz-domain-head {
   display: flex;
@@ -1688,4 +1694,34 @@ body.dhet-wizard-open .dhet-drawer {
 .dhet-wz-classlabel .dhet-wz-stats {
   margin-left: auto;
   white-space: nowrap;
+}
+
+/* Level-up review: one wide row per level, choices beside large cards. */
+.dhet-wz-review-levels {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.dhet-wz-review-level {
+  display: grid;
+  grid-template-columns: minmax(280px, 1fr) 3fr;
+  align-items: start;
+  gap: 24px;
+  padding: 22px 26px;
+}
+.dhet-wz-review-level h3 {
+  font-size: 24px;
+}
+.dhet-wz-review-level ul {
+  font-size: 16px;
+  gap: 8px;
+}
+.dhet-wz-review-level .dhet-wz-hand {
+  --card-width: 20rem;
+  gap: 20px;
+}
+@media (max-width: 1300px) {
+  .dhet-wz-review-level {
+    grid-template-columns: 1fr;
+  }
 }

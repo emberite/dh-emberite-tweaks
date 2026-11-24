@@ -65,9 +65,11 @@
             <div class="dhet-wz-review-levels">
                 {{#each summary}}
                 <section class="dhet-wz-review-level">
-                    <h3>{{localize "DHET.LevelUp.Level" level=level}}</h3>
-                    <ul>{{#each lines}}<li>{{this}}</li>{{/each}}</ul>
-                    {{#if cards.length}}<div class="dhet-wz-hand small">{{#each cards}}<div class="dhet-wz-hand-card">{{{this}}}</div>{{/each}}</div>{{/if}}
+                    <div class="dhet-wz-review-level-text">
+                        <h3>{{localize "DHET.LevelUp.Level" level=level}}</h3>
+                        <ul>{{#each lines}}<li>{{this}}</li>{{/each}}</ul>
+                    </div>
+                    {{#if cards.length}}<div class="dhet-wz-hand">{{#each cards}}<div class="dhet-wz-hand-card">{{{this}}}</div>{{/each}}</div>{{/if}}
                 </section>
                 {{/each}}
             </div>
@@ -124,7 +126,7 @@
                 <span class="dhet-wz-muted">{{count}}/{{amount}}</span>
             </div>
             {{/if}}
-            {{#if cards}}{{> "modules/dh-emberite-tweaks/templates/wizard/_cardgallery.hbs" domains=domains}}{{/if}}
+            {{#if cards}}<div class="dhet-wz-domains-cols">{{> "modules/dh-emberite-tweaks/templates/wizard/_cardgallery.hbs" domains=domains}}</div>{{/if}}
             {{#if upgrades}}
             <div class="dhet-wz-cardrow">
                 {{#each upgrades}}{{> "modules/dh-emberite-tweaks/templates/wizard/_pick.hbs"}}{{/each}}
