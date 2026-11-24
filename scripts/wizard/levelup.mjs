@@ -209,11 +209,12 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         this._allCards = cards;
     }
 
-    async #cardGallery(slot, limit, selectedUuid) {
+    /** One gallery for all of this level's card slots: the chosen cards first, then everything still allowed. */
+    async #cardGallery(selectedUuids) {
         const domainsConfig = CONFIG.DH.DOMAIN.allDomains?.() ?? {};
-        const eligible = this.#eligibleCards(limit);
-        const selected = selectedUuid ? await fromUuid(selectedUuid) : null;
-        const cards = selected ? [selected, ...eligible] : eligible;
+        const eligible = this.#eligibleCards(null);
+        const selected = (await Promise.all(selectedUuids.map(u => fromUuid(u)))).filter(Boolean);
+        const cards = [...selected, ...eligible];
         const byDomain = new Map();
         for (const card of cards) {
             const d = card.system.domain;
@@ -231,9 +232,8 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                         uuid: card.uuid,
                         name: card.name,
                         img: card.img,
-                        selected: card.uuid === selectedUuid,
+                        selected: selectedUuids.includes(card.uuid),
                         action: 'pickCard',
-                        slot,
                         card: await this.#cardOf(card)
                     }))
                 )
@@ -347,16 +347,27 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             name: e.name,
             modifier: e.modifier
         }));
-        const cards = await Promise.all(
-            Object.entries(level.achievements.domainCards ?? {})
-                .filter(([, c]) => c.level <= this.levelup.endLevel)
-                .map(async ([key, c]) => ({
-                    key,
-                    filled: !!c.uuid,
-                    domains: await this.#cardGallery(`${this.path}.achievements.domainCards.${key}.uuid`, null, c.uuid)
-                }))
-        );
+        const slots = this.#cardSlots();
+        const chosen = slots.map(s => s.uuid).filter(Boolean);
+        const cards = slots.length
+            ? { count: chosen.length, max: slots.length, filled: chosen.length === slots.length, domains: await this.#cardGallery(chosen) }
+            : null;
         return { experiences, proficiency: level.achievements.proficiency, cards };
+    }
+
+    /**
+     * This level's domain card slots: the level's own card, then one per "additional domain card" advancement
+     * (taking that advancement simply lets you choose one more card from the same gallery).
+     */
+    #cardSlots() {
+        const level = this.level;
+        const slots = Object.entries(level.achievements.domainCards ?? {})
+            .filter(([, c]) => c.level <= this.levelup.endLevel)
+            .map(([key, c]) => ({ path: `${this.path}.achievements.domainCards.${key}.uuid`, data: false, uuid: c.uuid ?? null }));
+        for (const [nr, box] of Object.entries(level.choices.domainCard ?? {})) {
+            slots.push({ path: `${this.path}.choices.domainCard.${nr}.data`, data: true, uuid: box.data[0] ?? null });
+        }
+        return slots;
     }
 
     async #details() {
@@ -397,11 +408,7 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                     break;
                 }
                 case 'domainCard':
-                    out.push({
-                        ...base,
-                        cards: true,
-                        domains: await this.#cardGallery(`${choice.path}.data`, choice.secondaryData?.limit ?? null, choice.data[0])
-                    });
+                    // No gallery of its own: it adds a slot to the level's card gallery.
                     break;
                 case 'subclass': {
                     const increase = Object.values(lu.levels).reduce(
@@ -621,13 +628,15 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         return this.#toggleData(target.dataset.path, target.dataset.id);
     }
 
-    /** Fill a domain card slot (an achievement card's `uuid` or an advancement card's `data`). */
+    /** Click a card: free its slot if chosen, else fill the first free slot (the level's own card first). */
     static async #onPickCard(event, target) {
-        const { slot, uuid } = target.dataset;
-        const current = foundry.utils.getProperty(this.levelup, slot);
-        const isData = slot.endsWith('.data');
-        const already = isData ? current?.includes?.(uuid) : current === uuid;
-        await this.#update({ [slot]: already ? (isData ? [] : null) : isData ? [uuid] : uuid });
+        const { uuid } = target.dataset;
+        const slots = this.#cardSlots();
+        const taken = slots.find(s => s.uuid === uuid);
+        if (taken) return this.#update({ [taken.path]: taken.data ? [] : null });
+        const free = slots.find(s => !s.uuid);
+        if (!free) return ui.notifications.info(L('LevelUp.CardsFull', { max: slots.length }));
+        await this.#update({ [free.path]: free.data ? [uuid] : uuid });
     }
 
     static async #onPickUpgrade(event, target) {
@@ -689,6 +698,24 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
+    /**
+     * The system's level up puts every new domain card in the vault. While the loadout has room (the world's
+     * loadout size plus bonuses, 5 by default), move the new cards into it, in the order they were chosen.
+     */
+    async #fillLoadout(before) {
+        const sys = this.actor.system;
+        const limit = (game.system.settings.homebrew?.maxLoadout ?? 5) + (sys.bonuses?.maxLoadout ?? 0);
+        let room = limit - (sys.domainCards?.loadout?.length ?? 0);
+        const updates = [];
+        for (const item of this.actor.items) {
+            if (room <= 0) break;
+            if (item.type !== 'domainCard' || before.has(item.id) || !item.system.inVault) continue;
+            updates.push({ _id: item.id, 'system.inVault': false });
+            room -= 1;
+        }
+        if (updates.length) await this.actor.updateEmbeddedDocuments('Item', updates);
+    }
+
     /** The system's own level-up: the same payload its dialog's save sends. */
     static async #onFinish(event, target) {
         const lu = this.levelup;
@@ -699,8 +726,10 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                 .filter(([k]) => Number(k) >= lu.startLevel)
                 .map(([k, v]) => [k, v.toObject()])
         );
+        const before = new Set(this.actor.items.filter(i => i.type === 'domainCard').map(i => i.id));
         try {
             await this.actor.levelUp(data);
+            await this.#fillLoadout(before);
         } catch (err) {
             console.error(`${MODULE_ID} | level up failed`, err);
             ui.notifications.error(L('LevelUp.Failed'));

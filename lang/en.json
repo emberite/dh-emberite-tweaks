@@ -404,7 +404,10 @@
         "NewExperience": "New experience: {name}",
         "Proficiency": "Proficiency +1",
         "Card": "Domain card: {name}"
-      }
+      },
+      "NewCards": "Your new domain cards",
+      "CardsChosen": "{count} of {max} chosen",
+      "CardsFull": "You've chosen {max} cards. Click a chosen card to swap it."
     }
   }
 }
