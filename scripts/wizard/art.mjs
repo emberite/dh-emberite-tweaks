@@ -75,3 +75,57 @@ export function stepBackdrop(step) {
 export function isArt(img) {
     return !!img && !img.startsWith('icons/') && !img.includes('/assets/icons/');
 }
+
+/** Whether the Core Rulebook module is active (its sheet design is used for the wizards). */
+export const coreActive = () => active(CORE);
+
+const THEME_VARS = [
+    '--dh-c-white',
+    '--dh-c-black',
+    '--dh-c-accent',
+    '--dh-c-deep-accent',
+    '--dh-c-bright-accent',
+    '--dh-c-secondary',
+    '--dh-c-secondary-60',
+    '--dh-c-sections-background',
+    '--dh-c-font-title',
+    '--dh-c-font-body'
+];
+
+/**
+ * The Core Rulebook sheet theme as inline custom properties. Its variables only exist on themed sheets, so a
+ * hidden probe with the sheet's classes reads them (or the actor's own open sheet, with its chosen theme).
+ */
+export function coreThemeStyle(actor) {
+    if (!coreActive()) return '';
+    let source = actor?.sheet?.rendered ? actor.sheet.element : null;
+    let probe = null;
+    if (!source?.classList.contains('dh-c-style')) {
+        probe = document.createElement('div');
+        probe.className = 'application sheet daggerheart dh-c-style theme-dark';
+        probe.style.cssText = 'position: absolute; visibility: hidden; pointer-events: none; inset: auto;';
+        document.body.append(probe);
+        source = probe;
+    }
+    const style = getComputedStyle(source);
+    const css = THEME_VARS.map(v => [v, style.getPropertyValue(v).trim()])
+        .filter(([, value]) => value)
+        .map(([v, value]) => `${v}: ${value}`)
+        .join('; ');
+    probe?.remove();
+    return css;
+}
+
+/** A document's card exactly as the system shows it in tooltips (`toEmbed`), as HTML. */
+export async function cardHtml(doc) {
+    try {
+        const theme = game.system.settings?.appearance?.tooltipCardTheme;
+        const embed = await doc.system.toEmbed?.({ theme });
+        if (!embed) return null;
+        const nodes = embed instanceof HTMLElement ? [embed] : [...embed];
+        return nodes.map(n => n.outerHTML).join('');
+    } catch (err) {
+        console.warn(`dh-emberite-tweaks | no card for ${doc?.name}`, err);
+        return null;
+    }
+}

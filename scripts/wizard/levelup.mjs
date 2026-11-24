@@ -1,7 +1,7 @@
 import { MODULE_ID } from '../rules.mjs';
 import { L } from '../actor.mjs';
 import { describe } from '../view.mjs';
-import { domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
+import { cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
 import { loadCandidates, subclassesOf } from './data.mjs';
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
@@ -53,7 +53,6 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             pickExperience: LevelUpWizard.#onPickExperience,
             pickCard: LevelUpWizard.#onPickCard,
             pickUpgrade: LevelUpWizard.#onPickUpgrade,
-            pickMulticlass: LevelUpWizard.#onPickMulticlass,
             pickMultiDomain: LevelUpWizard.#onPickMultiDomain,
             pickMultiSubclass: LevelUpWizard.#onPickMultiSubclass,
             finish: LevelUpWizard.#onFinish
@@ -106,6 +105,11 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     async _preRender(context, options) {
         await super._preRender(context, options);
         this._scroll = this._keepScroll ? this.element?.querySelector('.dhet-wz-body')?.scrollTop ?? 0 : 0;
+        // Keep focus in text fields across re-renders (a change event re-renders while Tab moves to the next field).
+        const active = document.activeElement;
+        this._focus = active?.dataset?.dhetInput && this.element?.contains(active)
+            ? { key: active.dataset.dhetInput, at: active.selectionStart ?? active.value.length }
+            : null;
         this._keepScroll = false;
     }
 
@@ -120,11 +124,26 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             input.addEventListener('change', ev => this.#onInput(ev));
         }
         this.element.querySelector('.dhet-wz-body')?.scrollTo?.({ top: this._scroll ?? 0 });
+        if (this._focus) {
+            const field = this.element.querySelector(`[data-dhet-input="${this._focus.key}"]`);
+            if (field) {
+                field.focus({ preventScroll: true });
+                field.setSelectionRange?.(this._focus.at, this._focus.at);
+            }
+            this._focus = null;
+        }
     }
 
     async close(options = {}) {
         document.body.classList.remove('dhet-wizard-open');
         return super.close(options);
+    }
+
+    /** The system's tooltip card for a document (cached). */
+    async #cardOf(doc) {
+        const key = `card:${doc.uuid}`;
+        if (!this.descriptions.has(key)) this.descriptions.set(key, await cardHtml(doc));
+        return this.descriptions.get(key);
     }
 
     async #describe(doc) {
@@ -212,11 +231,10 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                         uuid: card.uuid,
                         name: card.name,
                         img: card.img,
-                        hasArt: isArt(card.img),
-                        level: card.system.level,
                         selected: card.uuid === selectedUuid,
+                        action: 'pickCard',
                         slot,
-                        tooltip: await this.#describe(card)
+                        card: await this.#cardOf(card)
                     }))
                 )
             }))
@@ -233,6 +251,8 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         const base = {
             ...context,
             actorName: actor.name,
+            core: coreActive(),
+            themeStyle: (this._theme ??= coreThemeStyle(actor)),
             backdrop: isArt(subclass?.img) ? subclass.img : stepBackdrop('levelup'),
             cutout: subclassCutout(subclass),
             className: actor.system.class?.value?.name,
@@ -391,69 +411,70 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                     const subs = [actor.system.class.subclass, actor.system.multiclass?.subclass].filter(Boolean);
                     out.push({
                         ...base,
-                        upgrades: subs.map(sub => {
-                            const state = sub.system.featureState + increase;
-                            return {
-                                uuid: sub.uuid,
-                                name: sub.name,
-                                img: sub.img,
-                                hasArt: isArt(sub.img),
-                                cutout: subclassCutout(sub),
-                                state,
-                                stateLabel: game.i18n.localize(CONFIG.DH.ACTOR.subclassFeatureLabels?.[state] ?? ''),
-                                isMulticlass: sub.system.isMulticlass ? 'true' : 'false',
-                                selected: choice.data.includes(sub.uuid)
-                            };
-                        })
+                        upgrades: await Promise.all(
+                            subs.map(async sub => {
+                                const state = sub.system.featureState + increase;
+                                return {
+                                    uuid: sub.uuid,
+                                    name: sub.name,
+                                    img: sub.img,
+                                    action: 'pickUpgrade',
+                                    path: choice.path,
+                                    state,
+                                    isMulticlass: sub.system.isMulticlass ? 'true' : 'false',
+                                    badge: L('LevelUp.Unlocks', {
+                                        state: game.i18n.localize(CONFIG.DH.ACTOR.subclassFeatureLabels?.[state] ?? '')
+                                    }),
+                                    selected: choice.data.includes(sub.uuid),
+                                    card: await this.#cardOf(sub)
+                                };
+                            })
+                        )
                     });
                     break;
                 }
                 case 'multiclass': {
-                    const chosen = choice.data[0] ? await fromUuid(choice.data[0]) : null;
+                    // Like creation: other classes are labels over their subclass cards; a subclass brings its class.
+                    const chosenUuid = choice.data[0] ?? null;
+                    const chosen = chosenUuid ? await fromUuid(chosenUuid) : null;
                     const own = actor.system.class.value;
                     const domainsConfig = CONFIG.DH.DOMAIN.allDomains?.() ?? {};
+                    const groups = await Promise.all(
+                        this.candidates.class
+                            .filter(c => c.name !== own?.name)
+                            .map(async c => ({
+                                name: c.name,
+                                selected: chosen?.uuid === c.uuid,
+                                domainList: (c.system.domains ?? []).map(d => ({
+                                    label: game.i18n.localize(domainsConfig[d]?.label ?? d),
+                                    icon: domainsConfig[d]?.src
+                                })),
+                                subclasses: await Promise.all(
+                                    subclassesOf(c, this.candidates).map(async sub => ({
+                                        uuid: sub.uuid,
+                                        name: sub.name,
+                                        img: sub.img,
+                                        action: 'pickMultiSubclass',
+                                        path: choice.path,
+                                        selected: choice.secondaryData?.subclass === sub.uuid,
+                                        card: await this.#cardOf(sub)
+                                    }))
+                                )
+                            }))
+                    );
                     out.push({
                         ...base,
                         multiclass: true,
-                        classes: chosen
-                            ? null
-                            : await Promise.all(
-                                  this.candidates.class
-                                      .filter(c => c.name !== own?.name)
-                                      .map(async c => {
-                                          const subs = subclassesOf(c, this.candidates);
-                                          return {
-                                              uuid: c.uuid,
-                                              name: c.name,
-                                              cutouts: subs.map(subclassCutout).filter(Boolean).slice(0, 2),
-                                              fallbackArt: subs.map(x => x.img).find(isArt) ?? null,
-                                              img: c.img,
-                                              tooltip: await this.#describe(c)
-                                          };
-                                      })
-                              ),
+                        groups: groups.filter(g => g.subclasses.length),
                         chosen: chosen && { uuid: chosen.uuid, name: chosen.name },
                         domains: chosen
                             ? chosen.system.domains.map(d => ({
                                   id: d,
                                   label: game.i18n.localize(domainsConfig[d]?.label ?? d),
-                                  banner: domainBanner(d),
                                   icon: domainsConfig[d]?.src,
                                   selected: choice.secondaryData?.domain === d,
                                   disabled: own?.system.domains.includes(d)
                               }))
-                            : null,
-                        subclasses: chosen
-                            ? await Promise.all(
-                                  subclassesOf(chosen, this.candidates).map(async s => ({
-                                      uuid: s.uuid,
-                                      name: s.name,
-                                      img: s.img,
-                                      hasArt: isArt(s.img),
-                                      selected: choice.secondaryData?.subclass === s.uuid,
-                                      tooltip: await this.#describe(s)
-                                  }))
-                              )
                             : null
                     });
                     break;
@@ -469,20 +490,36 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             levels.map(async n => {
                 const level = lu.levels[n];
                 const lines = [];
+                const cards = [];
                 for (const e of Object.values(level.achievements.experiences ?? {})) lines.push(L('LevelUp.Summary.NewExperience', { name: e.name }));
                 if (level.achievements.proficiency) lines.push(L('LevelUp.Summary.Proficiency'));
                 for (const c of Object.values(level.achievements.domainCards ?? {})) {
-                    if (c.uuid) lines.push(L('LevelUp.Summary.Card', { name: (await fromUuid(c.uuid))?.name ?? '?' }));
+                    if (!c.uuid) continue;
+                    const doc = await fromUuid(c.uuid);
+                    const card = doc && (await this.#cardOf(doc));
+                    if (card) cards.push(card);
+                    else lines.push(L('LevelUp.Summary.Card', { name: doc?.name ?? '?' }));
                 }
                 for (const [option, boxes] of Object.entries(level.choices)) {
                     for (const box of Object.values(boxes)) {
                         let detail = '';
                         if (option === 'trait') detail = box.data.map(k => game.i18n.localize(CONFIG.DH.ACTOR.abilities[k]?.label ?? k)).join(', ');
-                        else if (['domainCard', 'subclass', 'multiclass'].includes(option) && box.data[0]) detail = (await fromUuid(box.data[0]))?.name ?? '';
+                        else if (option === 'experience') {
+                            const names = { ...this.actor.system.experiences };
+                            Object.values(lu.levels).forEach(l => Object.assign(names, l.achievements.experiences ?? {}));
+                            detail = box.data.map(id => names[id]?.name ?? id).join(', ');
+                        }
+                        // Options that are cards show the card (a multiclass shows its chosen subclass).
+                        const cardUuid = option === 'multiclass' ? box.secondaryData?.subclass : ['domainCard', 'subclass'].includes(option) ? box.data[0] : null;
+                        const doc = cardUuid ? await fromUuid(cardUuid) : null;
+                        const card = doc && (await this.#cardOf(doc));
+                        if (card) cards.push(card);
+                        if (option === 'multiclass' && box.data[0]) detail = (await fromUuid(box.data[0]))?.name ?? '';
+                        else if (!card && doc) detail = doc.name;
                         lines.push(`${L(`LevelUp.Detail.${option}`)}${detail ? `: ${detail}` : ''}`);
                     }
                 }
-                return { level: n, lines };
+                return { level: n, lines, cards };
             })
         );
     }
@@ -602,15 +639,6 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         });
     }
 
-    static async #onPickMulticlass(event, target) {
-        const { path, uuid } = target.dataset;
-        const box = foundry.utils.getProperty(this.levelup, path);
-        const cleared = Object.keys(box?.secondaryData ?? {}).reduce((acc, k) => ((acc[k] = _del), acc), {});
-        await this.#update({
-            [path]: { tier: box.tier, minCost: box.minCost, amount: box.amount, value: box.value, type: box.type, data: uuid ? [uuid] : [], secondaryData: cleared }
-        });
-    }
-
     /** Choose the multiclass domain; achievement cards from a previously chosen domain are cleared (as the system does). */
     static async #onPickMultiDomain(event, target) {
         const { path, domain } = target.dataset;
@@ -627,9 +655,26 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         await this.#update(update);
     }
 
+    /** A multiclass subclass also picks its class; switching class clears the domain picked for the old one. */
     static async #onPickMultiSubclass(event, target) {
         const { path, uuid } = target.dataset;
         const box = foundry.utils.getProperty(this.levelup, path);
+        const sub = this.candidates.subclass.find(x => x.uuid === uuid);
+        const cls = sub && this.candidates.class.find(x => (x.sourceUuid ?? x.uuid) === sub.system.linkedClass);
+        if (!box || !cls) return;
+        if (box.data[0] !== cls.uuid) {
+            return this.#update({
+                [path]: {
+                    tier: box.tier,
+                    minCost: box.minCost,
+                    amount: box.amount,
+                    value: box.value,
+                    type: box.type,
+                    data: [cls.uuid],
+                    secondaryData: { domain: null, subclass: uuid }
+                }
+            });
+        }
         await this.#update({ [`${path}.secondaryData.subclass`]: box.secondaryData.subclass === uuid ? null : uuid });
     }
 
@@ -637,7 +682,10 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         const input = event.currentTarget;
         const [kind, id] = input.dataset.dhetInput.split(':');
         if (kind === 'newExperience') {
-            await this.#update({ [`${this.path}.achievements.experiences.${id}.name`]: input.value.trim() });
+            // Update without re-rendering (focus stays where Tab put it); only the Next button follows.
+            await this.levelup.updateSource({ [`${this.path}.achievements.experiences.${id}.name`]: input.value.trim() });
+            const next = this.element.querySelector('[data-action="next"]');
+            if (next) next.disabled = !this.levelup.currentLevelFinished;
         }
     }
 

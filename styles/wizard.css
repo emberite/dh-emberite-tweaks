@@ -4,21 +4,28 @@
    picked, illustrated cards, subclass portraits and domain banners.
    ========================================================================== */
 
-/* ---------- tokens ---------- */
-.dhet-wizard {
-  --wz-gold: #e8c47a;
-  --wz-gold-soft: hsl(from var(--wz-gold) h s l / 0.35);
-  --wz-gold-faint: hsl(from var(--wz-gold) h s l / 0.14);
-  --wz-ink: #0d0b14;
-  --wz-panel: rgba(14, 12, 22, 0.72);
-  --wz-panel-solid: #15121f;
-  --wz-text: #f2ebdc;
+/* ---------- tokens ----------
+   Colours and fonts come from the Core Rulebook module's sheet theme (copied onto .dhet-wz as --dh-c-*);
+   the fallbacks are that theme's defaults. Declared on both elements so the inner one picks up the theme. */
+.dhet-wizard,
+.dhet-wz {
+  --wz-gold: var(--dh-c-secondary, #d7c093);
+  --wz-gold-soft: hsl(from var(--wz-gold) h s l / 0.4);
+  --wz-gold-faint: hsl(from var(--wz-gold) h s l / 0.15);
+  --wz-accent: var(--dh-c-accent, #4d66b3);
+  --wz-bright: var(--dh-c-bright-accent, #adbfff);
+  --wz-deep: var(--dh-c-deep-accent, #0f1424);
+  --wz-ink: var(--dh-c-black, #0b0c0e);
+  --wz-panel: hsl(from var(--wz-deep) h s l / 0.78);
+  --wz-panel-solid: var(--wz-deep);
+  --wz-text: var(--dh-c-white, #f5f3f0);
   --wz-dim: hsl(from var(--wz-text) h s l / 0.62);
-  --wz-accent: #7f6ad6;
   --wz-danger: #e2524f;
-  --wz-font-title: 'Cinzel', var(--dh-font-title, serif);
-  --wz-font-body: var(--dh-c-font-body, 'Montserrat'), 'Signika', sans-serif;
+  --wz-font-title: var(--dh-c-font-title, 'Lexend'), 'Cinzel', serif;
+  --wz-font-body: var(--dh-c-font-body, 'Overpass'), 'Montserrat', 'Signika', sans-serif;
+}
 
+.dhet-wizard {
   position: fixed;
   inset: 0;
   /* Above Foundry's interface (60), just below windows (100); other windows are hidden while it's open. */
@@ -31,7 +38,7 @@
   padding: 0;
   border: none;
   border-radius: 0;
-  background: var(--wz-ink);
+  background: radial-gradient(circle at 50% 20%, #0b0c0e, #0d0d0d);
   color: var(--wz-text);
   font-family: var(--wz-font-body);
   font-size: 14px;
@@ -53,7 +60,8 @@
   inset: -40px;
   background-size: cover;
   background-position: center 30%;
-  filter: blur(14px) saturate(1.15) brightness(0.45);
+  filter: blur(6px) saturate(1.1) brightness(0.55);
+  opacity: 0.55;
   transform: scale(1.05);
   transition: background-image 400ms ease;
   z-index: 0;
@@ -869,12 +877,13 @@
 }
 .dhet-wz-hero-art {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  inset: -16px;
+  width: calc(100% + 32px);
+  height: calc(100% + 32px);
   object-fit: cover;
   border: none;
-  opacity: 0.75;
+  opacity: 0.8;
+  filter: blur(5px) saturate(1.1);
 }
 .dhet-wz-hero::after {
   content: '';
@@ -1277,4 +1286,406 @@ body.dhet-wizard-open .dhet-drawer {
   display: flex;
   flex-direction: column;
   gap: 4px;
+}
+
+
+/* ==========================================================================
+   System cards as choices (the same cards the system shows in tooltips)
+   ========================================================================== */
+/* Card grids size their cards to the columns: 4 per row at 1920 wide (3 per domain column). */
+.dhet-wz-cardgrid {
+  --cols: 4;
+  container-type: inline-size;
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+}
+.dhet-wz-cardgrid > .dhet-wz-pick {
+  --card-width: calc((100cqi - (var(--cols) - 1) * 20px) / var(--cols) - 2px);
+}
+.dhet-wz-domain .dhet-wz-cardgrid {
+  --cols: 3;
+}
+@media (max-width: 1500px) {
+  .dhet-wz-cardgrid {
+    --cols: 3;
+  }
+  .dhet-wz-domain .dhet-wz-cardgrid {
+    --cols: 2;
+  }
+}
+@media (max-width: 1100px) {
+  .dhet-wz-cardgrid {
+    --cols: 2;
+  }
+}
+.dhet-wz-cardrow {
+  --card-width: 15rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: flex-start;
+}
+.dhet-wz-pick {
+  position: relative;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  outline: none;
+}
+.dhet-wz-pick:hover,
+.dhet-wz-pick:focus-visible {
+  transform: translateY(-4px);
+  filter: drop-shadow(0 0 6px hsl(from var(--wz-bright) h s l / 0.45));
+}
+.dhet-wz-pick.selected {
+  box-shadow: 0 0 0 3px var(--wz-gold), 0 0 30px hsl(from var(--wz-gold) h s l / 0.55);
+}
+.dhet-wz-pick.selected.second {
+  box-shadow: 0 0 0 3px var(--wz-bright), 0 0 30px hsl(from var(--wz-bright) h s l / 0.55);
+}
+.dhet-wz-pick .dh-card {
+  pointer-events: auto;
+}
+.dhet-wz-pick .dhet-wz-check {
+  top: -8px;
+  right: -8px;
+  z-index: 5;
+  width: 32px;
+  height: 32px;
+  font-size: 15px;
+}
+.dhet-wz-pick-badge {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  transform: translateX(-50%);
+  z-index: 5;
+  padding: 3px 12px;
+  border-radius: 999px;
+  background: var(--wz-gold);
+  color: var(--wz-ink);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.dhet-wz-fallback {
+  width: var(--card-width);
+  aspect-ratio: 5 / 7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 12px;
+  border: 1px solid var(--wz-gold-faint);
+  background: var(--wz-panel);
+}
+.dhet-wz-fallback img {
+  width: 40%;
+  border: none;
+}
+
+/* Classes are headings over their subclass cards. */
+.dhet-wz-classgroups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 26px 30px;
+}
+@media (max-width: 1250px) {
+  .dhet-wz-classgroups {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+/* Two subclass cards fill their class's half of the row (the card scales everything from --card-width). */
+.dhet-wz-classgroup .dhet-wz-cardrow {
+  container-type: inline-size;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.dhet-wz-classgroup .dhet-wz-cardrow > .dhet-wz-pick {
+  --card-width: calc((100cqi - 16px) / 2 - 2px);
+}
+.dhet-wz-classgroup {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 18px;
+  border: 1px solid var(--wz-gold-faint);
+  border-radius: 6px;
+  background: hsl(from var(--wz-deep) h s l / 0.45);
+}
+.dhet-wz-classgroup.selected {
+  border-color: var(--wz-gold-soft);
+  background: hsl(from var(--wz-accent) h s l / 0.14);
+}
+.dhet-wz-classlabel {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 14px;
+}
+.dhet-wz-classlabel h2 {
+  margin: 0;
+  border: none;
+  font-family: var(--wz-font-title);
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--wz-gold);
+}
+.dhet-wz-classlabel .dhet-wz-domains,
+.dhet-wz-classlabel .dhet-wz-stats {
+  font-size: 12px;
+  color: var(--wz-dim);
+}
+
+/* The hand: chosen cards on the review screens. */
+.dhet-wz-hand {
+  --card-width: 13rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.dhet-wz-hand.small {
+  --card-width: 11rem;
+  margin-top: 12px;
+  gap: 10px;
+}
+.dhet-wz-hand-card {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.55));
+}
+
+/* ==========================================================================
+   Core Rulebook design (when its module is active)
+   ========================================================================== */
+.dhet-core .dhet-wz-main {
+  margin: 14px 14px 14px 0;
+  border: 2px solid var(--wz-accent);
+  border-image: url(../../daggerheart-core/assets/layout/wireframe.png) 30;
+  border-image-width: 25px;
+  border-image-outset: 5px;
+  background: hsl(from var(--wz-ink) h s l / 0.35);
+}
+.dhet-core .dhet-wz-rail {
+  background: linear-gradient(180deg, hsl(from var(--wz-deep) h s l / 0.85), hsl(from var(--wz-ink) h s l / 0.7));
+  border-right: 1px solid hsl(from var(--wz-accent) h s l / 0.4);
+}
+.dhet-core .dhet-wz-head h1,
+.dhet-core .dhet-wz-subhead,
+.dhet-core .dhet-wz-domain-head h2,
+.dhet-core .dhet-wz-brand-name {
+  font-family: var(--wz-font-title);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.dhet-core .dhet-wz-head h1 {
+  font-size: 30px;
+}
+.dhet-wizard .dhet-core .dhet-wz-step {
+  font-family: var(--wz-font-title);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-size: 13px;
+}
+.dhet-wizard .dhet-core .dhet-wz-step.current {
+  color: var(--wz-bright);
+  border-color: hsl(from var(--wz-accent) h s l / 0.6);
+  background: linear-gradient(90deg, hsl(from var(--wz-accent) h s l / 0.3), transparent);
+}
+.dhet-core .dhet-wz-step.done .dhet-wz-step-num {
+  background: var(--wz-gold);
+  border-color: var(--wz-gold);
+}
+/* Cut-corner buttons, like the sheet's item buttons. */
+.dhet-wizard .dhet-core .dhet-wz-btn,
+.dhet-wizard .dhet-core .dhet-wz-toggle,
+.dhet-wizard .dhet-core .dhet-wz-segmented {
+  border-radius: 0;
+  border: 1px solid var(--wz-gold);
+  border-image: url(../../daggerheart-core/assets/layout/cutcorner-accent.webp) 40;
+  border-image-width: 50px;
+  /* No rectangular fill behind the <> frame: the fill is a clipped ::before (core's own hover shape). */
+  background: transparent;
+  position: relative;
+  isolation: isolate;
+  color: var(--wz-gold);
+  font-family: var(--wz-font-title);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  box-shadow: none;
+}
+.dhet-wizard .dhet-core .dhet-wz-btn::before,
+.dhet-wizard .dhet-core .dhet-wz-toggle::before,
+.dhet-wizard .dhet-core .dhet-wz-segmented::before,
+.dhet-wizard .dhet-core .dhet-wz-segmented button.on::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  clip-path: polygon(1em 0, calc(100% - 1em) 0, 100% 50%, calc(100% - 1em) 100%, 1em 100%, 0 50%);
+  background: hsl(from var(--wz-deep) h s l / 0.55);
+  pointer-events: none;
+}
+.dhet-wizard .dhet-core .dhet-wz-btn.primary::before {
+  background: linear-gradient(180deg, hsl(from var(--wz-accent) h s calc(l + 8)), var(--wz-accent));
+}
+.dhet-wizard .dhet-core .dhet-wz-btn.primary {
+  color: var(--wz-text);
+}
+.dhet-wizard .dhet-core .dhet-wz-btn:hover:not(:disabled),
+.dhet-wizard .dhet-core .dhet-wz-toggle:hover {
+  filter: drop-shadow(0 0 2px var(--wz-bright)) drop-shadow(0 0 5px var(--wz-accent));
+  color: var(--wz-bright);
+}
+.dhet-wizard .dhet-core .dhet-wz-segmented button {
+  position: relative;
+  isolation: isolate;
+  border-radius: 0;
+  background: transparent;
+}
+.dhet-wizard .dhet-core .dhet-wz-segmented button.on {
+  background: transparent;
+  color: var(--wz-text);
+}
+.dhet-wizard .dhet-core .dhet-wz-segmented button.on::before {
+  background: var(--wz-accent);
+}
+.dhet-wizard .dhet-core .dhet-wz-chip.selected,
+.dhet-core .dhet-wz-exp-badge,
+.dhet-core .dhet-wz-badge {
+  background: var(--wz-gold);
+  color: var(--wz-ink);
+}
+.dhet-wizard .dhet-core input[type='text'],
+.dhet-wizard .dhet-core input[type='search'] {
+  background: hsl(from var(--wz-deep) h s calc(l - 40) / 0.2);
+  border: none;
+  border-radius: 5px;
+  box-shadow: inset 0 0 3px hsl(from var(--wz-accent) h s l / 0.6);
+}
+.dhet-core .dhet-wz-trait,
+.dhet-core .dhet-wz-option-main,
+.dhet-core .dhet-wz-slot,
+.dhet-core .dhet-wz-gear-item,
+.dhet-core .dhet-wz-review-level {
+  border-radius: 6px;
+  background: hsl(from var(--wz-deep) h s l / 0.6);
+}
+.dhet-core .dhet-wz-confirm-box {
+  border-radius: 0;
+  border: 2px solid var(--wz-accent);
+  border-image: url(../../daggerheart-core/assets/layout/wireframe.png) 30;
+  border-image-width: 25px;
+  border-image-outset: 5px;
+}
+
+/* ---------- experience descriptions, background, currency ---------- */
+.dhet-wz-experience-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dhet-wizard textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--wz-gold-soft);
+  background: rgba(8, 6, 14, 0.6);
+  color: var(--wz-text);
+  font-family: var(--wz-font-body);
+  font-size: 14px;
+  resize: vertical;
+}
+.dhet-wizard textarea:focus {
+  outline: none;
+  border-color: var(--wz-gold);
+}
+.dhet-wizard .dhet-core textarea {
+  border: none;
+  border-radius: 5px;
+  background: hsl(from var(--wz-deep) h s calc(l - 40) / 0.2);
+  box-shadow: inset 0 0 3px hsl(from var(--wz-accent) h s l / 0.6);
+}
+.dhet-wz-exp-desc {
+  margin-left: 60px;
+  width: calc(100% - 60px) !important;
+}
+.dhet-wz-bio {
+  max-width: 900px;
+}
+.dhet-wz-bio-traits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.dhet-wz-bio-traits label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--wz-dim);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.dhet-wz-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.dhet-wz-question {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.dhet-wz-question strong {
+  font-size: 15px;
+  color: var(--wz-text);
+}
+.dhet-wz-currency {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.dhet-wz-coin {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--wz-gold-faint);
+  background: var(--wz-panel);
+}
+.dhet-wz-coin i {
+  color: var(--wz-gold);
+}
+.dhet-wz-question-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dhet-wz-question-head input {
+  flex: 1;
+  font-weight: 700;
+}
+.dhet-wizard .dhet-wz-add {
+  align-self: flex-start;
+}
+
+/* Class heading: name, domains and stats on one line. */
+.dhet-wz-classlabel {
+  flex-wrap: nowrap;
+  align-items: center;
+}
+.dhet-wz-classlabel .dhet-wz-domains {
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.dhet-wz-classlabel .dhet-wz-stats {
+  margin-left: auto;
+  white-space: nowrap;
 }

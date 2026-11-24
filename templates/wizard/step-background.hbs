@@ -1,0 +1,46 @@
+<div class="dhet-wz-bio">
+    <div class="dhet-wz-bio-traits">
+        <label><span>{{localize "DHET.Wizard.Background.Pronouns"}}</span><input type="text" value="{{pronouns}}" data-dhet-input="pronouns" /></label>
+        <label><span>{{localize "DHET.Wizard.Background.Age"}}</span><input type="text" value="{{age}}" data-dhet-input="age" /></label>
+        <label><span>{{localize "DHET.Wizard.Background.Faith"}}</span><input type="text" value="{{faith}}" data-dhet-input="faith" /></label>
+    </div>
+    <h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Background.Questions" class=className}}</h2>
+    <div class="dhet-wz-questions">
+        {{#each background}}
+        <label class="dhet-wz-question">
+            <strong>{{question}}</strong>
+            <textarea rows="3" placeholder="{{localize 'DHET.Wizard.Background.Answer'}}" data-dhet-input="{{key}}">{{answer}}</textarea>
+        </label>
+        {{/each}}
+        {{#each customBackground}}
+        <div class="dhet-wz-question custom">
+            <div class="dhet-wz-question-head">
+                <input type="text" value="{{question}}" placeholder="{{localize 'DHET.Wizard.Background.OwnQuestion'}}" data-dhet-input="customQuestion:background|{{id}}" />
+                <button type="button" class="dhet-wz-icon" data-action="removeQuestion" data-list="background" data-id="{{id}}" data-tooltip="{{localize 'DHET.Wizard.Background.Remove'}}"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <textarea rows="2" placeholder="{{localize 'DHET.Wizard.Background.Answer'}}" data-dhet-input="customAnswer:background|{{id}}">{{answer}}</textarea>
+        </div>
+        {{/each}}
+        <button type="button" class="dhet-wz-btn ghost small dhet-wz-add" data-action="addQuestion" data-list="background"><i class="fa-solid fa-plus"></i> {{localize "DHET.Wizard.Background.Add"}}</button>
+    </div>
+    <h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Background.Connections"}}</h2>
+    <p class="dhet-wz-muted">{{localize "DHET.Wizard.Background.ConnectionsHint"}}</p>
+    <div class="dhet-wz-questions">
+        {{#each connections}}
+        <label class="dhet-wz-question">
+            <strong>{{question}}</strong>
+            <textarea rows="2" placeholder="{{localize 'DHET.Wizard.Background.Answer'}}" data-dhet-input="{{key}}">{{answer}}</textarea>
+        </label>
+        {{/each}}
+        {{#each customConnections}}
+        <div class="dhet-wz-question custom">
+            <div class="dhet-wz-question-head">
+                <input type="text" value="{{question}}" placeholder="{{localize 'DHET.Wizard.Background.OwnQuestion'}}" data-dhet-input="customQuestion:connections|{{id}}" />
+                <button type="button" class="dhet-wz-icon" data-action="removeQuestion" data-list="connections" data-id="{{id}}" data-tooltip="{{localize 'DHET.Wizard.Background.Remove'}}"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <textarea rows="2" placeholder="{{localize 'DHET.Wizard.Background.Answer'}}" data-dhet-input="customAnswer:connections|{{id}}">{{answer}}</textarea>
+        </div>
+        {{/each}}
+        <button type="button" class="dhet-wz-btn ghost small dhet-wz-add" data-action="addQuestion" data-list="connections"><i class="fa-solid fa-plus"></i> {{localize "DHET.Wizard.Background.Add"}}</button>
+    </div>
+</div>

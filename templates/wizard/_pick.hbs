@@ -1,0 +1,12 @@
+<div class="dhet-wz-pick {{#if selected}}selected{{/if}} {{#if second}}second{{/if}}" role="button" tabindex="0"
+    data-action="{{action}}" data-uuid="{{uuid}}" {{#if slot}}data-slot="{{slot}}"{{/if}}
+    {{#if path}}data-path="{{path}}"{{/if}} {{#if state}}data-state="{{state}}" data-multiclass="{{isMulticlass}}"{{/if}}>
+    {{#if card}}{{{card}}}{{else}}
+    <div class="dhet-wz-fallback">
+        <img src="{{img}}" alt="" />
+        <strong>{{name}}</strong>
+    </div>
+    {{/if}}
+    {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
+    {{#if badge}}<span class="dhet-wz-pick-badge">{{badge}}</span>{{/if}}
+</div>

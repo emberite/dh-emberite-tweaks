@@ -1,4 +1,4 @@
-<div class="dhet-wz">
+<div class="dhet-wz {{#if core}}dhet-core{{/if}}" style="{{themeStyle}}">
     <div class="dhet-wz-backdrop" {{#if backdrop}}style="background-image: url('{{backdrop}}')"{{/if}}></div>
     <div class="dhet-wz-vignette"></div>
 
@@ -67,6 +67,7 @@
                 <section class="dhet-wz-review-level">
                     <h3>{{localize "DHET.LevelUp.Level" level=level}}</h3>
                     <ul>{{#each lines}}<li>{{this}}</li>{{/each}}</ul>
+                    {{#if cards.length}}<div class="dhet-wz-hand small">{{#each cards}}<div class="dhet-wz-hand-card">{{{this}}}</div>{{/each}}</div>{{/if}}
                 </section>
                 {{/each}}
             </div>
@@ -125,48 +126,32 @@
             {{/if}}
             {{#if cards}}{{> "modules/dh-emberite-tweaks/templates/wizard/_cardgallery.hbs" domains=domains}}{{/if}}
             {{#if upgrades}}
-            <div class="dhet-wz-grid dhet-wz-wide">
-                {{#each upgrades}}
-                <button type="button" class="dhet-wz-card dhet-wz-art-card {{#if selected}}selected{{/if}}" data-action="pickUpgrade" data-path="{{../path}}" data-uuid="{{uuid}}" data-state="{{state}}" data-multiclass="{{isMulticlass}}">
-                    {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
-                    <div class="dhet-wz-art">{{#if hasArt}}<img class="cover" src="{{img}}" alt="" />{{else if cutout}}<img class="dhet-wz-cutout" src="{{cutout}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}</div>
-                    <div class="dhet-wz-card-text"><strong>{{name}}</strong><span>{{localize "DHET.LevelUp.Unlocks" state=stateLabel}}</span></div>
-                </button>
-                {{/each}}
+            <div class="dhet-wz-cardrow">
+                {{#each upgrades}}{{> "modules/dh-emberite-tweaks/templates/wizard/_pick.hbs"}}{{/each}}
             </div>
             {{/if}}
             {{#if multiclass}}
-            {{#if classes}}
-            <div class="dhet-wz-grid">
-                {{#each classes}}
-                <button type="button" class="dhet-wz-card dhet-wz-class" data-action="pickMulticlass" data-path="{{../path}}" data-uuid="{{uuid}}" data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip" data-tooltip-direction="UP">
-                    <div class="dhet-wz-class-art">{{#if cutouts.length}}{{#each cutouts}}<img src="{{this}}" alt="" />{{/each}}{{else if fallbackArt}}<img class="cover" src="{{fallbackArt}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}</div>
-                    <div class="dhet-wz-card-text"><strong>{{name}}</strong></div>
-                </button>
-                {{/each}}
-            </div>
-            {{else}}
-            <div class="dhet-wz-toolbar">
-                <strong class="dhet-wz-chosen">{{chosen.name}}</strong>
-                <button type="button" class="dhet-wz-btn ghost small" data-action="pickMulticlass" data-path="{{path}}" data-uuid=""><i class="fa-solid fa-rotate-left"></i> {{localize "DHET.LevelUp.OtherClass"}}</button>
-            </div>
+            {{#if chosen}}
             <div class="dhet-wz-trait-row">
+                <strong class="dhet-wz-chosen">{{chosen.name}}</strong>
                 {{#each domains}}
                 <button type="button" class="dhet-wz-chip big {{#if selected}}selected{{/if}}" data-action="pickMultiDomain" data-path="{{../path}}" data-domain="{{id}}" {{#if disabled}}disabled{{/if}}>
                     {{#if icon}}<img src="{{icon}}" alt="" />{{/if}} {{label}}
                 </button>
                 {{/each}}
             </div>
-            <div class="dhet-wz-grid dhet-wz-wide">
-                {{#each subclasses}}
-                <button type="button" class="dhet-wz-card dhet-wz-art-card {{#if selected}}selected{{/if}}" data-action="pickMultiSubclass" data-path="{{../path}}" data-uuid="{{uuid}}" data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip" data-tooltip-direction="UP">
-                    {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
-                    <div class="dhet-wz-art">{{#if hasArt}}<img class="cover" src="{{img}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}</div>
-                    <div class="dhet-wz-card-text"><strong>{{name}}</strong></div>
-                </button>
+            {{/if}}
+            <div class="dhet-wz-classgroups">
+                {{#each groups}}
+                <section class="dhet-wz-classgroup {{#if selected}}selected{{/if}}">
+                    <header class="dhet-wz-classlabel">
+                        <h2>{{name}}</h2>
+                        <span class="dhet-wz-domains">{{#each domainList}}<span class="dhet-wz-dom">{{#if icon}}<img src="{{icon}}" alt="" />{{/if}}{{label}}</span>{{/each}}</span>
+                    </header>
+                    <div class="dhet-wz-cardrow">{{#each subclasses}}{{> "modules/dh-emberite-tweaks/templates/wizard/_pick.hbs"}}{{/each}}</div>
+                </section>
                 {{/each}}
             </div>
-            {{/if}}
             {{/if}}
             {{/each}}
 

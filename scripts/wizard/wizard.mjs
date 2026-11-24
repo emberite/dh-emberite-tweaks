@@ -1,12 +1,12 @@
 import { MODULE_ID } from '../rules.mjs';
 import { L } from '../actor.mjs';
 import { describe } from '../view.mjs';
-import { domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
+import { cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
 import { domainCards, loadCandidates, loadGear, subclassesOf, traitArray } from './data.mjs';
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
 
-export const STEPS = ['class', 'ancestry', 'community', 'traits', 'experiences', 'domains', 'equipment', 'review'];
+export const STEPS = ['class', 'ancestry', 'community', 'traits', 'experiences', 'domains', 'equipment', 'background', 'review'];
 const DOMAIN_CARDS = 2;
 const TRAITS = () => Object.keys(CONFIG.DH.ACTOR.abilities);
 const T = key => `modules/${MODULE_ID}/templates/wizard/${key}.hbs`;
@@ -34,10 +34,20 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             community: null,
             traits: Object.fromEntries(TRAITS().map(t => [t, null])),
             experiences: [
-                { id: foundry.utils.randomID(), name: '' },
-                { id: foundry.utils.randomID(), name: '' }
+                { id: foundry.utils.randomID(), name: '', description: '' },
+                { id: foundry.utils.randomID(), name: '', description: '' }
             ],
-            domainCards: []
+            domainCards: [],
+            /** Optional: characteristics and answers to the class's background and connection questions. */
+            biography: {
+                pronouns: '',
+                age: '',
+                faith: '',
+                background: {},
+                connections: {},
+                /** The player's own questions: { id, question, answer }. */
+                custom: { background: [], connections: [] }
+            }
         };
         this.equipment = {
             mode: 'suggested',
@@ -66,7 +76,6 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             goto: CreationWizard.#onGoto,
             next: CreationWizard.#onNext,
             back: CreationWizard.#onBack,
-            pickClass: CreationWizard.#onPickClass,
             pickSubclass: CreationWizard.#onPickSubclass,
             pickAncestry: CreationWizard.#onPickAncestry,
             toggleMixed: CreationWizard.#onToggleMixed,
@@ -82,6 +91,8 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             clearSlot: CreationWizard.#onClearSlot,
             pickChoice: CreationWizard.#onPickChoice,
             openItem: CreationWizard.#onOpenItem,
+            addQuestion: CreationWizard.#onAddQuestion,
+            removeQuestion: CreationWizard.#onRemoveQuestion,
             finish: CreationWizard.#onFinish
         }
     };
@@ -115,12 +126,25 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             input.addEventListener('change', ev => this.#onInput(ev, true));
         }
         this.element.querySelector('.dhet-wz-body')?.scrollTo?.({ top: this._scroll ?? 0 });
+        if (this._focus) {
+            const field = this.element.querySelector(`[data-dhet-input="${this._focus.key}"]`);
+            if (field) {
+                field.focus({ preventScroll: true });
+                field.setSelectionRange?.(this._focus.at, this._focus.at);
+            }
+            this._focus = null;
+        }
         this._scroll = 0;
     }
 
     async _preRender(context, options) {
         await super._preRender(context, options);
         this._scroll = this._keepScroll ? this.element?.querySelector('.dhet-wz-body')?.scrollTop ?? 0 : 0;
+        // Keep focus in text fields across re-renders (a change event re-renders while Tab moves to the next field).
+        const active = document.activeElement;
+        this._focus = active?.dataset?.dhetInput && this.element?.contains(active)
+            ? { key: active.dataset.dhetInput, at: active.selectionStart ?? active.value.length }
+            : null;
         this._keepScroll = false;
     }
 
@@ -149,6 +173,13 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     #candidate(type, item) {
         const source = item.sourceUuid ?? item._stats?.compendiumSource;
         return this.candidates[type].find(c => c.uuid === source || c.uuid === item.uuid) ?? null;
+    }
+
+    /** The system's tooltip card for a document (cached; rendering cards is not free). */
+    async #cardOf(doc) {
+        const key = `card:${doc.uuid}`;
+        if (!this.descriptions.has(key)) this.descriptions.set(key, await cardHtml(doc));
+        return this.descriptions.get(key);
     }
 
     async #describe(doc) {
@@ -248,6 +279,8 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         return {
             ...context,
             actorName: this.actor.name,
+            core: coreActive(),
+            themeStyle: (this._theme ??= coreThemeStyle(this.actor)),
             backdrop,
             step,
             stepTitle: L(`Wizard.Step.${step}.Title`),
@@ -298,6 +331,7 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             hasArt: isArt(doc.img),
             selected,
             action,
+            card: await this.#cardOf(doc),
             tooltip: await this.#describe(doc),
             ...extra
         };
@@ -311,42 +345,24 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
 
         switch (step) {
             case 'class': {
-                const classes = await Promise.all(
-                    c.class.map(cls => {
-                        const subs = subclassesOf(cls, c);
-                        return this.#card(cls, {
-                            selected: s.class?.uuid === cls.uuid,
-                            action: 'pickClass',
-                            extra: {
-                                cutouts: subs.map(subclassCutout).filter(Boolean).slice(0, 2),
-                                fallbackArt: subs.map(x => x.img).find(isArt) ?? null,
-                                domainList: (cls.system.domains ?? []).map(d => ({
-                                    label: domainLabel(d),
-                                    icon: domainsConfig[d]?.src
-                                })),
-                                hp: cls.system.hitPoints,
-                                evasion: cls.system.evasion
-                            }
-                        });
-                    })
+                // No separate class pick: each class labels its subclass cards, and a subclass brings its class.
+                const groups = await Promise.all(
+                    c.class.map(async cls => ({
+                        uuid: cls.uuid,
+                        name: cls.name,
+                        selected: s.class?.uuid === cls.uuid,
+                        domainList: (cls.system.domains ?? []).map(d => ({ label: domainLabel(d), icon: domainsConfig[d]?.src })),
+                        hp: cls.system.hitPoints,
+                        evasion: cls.system.evasion,
+                        tooltip: await this.#describe(cls),
+                        subclasses: await Promise.all(
+                            subclassesOf(cls, c).map(sub =>
+                                this.#card(sub, { selected: s.subclass?.uuid === sub.uuid, action: 'pickSubclass' })
+                            )
+                        )
+                    }))
                 );
-                const subclasses = s.class
-                    ? await Promise.all(
-                          subclassesOf(s.class, c).map(sub =>
-                              this.#card(sub, {
-                                  selected: s.subclass?.uuid === sub.uuid,
-                                  action: 'pickSubclass',
-                                  extra: {
-                                      cutout: subclassCutout(sub),
-                                      spellcast: sub.system.spellcastingTrait
-                                          ? game.i18n.localize(CONFIG.DH.ACTOR.abilities[sub.system.spellcastingTrait]?.label ?? '')
-                                          : null
-                                  }
-                              })
-                          )
-                      )
-                    : null;
-                return { classes, subclasses, className: s.class?.name };
+                return { groups: groups.filter(g => g.subclasses.length) };
             }
             case 'ancestry': {
                 const ancestries = await Promise.all(
@@ -498,6 +514,7 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                     for (const [n, i] of items.entries()) gallery.items[n].tooltip = await this.#describe(i);
                 }
                 return {
+                    currency: startingCurrency(this.actor),
                     gallery,
                     activeSlot: eq.slot,
                     mode: this.equipment.mode,
@@ -511,12 +528,28 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                     take: this.equipment.choices.take.map(i => ({ uuid: i.uuid, name: i.name, img: i.img }))
                 };
             }
+            case 'background': {
+                const bio = s.biography;
+                const questions = (list, kind) =>
+                    (list ?? []).filter(q => q?.trim()).map((question, i) => ({ question, key: `${kind}:${i}`, answer: bio[kind][i] ?? '' }));
+                return {
+                    pronouns: bio.pronouns,
+                    age: bio.age,
+                    faith: bio.faith,
+                    className: s.class?.name,
+                    background: questions(s.class?.system.backgroundQuestions, 'background'),
+                    connections: questions(s.class?.system.connections, 'connections'),
+                    customBackground: bio.custom.background,
+                    customConnections: bio.custom.connections
+                };
+            }
             case 'review': {
                 const fmt = v => (v > 0 ? `+${v}` : `${v}`);
                 const gear = this.gear;
                 return {
                     cutout: subclassCutout(s.subclass),
-                    heroArt: isArt(s.subclass?.img) ? s.subclass.img : null,
+                    // The header shows where you come from (the community's art, blurred) behind your subclass portrait.
+                    heroArt: [s.community?.img, s.subclass?.img].find(isArt) ?? null,
                     className: s.class?.name,
                     subclassName: s.subclass?.name,
                     ancestry: s.primaryAncestry && { name: this.#ancestryName(), img: s.primaryAncestry.img },
@@ -527,6 +560,13 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                     })),
                     experiences: s.experiences.map(e => e.name),
                     domainCards: s.domainCards.map(d => ({ name: d.name, img: d.img })),
+                    hand: (
+                        await Promise.all(
+                            [s.subclass, s.primaryAncestry, s.mixedAncestry ? s.secondaryAncestry : null, s.community, ...s.domainCards]
+                                .filter(Boolean)
+                                .map(d => this.#cardOf(d))
+                        )
+                    ).filter(Boolean),
                     gear: [gear.primaryWeapon, gear.primaryWeapon?.system.burden === 'twoHanded' ? null : gear.secondaryWeapon, gear.armor, this.equipment.choiceA, this.equipment.choiceB, ...this.equipment.choices.take]
                         .filter(Boolean)
                         .map(i => ({ name: i.name, img: i.img }))
@@ -574,19 +614,14 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         }
     }
 
-    static async #onPickClass(event, target) {
-        const cls = this.candidates.class.find(c => c.uuid === target.dataset.uuid);
+    /** Picking a subclass also picks its class (the class is only a heading over its subclasses). */
+    static async #onPickSubclass(event, target) {
+        const sub = this.candidates.subclass.find(x => x.uuid === target.dataset.uuid);
+        if (!sub) return;
+        const cls = this.candidates.class.find(x => (x.sourceUuid ?? x.uuid) === sub.system.linkedClass);
         if (!cls) return;
-        await this.#setClass(cls);
-        // Bring the subclass choice into view (scrolling the wizard's body only, not the page).
-        await this.refresh();
-        const body = this.element.querySelector('.dhet-wz-body');
-        const head = this.element.querySelector('.dhet-wz-subclasses');
-        if (body && head) body.scrollTo({ top: head.offsetTop - 16, behavior: 'smooth' });
-    }
-
-    static #onPickSubclass(event, target) {
-        this.setup.subclass = subclassesOf(this.setup.class, this.candidates).find(s => s.uuid === target.dataset.uuid) ?? null;
+        if (this.setup.class?.uuid !== cls.uuid) await this.#setClass(cls);
+        this.setup.subclass = this.setup.subclass?.uuid === sub.uuid ? null : sub;
         this.refresh();
     }
 
@@ -698,6 +733,23 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         this.refresh();
     }
 
+    /** A question of the player's own, under the class's background or connection questions. */
+    static async #onAddQuestion(event, target) {
+        const list = this.setup.biography.custom[target.dataset.list];
+        if (!list) return;
+        const id = foundry.utils.randomID();
+        list.push({ id, question: '', answer: '' });
+        await this.refresh();
+        this.element.querySelector(`[data-dhet-input="customQuestion:${target.dataset.list}|${id}"]`)?.focus();
+    }
+
+    static #onRemoveQuestion(event, target) {
+        const list = this.setup.biography.custom[target.dataset.list];
+        const at = list?.findIndex(e => e.id === target.dataset.id) ?? -1;
+        if (at >= 0) list.splice(at, 1);
+        this.refresh();
+    }
+
     static async #onOpenItem(event, target) {
         (await fromUuid(target.dataset.uuid))?.sheet?.render({ force: true });
     }
@@ -705,9 +757,17 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
     #onInput(event, commit = false) {
         const input = event.currentTarget;
         const [kind, id] = input.dataset.dhetInput.split(':');
-        if (kind === 'experience') {
+        if (kind === 'experience' || kind === 'experienceDescription') {
             const exp = this.setup.experiences.find(e => e.id === id);
-            if (exp) exp.name = input.value;
+            if (exp) exp[kind === 'experience' ? 'name' : 'description'] = input.value;
+        } else if (['pronouns', 'age', 'faith'].includes(kind)) {
+            this.setup.biography[kind] = input.value;
+        } else if (kind === 'background' || kind === 'connections') {
+            this.setup.biography[kind][id] = input.value;
+        } else if (kind === 'customQuestion' || kind === 'customAnswer') {
+            const [list, entryId] = id.split('|');
+            const entry = this.setup.biography.custom[list]?.find(e => e.id === entryId);
+            if (entry) entry[kind === 'customQuestion' ? 'question' : 'answer'] = input.value;
         } else if (kind === 'ancestryName') {
             this.setup.ancestryName = input.value;
         } else if (kind === 'gearSearch') {
@@ -722,8 +782,7 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             }, 200);
             return;
         }
-        // Keep typing smooth: only update the footer and stepper, re-render once the field is left.
-        if (commit) return this.refresh();
+        // No re-render for text: it would replace the field Tab is moving focus to. Only the footer needs to follow.
         const next = this.element.querySelector('[data-action="next"]');
         if (next) next.disabled = !this.complete(this.step);
     }
@@ -754,7 +813,9 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                 community: s.community,
                 class: s.class,
                 subclass: s.subclass,
-                experiences: Object.fromEntries(s.experiences.map(e => [e.id, { name: e.name.trim(), value: 2, core: true }])),
+                experiences: Object.fromEntries(
+                    s.experiences.map(e => [e.id, { name: e.name.trim(), value: 2, description: e.description.trim(), core: true }])
+                ),
                 domainCards: Object.fromEntries(s.domainCards.map(d => [foundry.utils.randomID(), d]))
             },
             equipment: {
@@ -774,9 +835,58 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
             target.disabled = false;
             return;
         }
+        await this.#writeBiography().catch(err => console.warn(`${MODULE_ID} | biography not written`, err));
         await this.close();
         this.actor.sheet?.render({ force: true });
     }
+
+    /**
+     * The system puts the class's background and connection questions into the biography when the class is
+     * added; write them again with the answers given here beneath each one, plus the characteristics.
+     */
+    async #writeBiography() {
+        const bio = this.setup.biography;
+        const esc = foundry.utils.escapeHTML;
+        const paragraph = a => (a ? `<p>${esc(a).replace(/\n/g, '<br>')}</p>` : '');
+        const answered = (list, answers, custom) => {
+            const questions = (list ?? []).filter(q => q?.trim());
+            const own = custom.filter(e => e.question.trim());
+            if (!questions.some((q, i) => answers[i]?.trim()) && !own.length) return null;
+            return [
+                ...questions.map((q, i) => `<p><strong>${q}</strong></p>${paragraph(answers[i]?.trim())}`),
+                ...own.map(e => `<p><strong>${esc(e.question.trim())}</strong></p>${paragraph(e.answer.trim())}`)
+            ].join('');
+        };
+        const update = {};
+        const background = answered(this.setup.class?.system.backgroundQuestions, bio.background, bio.custom.background);
+        const connections = answered(this.setup.class?.system.connections, bio.connections, bio.custom.connections);
+        if (background !== null) update['system.biography.background'] = background;
+        if (connections !== null) update['system.biography.connections'] = connections;
+        for (const key of ['pronouns', 'age', 'faith']) {
+            if (bio[key].trim()) update[`system.biography.characteristics.${key}`] = bio[key].trim();
+        }
+        if (Object.keys(update).length) await this.actor.update(update);
+    }
+}
+
+/** Starting currency from the system's (homebrew) currency settings: enabled denominations with a starting amount. */
+function startingCurrency(actor) {
+    let currency = null;
+    try {
+        currency = game.settings.get(CONFIG.DH.id, CONFIG.DH.SETTINGS.gameSettings.Homebrew)?.currency;
+    } catch {
+        /* no homebrew settings */
+    }
+    const order = ['chests', 'bags', 'handfuls', 'coins'];
+    return order
+        .map(key => {
+            const cfg = currency?.[key];
+            if (cfg && cfg.enabled === false) return null;
+            const amount = actor.system.gold?.[key] ?? cfg?.initialAmount ?? 0;
+            if (!amount) return null;
+            return { amount, label: cfg?.label ?? key, icon: cfg?.icon || 'fa-solid fa-coins', title: currency?.title ?? 'Gold' };
+        })
+        .filter(Boolean);
 }
 
 /** Short stats line for a weapon or armor (damage moved from `damage.parts` to `damage.main` in system 2.13). */

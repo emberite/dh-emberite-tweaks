@@ -281,6 +281,11 @@
           "Label": "Review",
           "Title": "Ready to begin",
           "Hint": "Check your choices, then create your character. You can go back to any step."
+        },
+        "background": {
+          "Label": "Background",
+          "Title": "Who are you?",
+          "Hint": "Optional. Answer your class's background and connection questions now or later on the sheet; they're saved to your biography."
         }
       },
       "Class": {
@@ -302,7 +307,8 @@
       },
       "Experiences": {
         "Placeholder": "Experience {number}",
-        "Examples": "For example: Bounty Hunter, Raised by Wolves, Silver Tongue, Sharpshooter, Survivor of the Long Winter."
+        "Examples": "For example: Bounty Hunter, Raised by Wolves, Silver Tongue, Sharpshooter, Survivor of the Long Winter.",
+        "DescriptionPlaceholder": "Optional: what this experience means for your character"
       },
       "Domains": {
         "Count": "{count} of {max} cards chosen",
@@ -332,10 +338,23 @@
         "Thresholds": "Thresholds",
         "Score": "Armor",
         "Phy": "phy",
-        "Mag": "mag"
+        "Mag": "mag",
+        "Currency": "Starting currency"
       },
       "KeepGoing": "Keep going",
-      "Leave": "Leave"
+      "Leave": "Leave",
+      "Background": {
+        "Pronouns": "Pronouns",
+        "Age": "Age",
+        "Faith": "Faith",
+        "Questions": "Background questions",
+        "Answer": "Your answer (optional)",
+        "Connections": "Connections",
+        "ConnectionsHint": "Ask these of your fellow players, or answer them together at the table.",
+        "OwnQuestion": "Your own question",
+        "Add": "Add your own question",
+        "Remove": "Remove this question"
+      }
     },
     "LevelUp": {
       "Title": "Level up {actor}",

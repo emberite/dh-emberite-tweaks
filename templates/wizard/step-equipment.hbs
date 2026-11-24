@@ -78,6 +78,12 @@
     {{/each}}
 </div>
 {{/if}}
+{{#if currency.length}}
+<h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Equipment.Currency"}}</h2>
+<div class="dhet-wz-currency">
+    {{#each currency}}<span class="dhet-wz-coin"><i class="{{icon}}"></i> <strong>{{amount}}</strong> {{label}}</span>{{/each}}
+</div>
+{{/if}}
 {{#if take.length}}
 <h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Equipment.Take"}}</h2>
 <div class="dhet-wz-gear static">
