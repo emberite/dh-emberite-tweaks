@@ -92,7 +92,7 @@
 }
 
 /* ---------- the folder tab ---------- */
-.dhet-handle {
+.dhet-drawer .dhet-handle {
   pointer-events: auto;
   flex: none;
   width: var(--dhet-handle-width);
@@ -116,14 +116,14 @@
   text-transform: uppercase;
   line-height: 1;
 }
-.dhet-left .dhet-handle {
+.dhet-drawer.dhet-left .dhet-handle {
   border-left: 1px solid var(--dhet-line);
   border-right: none;
   border-radius: 10px 0 0 10px;
   box-shadow: -4px 2px 10px rgba(0, 0, 0, 0.45);
 }
-.dhet-handle:hover,
-.dhet-handle:focus-visible {
+.dhet-drawer .dhet-handle:hover,
+.dhet-drawer .dhet-handle:focus-visible {
   color: var(--dhet-bright);
   background: hsl(from var(--dhet-bg) h s calc(l + 6));
   outline: none;
@@ -137,7 +137,7 @@
 .dhet-handle-icon {
   font-size: 14px;
 }
-.dhet-open .dhet-handle {
+.dhet-drawer.dhet-open .dhet-handle {
   color: var(--dhet-bright);
 }
 

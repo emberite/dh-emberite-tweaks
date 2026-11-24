@@ -1,7 +1,7 @@
 {
   "id": "dh-emberite-tweaks",
-  "title": "Emberite Tweaks: Class Features",
-  "description": "A pull-out drawer on Daggerheart character sheets that automates class features the system leaves to the table: Brawler martial stances and Focus, Warlock Favor and Patron Die, Witch hexes and lunar phases, Assassin marks and poisons, Wizard Strange Patterns and the Guardian's Unstoppable Die. Each feature can be switched off on its own.",
+  "title": "Emberite Tweaks",
+  "description": "Quality-of-life tools for Daggerheart: a full-screen character creation wizard that lets you pick illustrated cards instead of dragging them, and a pull-out drawer on character sheets that automates class features the system leaves to the table (Brawler stances, Warlock Favor and Patron Die, Witch hexes and lunar phases, Assassin marks and poisons, the Guardian's Unstoppable Die). Each tool can be switched off on its own.",
   "version": "0.1.0",
   "compatibility": {
     "minimum": "14",
