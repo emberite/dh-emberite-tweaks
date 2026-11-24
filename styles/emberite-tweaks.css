@@ -401,21 +401,40 @@
   color: var(--dhet-gold);
 }
 
-.dhet-poison {
-  flex: 1;
+.dhet-poisons {
+  list-style: none;
+  margin: 8px 0 6px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.dhet-poisons > li {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1px;
-  height: auto;
-  min-height: 0;
-  padding: 4px 7px;
+  min-width: 0;
+}
+.dhet-drawer .dhet-poison {
+  flex: 1;
+  min-width: 0;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 0 7px;
   text-align: left;
-  line-height: 1.25;
+  font-size: 12px;
+}
+.dhet-poison i {
+  flex: none;
+  width: 12px;
+  font-size: 10px;
+  color: var(--dhet-accent);
 }
 .dhet-poison span {
-  font-size: 11px;
-  color: var(--dhet-dim);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* ---------- moon ---------- */

@@ -120,7 +120,7 @@
       "BrewHint": "Mark a Stress to place 1d4+1 tokens on the card. Unspent tokens clear on a long rest.",
       "BrewFlavor": "Toxic Concoctions: new tokens",
       "NoTokens": "No tokens left.",
-      "Hint": "After a successful weapon attack, spend a token to afflict the target. Poisons with a system action are applied to your targets.",
+      "Hint": "After a successful weapon attack, click a poison to spend a token. Hover for its effect.",
       "TwinFang": "Twin Fang: against a target Marked for Death, spend another token for a second poison.",
       "UsedChat": "<strong>{actor}</strong> afflicts the target with <strong>{poison}</strong>",
       "ghostPetal": {
@@ -154,6 +154,11 @@
       "corpseThorn": {
         "Name": "Corpse Thorn",
         "Text": "The target gains disadvantage on reaction rolls until the end of the scene."
+      },
+      "Kind": {
+        "apply": "Applied to your targets",
+        "roll": "Rolls {die} for you",
+        "note": "Posts a reminder to chat"
       }
     },
     "Patterns": {

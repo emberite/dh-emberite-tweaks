@@ -7,15 +7,15 @@
         <i class="fa-solid fa-flask"></i> {{localize "DHET.Poison.Brew"}}
     </button>
 </div>
-<ul class="dhet-list dhet-poisons">
+<ul class="dhet-poisons">
     {{#each poisons}}
     <li>
         <button type="button" class="dhet-poison" data-dhet-action="poison" data-poison="{{key}}" {{#if ../empty}}aria-disabled="true"{{/if}}
-            data-tooltip-html="{{tooltip}}"
-            data-tooltip-class="dhet-tooltip">
-            <strong>{{name}}</strong><span>{{text}}</span>
+            data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip">
+            <i class="{{icon}}"></i><span>{{name}}</span>
         </button>
     </li>
     {{/each}}
 </ul>
-<p class="dhet-muted">{{localize "DHET.Poison.Hint"}}{{#if twinFang}} {{localize "DHET.Poison.TwinFang"}}{{/if}}</p>
+<p class="dhet-muted">{{localize "DHET.Poison.Hint"}}</p>
+{{#if twinFang}}<p class="dhet-muted">{{localize "DHET.Poison.TwinFang"}}</p>{{/if}}

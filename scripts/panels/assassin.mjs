@@ -112,10 +112,15 @@ function knownPoisons(actor) {
     });
 }
 
-/** Poison name, its rule and the feature that teaches it. */
+/** What clicking a poison does: the system applies it, the module rolls its die, or it's a chat reminder. */
+const poisonKind = p => (p.action ? 'apply' : p.roll ? 'roll' : 'note');
+const KIND_ICONS = { apply: 'fa-solid fa-crosshairs', roll: 'fa-solid fa-dice-d6', note: 'fa-solid fa-comment' };
+
+/** Poison name, its rule, what a click does and the feature that teaches it. */
 function poisonTooltip(poison) {
     const esc = foundry.utils.escapeHTML;
-    return `<div class="dhet-tip"><strong>${esc(L(`Poison.${poison.key}.Name`))}</strong><p>${esc(L(`Poison.${poison.key}.Text`))}</p><p class="dhet-tip-source">${esc(poison.feature.name)}</p></div>`;
+    const kind = poisonKind(poison);
+    return `<div class="dhet-tip"><strong>${esc(L(`Poison.${poison.key}.Name`))}</strong><p>${esc(L(`Poison.${poison.key}.Text`))}</p><p class="dhet-tip-source"><i class="${KIND_ICONS[kind]}"></i> ${esc(L(`Poison.Kind.${kind}`, { die: poison.roll ?? '' }))} · ${esc(poison.feature.name)}</p></div>`;
 }
 
 const tokens = item => item.system.resource?.value ?? 0;
@@ -138,7 +143,7 @@ export const poisonPanel = {
             poisons: knownPoisons(actor).map(p => ({
                 key: p.key,
                 name: L(`Poison.${p.key}.Name`),
-                text: L(`Poison.${p.key}.Text`),
+                icon: KIND_ICONS[poisonKind(p)],
                 tooltip: poisonTooltip(p)
             }))
         };
