@@ -95,6 +95,8 @@ class Drawer {
         const roomRight = window.innerWidth - rect.right;
         const left = roomRight < needed && rect.left > roomRight;
         el.classList.toggle('dhet-left', left);
+        // Tooltips open over the sheet, not off the edge of the screen.
+        el.dataset.tooltipDirection = left ? 'RIGHT' : 'LEFT';
         el.style.top = `${rect.top + INSET}px`;
         el.style.height = `${Math.max(220, rect.height - INSET * 2)}px`;
         if (left) {
@@ -148,7 +150,7 @@ class Drawer {
             const state = (this.state[panel.id] ??= {});
             const context = await panel.prepare(actor, state);
             const html = await foundry.applications.handlebars.renderTemplate(panel.template, { ...context, state });
-            return `<section class="dhet-section dhet-${panel.id}" data-panel="${panel.id}">
+            return `<section class="dhet-section dhet-section-${panel.id}" data-panel="${panel.id}">
                 <h3 class="dhet-section-title"><i class="${panel.icon}"></i> ${L(`Panel.${panel.id}`)}</h3>
                 ${html}
             </section>`;
@@ -180,6 +182,8 @@ class Drawer {
         const target = event.target.closest('[data-dhet-action]');
         if (!target || ['INPUT', 'SELECT', 'TEXTAREA'].includes(target.tagName)) return;
         event.preventDefault();
+        // Unavailable controls use aria-disabled instead of disabled, so their tooltips still show on hover.
+        if (target.getAttribute('aria-disabled') === 'true') return;
         if (target.dataset.dhetAction === 'toggle') return this.toggle();
         this.#run(target, event);
     }

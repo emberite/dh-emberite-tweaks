@@ -6,13 +6,13 @@
     </div>
 </div>
 <ol class="dhet-phases">
-    {{#each phases}}<li class="{{#if active}}active{{/if}}">{{label}}</li>{{/each}}
+    {{#each phases}}<li class="{{#if active}}active{{/if}}" data-tooltip="{{effect}}">{{label}}</li>{{/each}}
 </ol>
 <div class="dhet-actions">
     <button type="button" data-dhet-action="rollMoon" data-tooltip="{{localize 'DHET.Lunar.RollHint'}}">
         <i class="fa-solid fa-dice-d6"></i> {{localize "DHET.Lunar.Roll"}}
     </button>
-    <button type="button" data-dhet-action="advanceMoon" {{#unless value}}disabled{{/unless}}
+    <button type="button" data-dhet-action="advanceMoon" {{#unless value}}aria-disabled="true"{{/unless}}
         data-tooltip="{{localize 'DHET.Lunar.AdvanceHint'}}">
         <i class="fa-solid fa-forward"></i> {{localize "DHET.Lunar.Advance"}}{{#if next}} → {{next}}{{/if}}
     </button>

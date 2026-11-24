@@ -1,6 +1,6 @@
 <div class="dhet-track">
     <span class="dhet-label">{{localize "DHET.Poison.Tokens"}}</span>
-    <button type="button" class="dhet-icon" data-dhet-action="adjust" data-delta="-1" {{#if empty}}disabled{{/if}}><i class="fa-solid fa-minus"></i></button>
+    <button type="button" class="dhet-icon" data-dhet-action="adjust" data-delta="-1" {{#if empty}}aria-disabled="true"{{/if}}><i class="fa-solid fa-minus"></i></button>
     <span class="dhet-big">{{tokens}}</span>
     <button type="button" class="dhet-icon" data-dhet-action="adjust" data-delta="1"><i class="fa-solid fa-plus"></i></button>
     <button type="button" class="dhet-mini" data-dhet-action="brew" data-tooltip="{{localize 'DHET.Poison.BrewHint'}}">
@@ -10,7 +10,9 @@
 <ul class="dhet-list dhet-poisons">
     {{#each poisons}}
     <li>
-        <button type="button" class="dhet-poison" data-dhet-action="poison" data-poison="{{key}}" {{#if ../empty}}disabled{{/if}}>
+        <button type="button" class="dhet-poison" data-dhet-action="poison" data-poison="{{key}}" {{#if ../empty}}aria-disabled="true"{{/if}}
+            data-tooltip-html="{{tooltip}}"
+            data-tooltip-class="dhet-tooltip">
             <strong>{{name}}</strong><span>{{text}}</span>
         </button>
     </li>

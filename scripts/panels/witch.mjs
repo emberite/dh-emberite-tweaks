@@ -58,7 +58,7 @@ export const lunarPanel = {
             phase,
             phaseLabel: phase ? L(`Lunar.Phase.${phase}`) : L('Lunar.Unrolled'),
             phaseEffect: phase ? L(`Lunar.Effect.${phase}`) : L('Lunar.RollHint'),
-            phases: LUNAR_PHASES.map(p => ({ key: p, label: L(`Lunar.Phase.${p}`), active: p === phase })),
+            phases: LUNAR_PHASES.map(p => ({ key: p, label: L(`Lunar.Phase.${p}`), effect: L(`Lunar.Effect.${p}`), active: p === phase })),
             next: phase ? L(`Lunar.Phase.${lunarPhase(nextLunarValue(value))}`) : null
         };
     },

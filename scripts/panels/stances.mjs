@@ -27,7 +27,7 @@ import {
     stanceTier,
     tier
 } from '../actor.mjs';
-import { plainText } from '../view.mjs';
+import { describe } from '../view.mjs';
 
 /**
  * Brawler (Martial Artist): Focus track, known stances, one-click shifting that keeps a single active stance,
@@ -106,15 +106,21 @@ async function learnable(actor) {
     const pack = game.packs.get(STANCE_PACK);
     if (!pack) return [];
     const known = new Set(knownStances(actor).map(i => compendiumId(i._stats?.compendiumSource) ?? i.name));
-    const index = await pack.getIndex({ fields: ['img'] });
-    return Object.entries(STANCES)
+    const index = await pack.getIndex({ fields: ['img', 'system.description'] });
+    const entries = Object.entries(STANCES)
         .filter(([id, t]) => t <= tier(actor) && !known.has(id) && index.has(id))
-        .map(([id, t]) => {
-            const entry = index.get(id);
-            return { id, tier: t, name: entry.name, img: entry.img };
-        })
-        .filter(e => !known.has(e.name))
-        .sort((a, b) => a.tier - b.tier || a.name.localeCompare(b.name));
+        .map(([id, t]) => ({ id, tier: t, entry: index.get(id) }))
+        .filter(e => !known.has(e.entry.name))
+        .sort((a, b) => a.tier - b.tier || a.entry.name.localeCompare(b.entry.name));
+    return Promise.all(
+        entries.map(async ({ id, tier: t, entry }) => ({
+            id,
+            tier: t,
+            name: entry.name,
+            img: entry.img,
+            tooltip: await describe(entry.name, entry.system?.description)
+        }))
+    );
 }
 
 async function learn(actor, id) {
@@ -140,15 +146,17 @@ export default {
         const activeEffects = activeStanceEffects(actor);
         const activeIds = new Set(activeEffects.map(e => stanceItemFor(actor, e)?.id).filter(Boolean));
         const trait = favoredTrait(actor);
-        const known = knownStances(actor).map(item => ({
-            id: item.id,
-            name: item.name,
-            img: item.img,
-            tier: stanceTier(item),
-            active: activeIds.has(item.id),
-            favored: isFavored(item),
-            tooltip: plainText(item.system.description, 400)
-        }));
+        const known = await Promise.all(
+            knownStances(actor).map(async item => ({
+                id: item.id,
+                name: item.name,
+                img: item.img,
+                tier: stanceTier(item),
+                active: activeIds.has(item.id),
+                favored: isFavored(item),
+                tooltip: await describe(item.name, item.system.description, item)
+            }))
+        );
         const limit = knownStanceLimit(level(actor));
         return {
             focus: focus ? { ...focus, pips: pips(focus.value, focus.max || 6) } : null,

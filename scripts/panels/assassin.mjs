@@ -112,6 +112,12 @@ function knownPoisons(actor) {
     });
 }
 
+/** Poison name, its rule and the feature that teaches it. */
+function poisonTooltip(poison) {
+    const esc = foundry.utils.escapeHTML;
+    return `<div class="dhet-tip"><strong>${esc(L(`Poison.${poison.key}.Name`))}</strong><p>${esc(L(`Poison.${poison.key}.Text`))}</p><p class="dhet-tip-source">${esc(poison.feature.name)}</p></div>`;
+}
+
 const tokens = item => item.system.resource?.value ?? 0;
 
 export const poisonPanel = {
@@ -132,7 +138,8 @@ export const poisonPanel = {
             poisons: knownPoisons(actor).map(p => ({
                 key: p.key,
                 name: L(`Poison.${p.key}.Name`),
-                text: L(`Poison.${p.key}.Text`)
+                text: L(`Poison.${p.key}.Text`),
+                tooltip: poisonTooltip(p)
             }))
         };
     },

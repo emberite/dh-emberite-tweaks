@@ -13,8 +13,8 @@
 
 <div class="dhet-active {{#if active}}on{{/if}}">
     {{#if active}}
-    <img src="{{active.img}}" alt="" />
-    <span class="dhet-active-name">{{active.name}}</span>
+    <img src="{{active.img}}" alt="" data-tooltip-html="{{active.tooltip}}" data-tooltip-class="dhet-tooltip" />
+    <span class="dhet-active-name" data-tooltip-html="{{active.tooltip}}" data-tooltip-class="dhet-tooltip">{{active.name}}</span>
     <button type="button" class="dhet-mini" data-dhet-action="drop" data-tooltip="{{localize 'DHET.Stances.DropHint'}}">
         <i class="fa-solid fa-person-falling"></i> {{localize "DHET.Stances.Drop"}}
     </button>
@@ -27,15 +27,15 @@
 <ul class="dhet-list dhet-stances">
     {{#each known}}
     <li class="dhet-stance {{#if active}}active{{/if}}" data-item-id="{{id}}">
-        <button type="button" class="dhet-stance-main" data-dhet-action="shift" data-cost="focus" data-tooltip="{{tooltip}}"
-            data-tooltip-direction="LEFT" {{#if active}}disabled{{/if}}>
+        <button type="button" class="dhet-stance-main" data-dhet-action="shift" data-cost="focus" data-tooltip-html="{{tooltip}}"
+            data-tooltip-class="dhet-tooltip" {{#if active}}aria-disabled="true"{{/if}}>
             <img src="{{img}}" alt="" />
             <span class="dhet-stance-name">{{name}}</span>
             {{#if tier}}<span class="dhet-tier">T{{tier}}</span>{{/if}}
         </button>
         {{#if ../flow}}
         <button type="button" class="dhet-icon" data-dhet-action="shift" data-cost="stress"
-            data-tooltip="{{localize 'DHET.Stances.ShiftStress'}}" {{#if active}}disabled{{/if}}><i class="fa-solid fa-bolt"></i></button>
+            data-tooltip="{{localize 'DHET.Stances.ShiftStress'}}" {{#if active}}aria-disabled="true"{{/if}}><i class="fa-solid fa-bolt"></i></button>
         {{/if}}
         <button type="button" class="dhet-icon" data-dhet-action="open" data-tooltip="{{localize 'DHET.Open'}}"><i class="fa-solid fa-book"></i></button>
         <button type="button" class="dhet-icon dhet-danger" data-dhet-action="forget" data-tooltip="{{localize 'DHET.Stances.Forget'}}"><i class="fa-solid fa-xmark"></i></button>
@@ -64,7 +64,8 @@
 <ul class="dhet-list dhet-learn">
     {{#each learning}}
     <li>
-        <button type="button" class="dhet-stance-main" data-dhet-action="learn" data-stance-id="{{id}}">
+        <button type="button" class="dhet-stance-main" data-dhet-action="learn" data-stance-id="{{id}}"
+            data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip">
             <img src="{{img}}" alt="" /><span class="dhet-stance-name">{{name}}</span><span class="dhet-tier">T{{tier}}</span>
         </button>
     </li>
