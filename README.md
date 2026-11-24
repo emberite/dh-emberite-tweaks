@@ -52,12 +52,14 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 
 ### Witch: Lunar Phases and Hex
 
-![Witch drawer: Waxing Moon and two hexed creatures](docs/screenshots/02-witch.webp)
+![Witch drawer: a waxing crescent moon and two hexed creatures](docs/screenshots/02-witch-v2.webp)
 
 - **Lunar Phases** (Moon): **Roll the moon** at the start of a session. The phase is set from the d6 and only the matching effect is turned on (Waxing +2 damage, Full +3 thresholds, Waning +1 Evasion; New Moon is a reminder). **1 Hope** advances the die, and a 6 becomes a 1. The effects also follow when you change the die on the sheet. Without the module, the pack's Waning effect is always on.
 - **Hex**: lists the creatures on the scene you've hexed against your limit (your Spellcast trait), and shows the penalty (your tier). Click a name to ping its token, ✕ to lift the hex, or **Lift all**. **Hex targets** runs the feature's own action. You're warned when a new hex goes past your limit. Players can lift hexes from adversaries they don't own; the change goes through the GM, who must be connected.
 
 ### Assassin: Marked for Death and Toxic Concoctions
+
+![Assassin drawer: a marked creature with the mark's dice switched on, poison tokens and every poison of a Poisoners Guild master](docs/screenshots/05-assassin.webp)
 
 - **Marked for Death**: shows the creature you've marked and the right dice: tier × d4, d6 with *Ambush*, d8 with *Backstab*. **Striking the mark** adds those dice to your damage rolls while it's on, and turns itself off when no mark is left. Marking a new creature clears the old mark, because you can only have one.
 - **Toxic Concoctions**: a token counter. **Brew** marks a Stress and adds 1d4+1 tokens. Each poison you know (including those from *Poison Compendium* and *Venomancer*) is a button that spends a token. Poisons the system has an action for are applied to your targets through that action. Leech Weed rolls its d6, and Fear Leaf posts its reminder.
