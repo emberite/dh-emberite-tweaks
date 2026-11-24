@@ -115,6 +115,24 @@ export function lunarPhase(value) {
     return null;
 }
 
+/**
+ * SVG path (viewBox 0 0 40 40, moon of radius 18 at 20,20) of the lit part of the moon for a d6 result, or
+ * null for New Moon. The waxing moon is lit on the right and the waning moon on the left. The two values of
+ * each phase show its crescent (2, 6) or its gibbous (3, 5) shape. A terminator ellipse closes the outer arc.
+ */
+export function moonLitPath(value) {
+    const outer = right => `M20 2 A18 18 0 0 ${right ? 1 : 0} 20 38`;
+    const inner = bulgeRight => `A10 18 0 0 ${bulgeRight ? 0 : 1} 20 2 Z`;
+    switch (value) {
+        case 2: return `${outer(true)} ${inner(true)}`; // waxing crescent
+        case 3: return `${outer(true)} ${inner(false)}`; // waxing gibbous
+        case 4: return 'M2 20 A18 18 0 1 1 38 20 A18 18 0 1 1 2 20 Z'; // full
+        case 5: return `${outer(false)} ${inner(true)}`; // waning gibbous
+        case 6: return `${outer(false)} ${inner(false)}`; // waning crescent
+        default: return null; // new, or not rolled yet
+    }
+}
+
 /** "If you increase the value of a 6, it becomes a 1." */
 export function nextLunarValue(value) {
     return value >= 6 || value < 1 ? 1 : value + 1;

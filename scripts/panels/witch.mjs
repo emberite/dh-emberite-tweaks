@@ -1,4 +1,4 @@
-import { HEX_EFFECT, LUNAR_EFFECTS, LUNAR_PHASES, MODULE_ID, lunarPhase, nextLunarValue } from '../rules.mjs';
+import { HEX_EFFECT, LUNAR_EFFECTS, LUNAR_PHASES, MODULE_ID, lunarPhase, moonLitPath, nextLunarValue } from '../rules.mjs';
 import {
     L,
     chat,
@@ -56,6 +56,9 @@ export const lunarPanel = {
             itemId: item.id,
             value,
             phase,
+            litPath: moonLitPath(value),
+            // Unique per sheet, so two open witches don't share SVG gradient/clip ids.
+            svgId: `dhet-moon-${actor.id}`,
             phaseLabel: phase ? L(`Lunar.Phase.${phase}`) : L('Lunar.Unrolled'),
             phaseEffect: phase ? L(`Lunar.Effect.${phase}`) : L('Lunar.RollHint'),
             phases: LUNAR_PHASES.map(p => ({ key: p, label: L(`Lunar.Phase.${p}`), effect: L(`Lunar.Effect.${p}`), active: p === phase })),

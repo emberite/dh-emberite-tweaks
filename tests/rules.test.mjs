@@ -8,6 +8,7 @@ import {
     knownStanceLimit,
     lastId,
     lunarPhase,
+    moonLitPath,
     markDieFaces,
     nextLunarValue,
     patronDieFaces,
@@ -19,6 +20,16 @@ import {
 test('lunar phases follow the d6 table', () => {
     assert.deepEqual([1, 2, 3, 4, 5, 6].map(lunarPhase), ['new', 'waxing', 'waxing', 'full', 'waning', 'waning']);
     assert.equal(lunarPhase(0), null);
+});
+
+test('the moon is lit on the right while waxing and on the left while waning', () => {
+    assert.equal(moonLitPath(1), null, 'new moon');
+    assert.equal(moonLitPath(0), null, 'not rolled');
+    assert.match(moonLitPath(2), /^M20 2 A18 18 0 0 1 20 38 A10 18 0 0 0/, 'waxing crescent: right arc, thin');
+    assert.match(moonLitPath(3), /^M20 2 A18 18 0 0 1 20 38 A10 18 0 0 1/, 'waxing gibbous: right arc, fat');
+    assert.match(moonLitPath(5), /^M20 2 A18 18 0 0 0 20 38 A10 18 0 0 0/, 'waning gibbous: left arc, fat');
+    assert.match(moonLitPath(6), /^M20 2 A18 18 0 0 0 20 38 A10 18 0 0 1/, 'waning crescent: left arc, thin');
+    assert.match(moonLitPath(4), /A18 18 0 1 1/, 'full disc');
 });
 
 test('advancing the moon wraps a 6 to a 1', () => {

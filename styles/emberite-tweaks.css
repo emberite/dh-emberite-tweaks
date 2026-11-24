@@ -445,24 +445,29 @@
 }
 .dhet-moon-disc {
   flex: none;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1px solid var(--dhet-line);
-  background: #2b2a33;
+  width: 40px;
+  height: 40px;
+  overflow: visible;
+  filter: drop-shadow(0 0 5px hsl(from #f6ecc8 h s l / 0.35));
 }
-.dhet-moon-new .dhet-moon-disc {
-  background: radial-gradient(circle at 50% 50%, #2b2a33 60%, #4b4a58);
-}
-.dhet-moon-waxing .dhet-moon-disc {
-  background: linear-gradient(90deg, #2b2a33 50%, #f2ecd6 50%);
+.dhet-moon-new .dhet-moon-disc,
+.dhet-moon-none .dhet-moon-disc {
+  filter: none;
 }
 .dhet-moon-full .dhet-moon-disc {
-  background: radial-gradient(circle at 40% 35%, #fffbe9, #e7dcb6);
-  box-shadow: 0 0 12px hsl(from var(--dhet-gold) h s l / 0.6);
+  filter: drop-shadow(0 0 9px hsl(from #f6ecc8 h s l / 0.7));
 }
-.dhet-moon-waning .dhet-moon-disc {
-  background: linear-gradient(90deg, #f2ecd6 50%, #2b2a33 50%);
+.dhet-moon-craters circle {
+  fill: #b9ab7d;
+  opacity: 0.35;
+}
+.dhet-moon-rim {
+  fill: none;
+  stroke: var(--dhet-line);
+  stroke-width: 0.8;
+}
+.dhet-moon-new .dhet-moon-rim {
+  stroke: hsl(from #f6ecc8 h s l / 0.45);
 }
 .dhet-moon-text {
   display: flex;
