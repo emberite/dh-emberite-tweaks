@@ -1,0 +1,26 @@
+<div class="dhet-wz-toolbar">
+    <div class="dhet-wz-pool">
+        {{#each pool}}<span class="dhet-wz-chip {{#if used}}used{{/if}}">{{label}}</span>{{/each}}
+    </div>
+    {{#if hasSuggestion}}
+    <button type="button" class="dhet-wz-btn ghost small" data-action="suggestedTraits">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> {{localize "DHET.Wizard.Traits.Suggested" class=className}}
+    </button>
+    {{/if}}
+    <button type="button" class="dhet-wz-btn ghost small" data-action="clearTraits"><i class="fa-solid fa-eraser"></i> {{localize "DHET.Wizard.Traits.Clear"}}</button>
+</div>
+<div class="dhet-wz-traits">
+    {{#each traits}}
+    <div class="dhet-wz-trait {{#if value}}set{{/if}}">
+        <div class="dhet-wz-trait-shield"><span>{{#if value}}{{value}}{{else}}?{{/if}}</span></div>
+        <strong>{{label}}</strong>
+        <span class="dhet-wz-muted">{{verbs}}</span>
+        <div class="dhet-wz-trait-options">
+            {{#each options}}
+            <button type="button" class="dhet-wz-chip {{#if selected}}selected{{/if}}" data-action="setTrait" data-trait="{{../key}}" data-value="{{value}}" {{#if disabled}}disabled{{/if}}>{{label}}</button>
+            {{/each}}
+        </div>
+        {{#if suggested}}<span class="dhet-wz-muted">{{localize "DHET.Wizard.Traits.SuggestedValue" value=suggested}}</span>{{/if}}
+    </div>
+    {{/each}}
+</div>

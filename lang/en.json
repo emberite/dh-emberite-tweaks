@@ -221,6 +221,170 @@
       "Unstoppable": {
         "Name": "Guardian: Unstoppable",
         "Hint": "The Unstoppable Die starts at 1, rises after each damage roll that deals Hit Points (d4, d6 from level 5) and ends Unstoppable when it passes its maximum."
+      },
+      "CreationWizard": {
+        "Name": "Full-screen character creation",
+        "Hint": "Character Setup opens a full-screen wizard with the premium modules' art, where you pick cards instead of dragging them. It creates the character with the system's own code, so the result is the same. Turn off to use the system's dialog."
+      },
+      "LevelUpWizard": {
+        "Name": "Full-screen level up",
+        "Hint": "Leveling up opens a full-screen wizard: click advancements and pick cards instead of ticking boxes and dragging. It applies the level with the system's own code. Turn off to use the system's dialog."
+      }
+    },
+    "Wizard": {
+      "Title": "Create {actor}",
+      "Kicker": "Character creation",
+      "Close": "Close without creating",
+      "CloseTitle": "Leave character creation?",
+      "CloseConfirm": "Your choices so far will be lost.",
+      "Back": "Back",
+      "Next": "Next",
+      "Finish": "Create character",
+      "Failed": "The character couldn't be created. The console (F12) has the details.",
+      "Step": {
+        "class": {
+          "Label": "Class",
+          "Title": "Choose your class",
+          "Hint": "Your class shapes how you fight and which two domains you draw cards from. Then pick the subclass that makes it yours."
+        },
+        "ancestry": {
+          "Label": "Ancestry",
+          "Title": "Choose your ancestry",
+          "Hint": "Your lineage gives you two features. Turn on mixed ancestry to take the first feature from one ancestry and the second from another."
+        },
+        "community": {
+          "Label": "Community",
+          "Title": "Choose your community",
+          "Hint": "The culture you grew up in and the feature it taught you."
+        },
+        "traits": {
+          "Label": "Traits",
+          "Title": "Assign your traits",
+          "Hint": "Give each trait one of the values. Every value can be used once."
+        },
+        "experiences": {
+          "Label": "Experiences",
+          "Title": "Name your experiences",
+          "Hint": "Two experiences from your past, each worth +2 when they apply to a roll."
+        },
+        "domains": {
+          "Label": "Domain Cards",
+          "Title": "Choose your domain cards",
+          "Hint": "Pick two level 1 cards from your class's domains."
+        },
+        "equipment": {
+          "Label": "Equipment",
+          "Title": "Gear up",
+          "Hint": "Take your class's suggested kit, or pick your own tier 1 weapons and armor."
+        },
+        "review": {
+          "Label": "Review",
+          "Title": "Ready to begin",
+          "Hint": "Check your choices, then create your character. You can go back to any step."
+        }
+      },
+      "Class": {
+        "Subclass": "Choose your {class} subclass",
+        "Spellcast": "Spellcast: {trait}"
+      },
+      "Ancestry": {
+        "Mixed": "Mixed ancestry",
+        "MixedHint": "The first ancestry you pick gives its first feature, the second gives its second feature.",
+        "Name": "Ancestry name",
+        "NamePlaceholder": "e.g. Elf/Orc",
+        "First": "First feature",
+        "Second": "Second feature"
+      },
+      "Traits": {
+        "Suggested": "Use the {class} suggestion",
+        "SuggestedValue": "Suggested: {value}",
+        "Clear": "Clear"
+      },
+      "Experiences": {
+        "Placeholder": "Experience {number}",
+        "Examples": "For example: Bounty Hunter, Raised by Wolves, Silver Tongue, Sharpshooter, Survivor of the Long Winter."
+      },
+      "Domains": {
+        "Count": "{count} of {max} cards chosen",
+        "Full": "You already have {max} cards. Click a chosen card to swap it out.",
+        "Recall": "Recall {cost}"
+      },
+      "Equipment": {
+        "Suggested": "Suggested kit",
+        "Custom": "Choose my own",
+        "SuggestedHint": "The weapons and armor your class's guide recommends.",
+        "CustomHint": "Click a slot, then pick from the tier 1 gear below.",
+        "primaryWeapon": "Primary weapon",
+        "secondaryWeapon": "Secondary weapon",
+        "armor": "Armor",
+        "Empty": "Nothing chosen",
+        "None": "None suggested",
+        "ClearSlot": "Empty this slot",
+        "Choose": "Choose a {slot}",
+        "Search": "Search by name…",
+        "AnyTrait": "Any trait",
+        "NoMatch": "Nothing matches.",
+        "TwoHanded": "Your primary weapon is two-handed, so there's no room for a secondary weapon.",
+        "TwoHandedSlot": "Two-handed primary weapon",
+        "ChoiceA": "Take one",
+        "ChoiceB": "And one of these",
+        "Take": "You also take",
+        "Thresholds": "Thresholds",
+        "Score": "Armor",
+        "Phy": "phy",
+        "Mag": "mag"
+      },
+      "KeepGoing": "Keep going",
+      "Leave": "Leave"
+    },
+    "LevelUp": {
+      "Title": "Level up {actor}",
+      "Kicker": "Level up",
+      "Level": "Level {level}",
+      "Review": "Review",
+      "ChooseTitle": "How far are you leveling?",
+      "ChooseHint": "Pick the level your character reaches. You'll make each level's choices in turn.",
+      "NewTier": "New tier",
+      "ReviewTitle": "Ready to level up",
+      "ReviewHint": "Check each level's choices, then apply them. You can jump back to any level from the list.",
+      "LevelHint": "Choose {count} advancements and your new domain card. Tier achievements come first when you enter a new tier.",
+      "Achievements": "Tier achievements",
+      "NewExperience": "Name your new experience",
+      "ProficiencyUp": "Your Proficiency increases by 1.",
+      "TraitsCleared": "Traits marked in the last tier are cleared and can be raised again.",
+      "Advancements": "Advancements",
+      "Left": "{available} of {max} left",
+      "Cost": "{cost} slots",
+      "Undo": "Give this advancement back",
+      "Marked": "Already raised this tier",
+      "NewCard": "Your new domain card",
+      "CardLevel": "Level {level}",
+      "NoCards": "No cards available for this slot.",
+      "Unlocks": "Unlocks: {state}",
+      "OtherClass": "Choose another class",
+      "NoneLeft": "No advancement slots left at this level.",
+      "PickedEnough": "Already picked enough. Click a chosen one to swap it.",
+      "NextLevel": "Next level",
+      "ToReview": "Review",
+      "Finish": "Level up",
+      "CloseTitle": "Leave level up?",
+      "CloseConfirm": "Your choices so far will be lost. The level you picked stays pending on the sheet.",
+      "Failed": "The level up couldn't be applied. The console (F12) has the details.",
+      "Detail": {
+        "trait": "Raise two traits",
+        "hitPoint": "Hit Point slot",
+        "stress": "Stress slot",
+        "experience": "Raise two experiences",
+        "domainCard": "Extra domain card",
+        "evasion": "Evasion",
+        "subclass": "Upgrade your subclass",
+        "proficiency": "Proficiency",
+        "multiclass": "Multiclass"
+      },
+      "Summary": {
+        "NewExperience": "New experience: {name}",
+        "Proficiency": "Proficiency +1",
+        "Card": "Domain card: {name}"
       }
     }
   }

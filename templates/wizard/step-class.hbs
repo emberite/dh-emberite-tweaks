@@ -1,0 +1,39 @@
+<div class="dhet-wz-grid dhet-wz-classes">
+    {{#each classes}}
+    <button type="button" class="dhet-wz-card dhet-wz-class {{#if selected}}selected{{/if}}" data-action="{{action}}" data-uuid="{{uuid}}"
+        data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip" data-tooltip-direction="UP">
+        {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
+        <div class="dhet-wz-class-art">
+            {{#if cutouts.length}}
+            {{#each cutouts}}<img src="{{this}}" alt="" />{{/each}}
+            {{else if fallbackArt}}<img class="cover" src="{{fallbackArt}}" alt="" />
+            {{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}
+        </div>
+        <div class="dhet-wz-card-text">
+            <strong>{{name}}</strong>
+            <span class="dhet-wz-domains">{{#each domainList}}<span class="dhet-wz-dom">{{#if icon}}<img src="{{icon}}" alt="" />{{/if}}{{label}}</span>{{/each}}</span>
+            <span class="dhet-wz-stats"><i class="fa-solid fa-heart"></i> {{hp}} <i class="fa-solid fa-shield"></i> {{evasion}}</span>
+        </div>
+    </button>
+    {{/each}}
+</div>
+
+{{#if subclasses}}
+<h2 class="dhet-wz-subhead dhet-wz-subclasses">{{localize "DHET.Wizard.Class.Subclass" class=className}}</h2>
+<div class="dhet-wz-grid dhet-wz-wide">
+    {{#each subclasses}}
+    <button type="button" class="dhet-wz-card dhet-wz-art-card {{#if selected}}selected{{/if}}" data-action="{{action}}" data-uuid="{{uuid}}"
+        data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip" data-tooltip-direction="UP">
+        {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
+        <div class="dhet-wz-art">
+            {{#if hasArt}}<img class="cover" src="{{img}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}
+            {{#if cutout}}{{#unless hasArt}}<img class="dhet-wz-cutout" src="{{cutout}}" alt="" />{{/unless}}{{/if}}
+        </div>
+        <div class="dhet-wz-card-text">
+            <strong>{{name}}</strong>
+            {{#if spellcast}}<span>{{localize "DHET.Wizard.Class.Spellcast" trait=spellcast}}</span>{{/if}}
+        </div>
+    </button>
+    {{/each}}
+</div>
+{{/if}}

@@ -4,6 +4,7 @@ import { registerSocket } from './actor.mjs';
 import { PANELS, refreshDrawers, registerDrawer, toggleDrawer } from './drawer.mjs';
 import { preloadTemplates } from './view.mjs';
 import { syncLunarEffects } from './panels/witch.mjs';
+import { openCreationWizard, openLevelUpWizard, registerWizard } from './wizard/register.mjs';
 
 /**
  * Load the stylesheet with a version query. Foundry links module CSS by bare path, and a caching proxy would
@@ -13,7 +14,9 @@ function loadStyles() {
     const version = game.modules.get(MODULE_ID)?.version ?? Date.now();
     const style = document.createElement('style');
     style.id = `${MODULE_ID}-styles`;
-    style.textContent = `@import url("modules/${MODULE_ID}/styles/emberite-tweaks.css?v=${encodeURIComponent(version)}") layer(modules);`;
+    style.textContent = ['emberite-tweaks', 'wizard']
+        .map(file => `@import url("modules/${MODULE_ID}/styles/${file}.css?v=${encodeURIComponent(version)}") layer(modules);`)
+        .join('\n');
     document.head.append(style);
 }
 
@@ -22,6 +25,8 @@ function loadStyles() {
  * Order here is the order in Configure Settings.
  */
 const FEATURE_SETTINGS = [
+    'creationWizard',
+    'levelUpWizard',
     'martialStances',
     'oneStance',
     'stanceDropOut',
@@ -70,6 +75,7 @@ Hooks.once('init', () => {
     loadStyles();
     registerSettings();
     registerDrawer();
+    registerWizard();
     preloadTemplates();
 
     game.modules.get(MODULE_ID).api = {
@@ -77,6 +83,8 @@ Hooks.once('init', () => {
         toggleDrawer,
         refreshDrawers,
         syncLunarEffects,
+        openCreationWizard,
+        openLevelUpWizard,
         rules
     };
 });

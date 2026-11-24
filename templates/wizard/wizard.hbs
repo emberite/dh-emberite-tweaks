@@ -1,0 +1,67 @@
+<div class="dhet-wz">
+    <div class="dhet-wz-backdrop" {{#if backdrop}}style="background-image: url('{{backdrop}}')"{{/if}}></div>
+    <div class="dhet-wz-vignette"></div>
+
+    <nav class="dhet-wz-rail">
+        <header class="dhet-wz-brand">
+            <span class="dhet-wz-brand-kicker">{{localize "DHET.Wizard.Kicker"}}</span>
+            <span class="dhet-wz-brand-name">{{actorName}}</span>
+        </header>
+        <ol class="dhet-wz-steps">
+            {{#each steps}}
+            <li>
+                <button type="button" class="dhet-wz-step {{#if current}}current{{/if}} {{#if done}}done{{/if}}"
+                    data-action="goto" data-step="{{id}}" {{#if locked}}disabled{{/if}}>
+                    <span class="dhet-wz-step-num">{{#if done}}<i class="fa-solid fa-check"></i>{{else}}{{number}}{{/if}}</span>
+                    <span class="dhet-wz-step-label">{{label}}</span>
+                </button>
+            </li>
+            {{/each}}
+        </ol>
+        <div class="dhet-wz-sofar">
+            {{#if summary.cutout}}<img class="dhet-wz-sofar-cutout" src="{{summary.cutout}}" alt="" />
+            {{else if summary.art}}<img class="dhet-wz-sofar-art" src="{{summary.art}}" alt="" />{{/if}}
+            {{#each summary.lines}}<span>{{this}}</span>{{/each}}
+        </div>
+    </nav>
+
+    <main class="dhet-wz-main">
+        <header class="dhet-wz-head">
+            <div>
+                <h1>{{stepTitle}}</h1>
+                <p>{{stepHint}}</p>
+            </div>
+            <button type="button" class="dhet-wz-close" data-action="close" data-tooltip="{{localize 'DHET.Wizard.Close'}}">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+        <section class="dhet-wz-body dhet-wz-step-{{step}}">
+            {{{stepHtml}}}
+        </section>
+        <footer class="dhet-wz-foot">
+            <button type="button" class="dhet-wz-btn ghost" data-action="back" {{#unless canBack}}disabled{{/unless}}>
+                <i class="fa-solid fa-arrow-left"></i> {{localize "DHET.Wizard.Back"}}
+            </button>
+            {{#if isLast}}
+            <button type="button" class="dhet-wz-btn primary" data-action="finish">
+                <i class="fa-solid fa-feather-pointed"></i> {{localize "DHET.Wizard.Finish"}}
+            </button>
+            {{else}}
+            <button type="button" class="dhet-wz-btn primary" data-action="next" {{#unless canNext}}disabled{{/unless}}>
+                {{localize "DHET.Wizard.Next"}}: {{nextLabel}} <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            {{/if}}
+        </footer>
+    </main>
+
+    <div class="dhet-wz-confirm" role="dialog">
+        <div class="dhet-wz-confirm-box">
+            <h2>{{localize "DHET.Wizard.CloseTitle"}}</h2>
+            <p>{{localize "DHET.Wizard.CloseConfirm"}}</p>
+            <div>
+                <button type="button" class="dhet-wz-btn ghost" data-action="cancelClose">{{localize "DHET.Wizard.KeepGoing"}}</button>
+                <button type="button" class="dhet-wz-btn primary" data-action="close" data-confirmed="true">{{localize "DHET.Wizard.Leave"}}</button>
+            </div>
+        </div>
+    </div>
+</div>

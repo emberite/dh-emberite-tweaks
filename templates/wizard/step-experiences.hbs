@@ -1,0 +1,9 @@
+<div class="dhet-wz-experiences">
+    {{#each experiences}}
+    <label class="dhet-wz-experience">
+        <span class="dhet-wz-exp-badge">+2</span>
+        <input type="text" value="{{name}}" placeholder="{{localize 'DHET.Wizard.Experiences.Placeholder' number=number}}" data-dhet-input="experience:{{id}}" />
+    </label>
+    {{/each}}
+    <p class="dhet-wz-muted">{{examples}}</p>
+</div>

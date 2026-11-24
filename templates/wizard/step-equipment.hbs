@@ -1,0 +1,86 @@
+<div class="dhet-wz-toolbar">
+    <div class="dhet-wz-segmented">
+        <button type="button" class="{{#if (eq mode 'suggested')}}on{{/if}}" data-action="equipmentMode" data-mode="suggested">
+            <i class="fa-solid fa-box-open"></i> {{localize "DHET.Wizard.Equipment.Suggested"}}
+        </button>
+        <button type="button" class="{{#if (eq mode 'custom')}}on{{/if}}" data-action="equipmentMode" data-mode="custom">
+            <i class="fa-solid fa-sliders"></i> {{localize "DHET.Wizard.Equipment.Custom"}}
+        </button>
+    </div>
+    <span class="dhet-wz-muted">{{#if (eq mode 'custom')}}{{localize "DHET.Wizard.Equipment.CustomHint"}}{{else}}{{localize "DHET.Wizard.Equipment.SuggestedHint"}}{{/if}}</span>
+</div>
+
+<div class="dhet-wz-slots">
+    {{#each slots}}
+    <div class="dhet-wz-slot {{#if (eq ../activeSlot key)}}{{#if custom}}active{{/if}}{{/if}} {{#if blocked}}blocked{{/if}}"
+        {{#if custom}}data-action="selectSlot" data-slot="{{key}}"{{/if}}>
+        <span class="dhet-wz-slot-label">{{label}}</span>
+        {{#if item}}
+        <img src="{{item.img}}" alt="" />
+        <strong>{{item.name}}</strong>
+        <span class="dhet-wz-muted">{{item.info}}</span>
+        {{#if custom}}<button type="button" class="dhet-wz-icon" data-action="clearSlot" data-slot="{{key}}" data-tooltip="{{localize 'DHET.Wizard.Equipment.ClearSlot'}}"><i class="fa-solid fa-xmark"></i></button>{{/if}}
+        {{else if blocked}}
+        <span class="dhet-wz-muted">{{localize "DHET.Wizard.Equipment.TwoHandedSlot"}}</span>
+        {{else}}
+        <span class="dhet-wz-muted">{{#if custom}}{{localize "DHET.Wizard.Equipment.Empty"}}{{else}}{{localize "DHET.Wizard.Equipment.None"}}{{/if}}</span>
+        {{/if}}
+    </div>
+    {{/each}}
+</div>
+
+{{#if gallery}}
+<div class="dhet-wz-gallery">
+    <div class="dhet-wz-toolbar">
+        <h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Equipment.Choose" slot=gallery.slotLabel}}</h2>
+        <input type="search" class="dhet-wz-search" value="{{gallery.search}}" placeholder="{{localize 'DHET.Wizard.Equipment.Search'}}" data-dhet-input="gearSearch" />
+        {{#if gallery.weapon}}
+        <div class="dhet-wz-filter">
+            {{#each gallery.traits}}<button type="button" class="dhet-wz-chip {{#if selected}}selected{{/if}}" data-action="gearTrait" data-trait="{{key}}">{{label}}</button>{{/each}}
+        </div>
+        {{/if}}
+    </div>
+    {{#if gallery.blocked}}
+    <p class="dhet-wz-muted">{{localize "DHET.Wizard.Equipment.TwoHanded"}}</p>
+    {{else}}
+    <div class="dhet-wz-gear">
+        {{#each gallery.items}}
+        <button type="button" class="dhet-wz-gear-item {{#if selected}}selected{{/if}}" data-action="pickGear" data-uuid="{{uuid}}"
+            data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip">
+            <img src="{{img}}" alt="" />
+            <span><strong>{{name}}</strong><small>{{info}}</small></span>
+        </button>
+        {{else}}
+        <p class="dhet-wz-muted">{{localize "DHET.Wizard.Equipment.NoMatch"}}</p>
+        {{/each}}
+    </div>
+    {{/if}}
+</div>
+{{/if}}
+
+{{#if choiceA.length}}
+<h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Equipment.ChoiceA"}}</h2>
+<div class="dhet-wz-gear">
+    {{#each choiceA}}
+    <button type="button" class="dhet-wz-gear-item {{#if selected}}selected{{/if}}" data-action="pickChoice" data-key="{{key}}" data-uuid="{{uuid}}">
+        <img src="{{img}}" alt="" /><span><strong>{{name}}</strong></span>
+    </button>
+    {{/each}}
+</div>
+{{/if}}
+{{#if choiceB.length}}
+<h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Equipment.ChoiceB"}}</h2>
+<div class="dhet-wz-gear">
+    {{#each choiceB}}
+    <button type="button" class="dhet-wz-gear-item {{#if selected}}selected{{/if}}" data-action="pickChoice" data-key="{{key}}" data-uuid="{{uuid}}">
+        <img src="{{img}}" alt="" /><span><strong>{{name}}</strong></span>
+    </button>
+    {{/each}}
+</div>
+{{/if}}
+{{#if take.length}}
+<h2 class="dhet-wz-subhead">{{localize "DHET.Wizard.Equipment.Take"}}</h2>
+<div class="dhet-wz-gear static">
+    {{#each take}}<div class="dhet-wz-gear-item"><img src="{{img}}" alt="" /><span><strong>{{name}}</strong></span></div>{{/each}}
+</div>
+{{/if}}

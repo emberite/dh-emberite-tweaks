@@ -1,0 +1,208 @@
+<div class="dhet-wz">
+    <div class="dhet-wz-backdrop" {{#if backdrop}}style="background-image: url('{{backdrop}}')"{{/if}}></div>
+    <div class="dhet-wz-vignette"></div>
+
+    <nav class="dhet-wz-rail">
+        <header class="dhet-wz-brand">
+            <span class="dhet-wz-brand-kicker">{{localize "DHET.LevelUp.Kicker"}}</span>
+            <span class="dhet-wz-brand-name">{{actorName}}</span>
+        </header>
+        {{#if levels}}
+        <ol class="dhet-wz-steps">
+            {{#each levels}}
+            <li>
+                <button type="button" class="dhet-wz-step {{#if current}}current{{/if}} {{#if done}}done{{/if}}" data-action="gotoLevel" data-level="{{level}}" {{#if locked}}disabled{{/if}}>
+                    <span class="dhet-wz-step-num">{{#if done}}<i class="fa-solid fa-check"></i>{{else}}{{level}}{{/if}}</span>
+                    <span class="dhet-wz-step-label">{{localize "DHET.LevelUp.Level" level=level}}</span>
+                </button>
+            </li>
+            {{/each}}
+            <li>
+                <button type="button" class="dhet-wz-step {{#if reviewing}}current{{/if}}" disabled>
+                    <span class="dhet-wz-step-num"><i class="fa-solid fa-flag-checkered"></i></span>
+                    <span class="dhet-wz-step-label">{{localize "DHET.LevelUp.Review"}}</span>
+                </button>
+            </li>
+        </ol>
+        {{/if}}
+        <div class="dhet-wz-sofar">
+            {{#if cutout}}<img class="dhet-wz-sofar-cutout" src="{{cutout}}" alt="" />{{else if backdrop}}<img class="dhet-wz-sofar-art" src="{{backdrop}}" alt="" />{{/if}}
+            <span>{{className}} · {{subclassName}}</span>
+            <span>{{localize "DHET.LevelUp.Level" level=currentLevel}}</span>
+        </div>
+    </nav>
+
+    <main class="dhet-wz-main">
+        <header class="dhet-wz-head">
+            <div>
+                {{#if choosing}}
+                <h1>{{localize "DHET.LevelUp.ChooseTitle"}}</h1>
+                <p>{{localize "DHET.LevelUp.ChooseHint"}}</p>
+                {{else if reviewing}}
+                <h1>{{localize "DHET.LevelUp.ReviewTitle"}}</h1>
+                <p>{{localize "DHET.LevelUp.ReviewHint"}}</p>
+                {{else}}
+                <h1>{{localize "DHET.LevelUp.Level" level=level}} <span class="dhet-wz-tier">{{tierName}}</span></h1>
+                <p>{{localize "DHET.LevelUp.LevelHint" count=maxSelections}}</p>
+                {{/if}}
+            </div>
+            <button type="button" class="dhet-wz-close" data-action="close" data-tooltip="{{localize 'DHET.Wizard.Close'}}"><i class="fa-solid fa-xmark"></i></button>
+        </header>
+
+        <section class="dhet-wz-body">
+            {{#if choosing}}
+            <div class="dhet-wz-grid dhet-wz-targets">
+                {{#each targets}}
+                <button type="button" class="dhet-wz-card dhet-wz-target {{#if newTier}}new-tier{{/if}}" data-action="target" data-level="{{level}}">
+                    <span class="dhet-wz-target-num">{{level}}</span>
+                    <span class="dhet-wz-muted">{{tier}}</span>
+                    {{#if newTier}}<span class="dhet-wz-badge">{{localize "DHET.LevelUp.NewTier"}}</span>{{/if}}
+                </button>
+                {{/each}}
+            </div>
+
+            {{else if reviewing}}
+            <div class="dhet-wz-review-levels">
+                {{#each summary}}
+                <section class="dhet-wz-review-level">
+                    <h3>{{localize "DHET.LevelUp.Level" level=level}}</h3>
+                    <ul>{{#each lines}}<li>{{this}}</li>{{/each}}</ul>
+                </section>
+                {{/each}}
+            </div>
+
+            {{else}}
+            {{#if achievements.experiences.length}}
+            <h2 class="dhet-wz-subhead">{{localize "DHET.LevelUp.Achievements"}}</h2>
+            <div class="dhet-wz-achievements">
+                {{#each achievements.experiences}}
+                <label class="dhet-wz-experience">
+                    <span class="dhet-wz-exp-badge">+{{modifier}}</span>
+                    <input type="text" value="{{name}}" placeholder="{{localize 'DHET.LevelUp.NewExperience'}}" data-dhet-input="newExperience:{{id}}" />
+                </label>
+                {{/each}}
+                {{#if achievements.proficiency}}<p class="dhet-wz-note"><i class="fa-solid fa-hand-fist"></i> {{localize "DHET.LevelUp.ProficiencyUp"}}</p>{{/if}}
+                <p class="dhet-wz-note"><i class="fa-solid fa-eraser"></i> {{localize "DHET.LevelUp.TraitsCleared"}}</p>
+            </div>
+            {{/if}}
+
+            <h2 class="dhet-wz-subhead">{{localize "DHET.LevelUp.Advancements"}} <span class="dhet-wz-counter-inline {{#unless available}}full{{/unless}}">{{localize "DHET.LevelUp.Left" available=available max=maxSelections}}</span></h2>
+            <div class="dhet-wz-options">
+                {{#each options}}
+                <div class="dhet-wz-option {{#if taken}}taken{{/if}} {{#unless canTake}}{{#unless taken}}spent{{/unless}}{{/unless}}">
+                    <button type="button" class="dhet-wz-option-main" data-action="option" data-option="{{key}}" data-nr="{{nextNr}}" {{#unless canTake}}aria-disabled="true"{{/unless}}>
+                        <i class="{{icon}}"></i>
+                        <span class="dhet-wz-option-label">{{label}}</span>
+                        <span class="dhet-wz-pips">{{#each pips}}<span class="{{#if mine}}mine{{else if selected}}used{{else if locked}}used{{/if}}"></span>{{/each}}</span>
+                        {{#if (gt cost 1)}}<span class="dhet-wz-cost">{{localize "DHET.LevelUp.Cost" cost=cost}}</span>{{/if}}
+                    </button>
+                    {{#if taken}}
+                    <button type="button" class="dhet-wz-icon" data-action="unoption" data-option="{{key}}" data-nr="{{lastNr}}" data-tooltip="{{localize 'DHET.LevelUp.Undo'}}"><i class="fa-solid fa-rotate-left"></i></button>
+                    {{/if}}
+                </div>
+                {{/each}}
+            </div>
+
+            {{#each details}}
+            <h2 class="dhet-wz-subhead"><i class="{{icon}}"></i> {{label}}</h2>
+            {{#if traits}}
+            <div class="dhet-wz-trait-row">
+                {{#each traits}}
+                <button type="button" class="dhet-wz-chip big {{#if selected}}selected{{/if}}" data-action="pickTrait" data-path="{{../path}}" data-trait="{{key}}" {{#if disabled}}disabled data-tooltip="{{localize 'DHET.LevelUp.Marked'}}"{{/if}}>
+                    {{label}} <small>{{value}}</small>
+                </button>
+                {{/each}}
+                <span class="dhet-wz-muted">{{count}}/{{amount}}</span>
+            </div>
+            {{/if}}
+            {{#if experiences}}
+            <div class="dhet-wz-trait-row">
+                {{#each experiences}}
+                <button type="button" class="dhet-wz-chip big {{#if selected}}selected{{/if}}" data-action="pickExperience" data-path="{{../path}}" data-id="{{id}}">{{name}} <small>+{{value}}</small></button>
+                {{/each}}
+                <span class="dhet-wz-muted">{{count}}/{{amount}}</span>
+            </div>
+            {{/if}}
+            {{#if cards}}{{> "modules/dh-emberite-tweaks/templates/wizard/_cardgallery.hbs" domains=domains}}{{/if}}
+            {{#if upgrades}}
+            <div class="dhet-wz-grid dhet-wz-wide">
+                {{#each upgrades}}
+                <button type="button" class="dhet-wz-card dhet-wz-art-card {{#if selected}}selected{{/if}}" data-action="pickUpgrade" data-path="{{../path}}" data-uuid="{{uuid}}" data-state="{{state}}" data-multiclass="{{isMulticlass}}">
+                    {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
+                    <div class="dhet-wz-art">{{#if hasArt}}<img class="cover" src="{{img}}" alt="" />{{else if cutout}}<img class="dhet-wz-cutout" src="{{cutout}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}</div>
+                    <div class="dhet-wz-card-text"><strong>{{name}}</strong><span>{{localize "DHET.LevelUp.Unlocks" state=stateLabel}}</span></div>
+                </button>
+                {{/each}}
+            </div>
+            {{/if}}
+            {{#if multiclass}}
+            {{#if classes}}
+            <div class="dhet-wz-grid">
+                {{#each classes}}
+                <button type="button" class="dhet-wz-card dhet-wz-class" data-action="pickMulticlass" data-path="{{../path}}" data-uuid="{{uuid}}" data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip" data-tooltip-direction="UP">
+                    <div class="dhet-wz-class-art">{{#if cutouts.length}}{{#each cutouts}}<img src="{{this}}" alt="" />{{/each}}{{else if fallbackArt}}<img class="cover" src="{{fallbackArt}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}</div>
+                    <div class="dhet-wz-card-text"><strong>{{name}}</strong></div>
+                </button>
+                {{/each}}
+            </div>
+            {{else}}
+            <div class="dhet-wz-toolbar">
+                <strong class="dhet-wz-chosen">{{chosen.name}}</strong>
+                <button type="button" class="dhet-wz-btn ghost small" data-action="pickMulticlass" data-path="{{path}}" data-uuid=""><i class="fa-solid fa-rotate-left"></i> {{localize "DHET.LevelUp.OtherClass"}}</button>
+            </div>
+            <div class="dhet-wz-trait-row">
+                {{#each domains}}
+                <button type="button" class="dhet-wz-chip big {{#if selected}}selected{{/if}}" data-action="pickMultiDomain" data-path="{{../path}}" data-domain="{{id}}" {{#if disabled}}disabled{{/if}}>
+                    {{#if icon}}<img src="{{icon}}" alt="" />{{/if}} {{label}}
+                </button>
+                {{/each}}
+            </div>
+            <div class="dhet-wz-grid dhet-wz-wide">
+                {{#each subclasses}}
+                <button type="button" class="dhet-wz-card dhet-wz-art-card {{#if selected}}selected{{/if}}" data-action="pickMultiSubclass" data-path="{{../path}}" data-uuid="{{uuid}}" data-tooltip-html="{{tooltip}}" data-tooltip-class="dhet-tooltip" data-tooltip-direction="UP">
+                    {{#if selected}}<span class="dhet-wz-check"><i class="fa-solid fa-check"></i></span>{{/if}}
+                    <div class="dhet-wz-art">{{#if hasArt}}<img class="cover" src="{{img}}" alt="" />{{else}}<img class="icon" src="{{img}}" alt="" />{{/if}}</div>
+                    <div class="dhet-wz-card-text"><strong>{{name}}</strong></div>
+                </button>
+                {{/each}}
+            </div>
+            {{/if}}
+            {{/if}}
+            {{/each}}
+
+            {{#each achievements.cards}}
+            <h2 class="dhet-wz-subhead">{{localize "DHET.LevelUp.NewCard"}} {{#if filled}}<i class="fa-solid fa-check dhet-wz-ok"></i>{{/if}}</h2>
+            <div class="dhet-wz-domains-cols">{{> "modules/dh-emberite-tweaks/templates/wizard/_cardgallery.hbs" domains=domains}}</div>
+            {{/each}}
+            {{/if}}
+        </section>
+
+        <footer class="dhet-wz-foot">
+            <button type="button" class="dhet-wz-btn ghost" data-action="back" {{#unless canBack}}{{#unless reviewing}}disabled{{/unless}}{{/unless}}>
+                <i class="fa-solid fa-arrow-left"></i> {{localize "DHET.Wizard.Back"}}
+            </button>
+            {{#if reviewing}}
+            <button type="button" class="dhet-wz-btn primary" data-action="finish" {{#unless canFinish}}disabled{{/unless}}>
+                <i class="fa-solid fa-angles-up"></i> {{localize "DHET.LevelUp.Finish"}}
+            </button>
+            {{else if choosing}}
+            <span></span>
+            {{else}}
+            <button type="button" class="dhet-wz-btn primary" data-action="next" {{#unless canNext}}disabled{{/unless}}>
+                {{#if isLastLevel}}{{localize "DHET.LevelUp.ToReview"}}{{else}}{{localize "DHET.LevelUp.NextLevel"}}{{/if}} <i class="fa-solid fa-arrow-right"></i>
+            </button>
+            {{/if}}
+        </footer>
+    </main>
+
+    <div class="dhet-wz-confirm" role="dialog">
+        <div class="dhet-wz-confirm-box">
+            <h2>{{localize "DHET.LevelUp.CloseTitle"}}</h2>
+            <p>{{localize "DHET.LevelUp.CloseConfirm"}}</p>
+            <div>
+                <button type="button" class="dhet-wz-btn ghost" data-action="cancelClose">{{localize "DHET.Wizard.KeepGoing"}}</button>
+                <button type="button" class="dhet-wz-btn primary" data-action="close" data-confirmed="true">{{localize "DHET.Wizard.Leave"}}</button>
+            </div>
+        </div>
+    </div>
+</div>

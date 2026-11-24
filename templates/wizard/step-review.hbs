@@ -1,0 +1,28 @@
+<div class="dhet-wz-review">
+    <div class="dhet-wz-hero">
+        {{#if heroArt}}<img class="dhet-wz-hero-art" src="{{heroArt}}" alt="" />{{/if}}
+        {{#if cutout}}<img class="dhet-wz-hero-cutout" src="{{cutout}}" alt="" />{{/if}}
+        <div class="dhet-wz-hero-text">
+            <span class="dhet-wz-kicker">{{className}}</span>
+            <strong>{{subclassName}}</strong>
+        </div>
+    </div>
+    <div class="dhet-wz-review-cols">
+        <div class="dhet-wz-review-pair">
+            {{#if ancestry}}<figure><img src="{{ancestry.img}}" alt="" /><figcaption>{{ancestry.name}}</figcaption></figure>{{/if}}
+            {{#if community}}<figure><img src="{{community.img}}" alt="" /><figcaption>{{community.name}}</figcaption></figure>{{/if}}
+        </div>
+        <section>
+            <h3>{{localize "DHET.Wizard.Step.traits.Label"}}</h3>
+            <div class="dhet-wz-review-traits">{{#each traits}}<span><small>{{label}}</small><strong>{{value}}</strong></span>{{/each}}</div>
+            <h3>{{localize "DHET.Wizard.Step.experiences.Label"}}</h3>
+            <ul>{{#each experiences}}<li>{{this}} <span class="dhet-wz-muted">+2</span></li>{{/each}}</ul>
+        </section>
+        <section>
+            <h3>{{localize "DHET.Wizard.Step.domains.Label"}}</h3>
+            <div class="dhet-wz-review-cards">{{#each domainCards}}<figure><img src="{{img}}" alt="" /><figcaption>{{name}}</figcaption></figure>{{/each}}</div>
+            <h3>{{localize "DHET.Wizard.Step.equipment.Label"}}</h3>
+            <ul class="dhet-wz-review-gear">{{#each gear}}<li><img src="{{img}}" alt="" /> {{name}}</li>{{/each}}</ul>
+        </section>
+    </div>
+</div>
