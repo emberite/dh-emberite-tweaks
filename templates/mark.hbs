@@ -1,0 +1,25 @@
+<div class="dhet-row">
+    <span class="dhet-muted">{{localize "DHET.Mark.Dice"}}</span>
+    <span class="dhet-die">+{{dice}}</span>
+</div>
+<ul class="dhet-list dhet-targets">
+    {{#each marked}}
+    <li data-effect-uuid="{{uuid}}" data-token-uuid="{{tokenUuid}}">
+        <button type="button" class="dhet-target" data-dhet-action="ping" data-tooltip="{{localize 'DHET.Ping'}}">
+            <img src="{{img}}" alt="" /><span>{{name}}</span>
+        </button>
+        <button type="button" class="dhet-icon dhet-danger" data-dhet-action="unmark" data-tooltip="{{localize 'DHET.Mark.Remove'}}"><i class="fa-solid fa-xmark"></i></button>
+    </li>
+    {{else}}
+    <li class="dhet-empty">{{#if hasScene}}{{localize "DHET.Mark.None"}}{{else}}{{localize "DHET.NoScene"}}{{/if}}</li>
+    {{/each}}
+</ul>
+<div class="dhet-actions">
+    <button type="button" data-dhet-action="mark" data-tooltip="{{localize 'DHET.Mark.MarkHint'}}">
+        <i class="fa-solid fa-crosshairs"></i> {{localize "DHET.Mark.Mark"}}
+    </button>
+    <button type="button" data-dhet-action="bonus" class="{{#if bonusActive}}on{{/if}}" data-tooltip="{{localize 'DHET.Mark.BonusHint'}}">
+        <i class="fa-solid fa-skull"></i>
+        {{#if bonusActive}}{{localize "DHET.Mark.BonusOn" dice=dice}}{{else}}{{localize "DHET.Mark.BonusOff" dice=dice}}{{/if}}
+    </button>
+</div>

@@ -1,0 +1,24 @@
+<div class="dhet-row">
+    <span class="{{#if over}}dhet-warn{{else}}dhet-muted{{/if}}">{{localize "DHET.Hex.Count" count=count cap=cap}}</span>
+    <span class="dhet-muted">{{localize "DHET.Hex.Penalty" penalty=penalty}}</span>
+</div>
+<ul class="dhet-list dhet-targets">
+    {{#each hexed}}
+    <li data-effect-uuid="{{uuid}}" data-token-uuid="{{tokenUuid}}">
+        <button type="button" class="dhet-target" data-dhet-action="ping" data-tooltip="{{localize 'DHET.Ping'}}">
+            <img src="{{img}}" alt="" /><span>{{name}}</span>
+        </button>
+        <button type="button" class="dhet-icon dhet-danger" data-dhet-action="unhex" data-tooltip="{{localize 'DHET.Hex.Remove'}}"><i class="fa-solid fa-xmark"></i></button>
+    </li>
+    {{else}}
+    <li class="dhet-empty">{{#if hasScene}}{{localize "DHET.Hex.None"}}{{else}}{{localize "DHET.NoScene"}}{{/if}}</li>
+    {{/each}}
+</ul>
+<div class="dhet-actions">
+    <button type="button" data-dhet-action="hex" {{#if full}}class="dhet-over"{{/if}} data-tooltip="{{localize 'DHET.Hex.HexHint'}}">
+        <i class="fa-solid fa-eye"></i> {{localize "DHET.Hex.Hex"}}
+    </button>
+    {{#if count}}
+    <button type="button" data-dhet-action="clearAll"><i class="fa-solid fa-broom"></i> {{localize "DHET.Hex.ClearAll"}}</button>
+    {{/if}}
+</div>

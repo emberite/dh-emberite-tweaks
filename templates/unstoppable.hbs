@@ -1,0 +1,15 @@
+<div class="dhet-row">
+    <span class="dhet-muted">{{#if active}}{{localize "DHET.Unstoppable.Active"}}{{else}}{{localize "DHET.Unstoppable.Inactive"}}{{/if}}</span>
+    <span class="dhet-die">d{{faces}}</span>
+</div>
+<ol class="dhet-faces">
+    {{#each faceList}}<li class="{{#if reached}}reached{{/if}}">{{value}}</li>{{/each}}
+</ol>
+<div class="dhet-actions">
+    {{#if active}}
+    <button type="button" data-dhet-action="end"><i class="fa-solid fa-hand"></i> {{localize "DHET.Unstoppable.End"}}</button>
+    {{else}}
+    <button type="button" data-dhet-action="become"><i class="fa-solid fa-shield-halved"></i> {{localize "DHET.Unstoppable.Become"}}</button>
+    {{/if}}
+</div>
+<p class="dhet-muted">{{localize "DHET.Unstoppable.Hint"}}</p>

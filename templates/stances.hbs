@@ -1,0 +1,82 @@
+{{#if focus}}
+<div class="dhet-track" aria-label="{{localize 'DHET.Stances.Focus'}}">
+    <span class="dhet-label">{{localize "DHET.Stances.Focus"}}</span>
+    <span class="dhet-pips">
+        {{#each focus.pips}}
+        <button type="button" class="dhet-pip {{#if filled}}filled{{/if}}" data-dhet-action="focus" data-value="{{value}}"
+            data-tooltip="{{value}}"><i class="fa-solid fa-yin-yang"></i></button>
+        {{/each}}
+    </span>
+    <span class="dhet-count">{{focus.value}}/{{focus.max}}</span>
+</div>
+{{/if}}
+
+<div class="dhet-active {{#if active}}on{{/if}}">
+    {{#if active}}
+    <img src="{{active.img}}" alt="" />
+    <span class="dhet-active-name">{{active.name}}</span>
+    <button type="button" class="dhet-mini" data-dhet-action="drop" data-tooltip="{{localize 'DHET.Stances.DropHint'}}">
+        <i class="fa-solid fa-person-falling"></i> {{localize "DHET.Stances.Drop"}}
+    </button>
+    {{else}}
+    <span class="dhet-muted">{{localize "DHET.Stances.None"}}</span>
+    {{/if}}
+</div>
+{{#if stacked}}<p class="dhet-warn">{{localize "DHET.Stances.Stacked"}}</p>{{/if}}
+
+<ul class="dhet-list dhet-stances">
+    {{#each known}}
+    <li class="dhet-stance {{#if active}}active{{/if}}" data-item-id="{{id}}">
+        <button type="button" class="dhet-stance-main" data-dhet-action="shift" data-cost="focus" data-tooltip="{{tooltip}}"
+            data-tooltip-direction="LEFT" {{#if active}}disabled{{/if}}>
+            <img src="{{img}}" alt="" />
+            <span class="dhet-stance-name">{{name}}</span>
+            {{#if tier}}<span class="dhet-tier">T{{tier}}</span>{{/if}}
+        </button>
+        {{#if ../flow}}
+        <button type="button" class="dhet-icon" data-dhet-action="shift" data-cost="stress"
+            data-tooltip="{{localize 'DHET.Stances.ShiftStress'}}" {{#if active}}disabled{{/if}}><i class="fa-solid fa-bolt"></i></button>
+        {{/if}}
+        <button type="button" class="dhet-icon" data-dhet-action="open" data-tooltip="{{localize 'DHET.Open'}}"><i class="fa-solid fa-book"></i></button>
+        <button type="button" class="dhet-icon dhet-danger" data-dhet-action="forget" data-tooltip="{{localize 'DHET.Stances.Forget'}}"><i class="fa-solid fa-xmark"></i></button>
+    </li>
+    {{else}}
+    <li class="dhet-empty">{{localize "DHET.Stances.NoneKnown"}}</li>
+    {{/each}}
+</ul>
+
+{{#if hasFavored}}
+<label class="dhet-field">
+    <span>{{localize "DHET.Stances.FavoredTrait"}}</span>
+    <select data-dhet-action="favoredTrait">
+        {{#each traits}}<option value="{{key}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+    </select>
+</label>
+{{/if}}
+
+<div class="dhet-row">
+    <span class="dhet-muted {{#if overLimit}}dhet-warn{{/if}}">{{localize "DHET.Stances.Known" count=count limit=limit}}</span>
+    <button type="button" class="dhet-mini" data-dhet-action="toggleLearn">
+        <i class="fa-solid {{#if learning}}fa-chevron-up{{else}}fa-plus{{/if}}"></i> {{localize "DHET.Stances.Learn"}}
+    </button>
+</div>
+{{#if learning}}
+<ul class="dhet-list dhet-learn">
+    {{#each learning}}
+    <li>
+        <button type="button" class="dhet-stance-main" data-dhet-action="learn" data-stance-id="{{id}}">
+            <img src="{{img}}" alt="" /><span class="dhet-stance-name">{{name}}</span><span class="dhet-tier">T{{tier}}</span>
+        </button>
+    </li>
+    {{else}}
+    <li class="dhet-empty">{{localize "DHET.Stances.NothingToLearn"}}</li>
+    {{/each}}
+</ul>
+{{#unless canLearn}}<p class="dhet-muted">{{localize "DHET.Stances.AtLimit"}}</p>{{/unless}}
+{{/if}}
+
+<div class="dhet-actions">
+    <button type="button" data-dhet-action="refocus" data-tooltip="{{localize 'DHET.Stances.RefocusHint'}}">
+        <i class="fa-solid fa-spa"></i> {{localize "DHET.Stances.Refocus"}}
+    </button>
+</div>

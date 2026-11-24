@@ -1,0 +1,19 @@
+<div class="dhet-track">
+    <span class="dhet-label">{{localize "DHET.Poison.Tokens"}}</span>
+    <button type="button" class="dhet-icon" data-dhet-action="adjust" data-delta="-1" {{#if empty}}disabled{{/if}}><i class="fa-solid fa-minus"></i></button>
+    <span class="dhet-big">{{tokens}}</span>
+    <button type="button" class="dhet-icon" data-dhet-action="adjust" data-delta="1"><i class="fa-solid fa-plus"></i></button>
+    <button type="button" class="dhet-mini" data-dhet-action="brew" data-tooltip="{{localize 'DHET.Poison.BrewHint'}}">
+        <i class="fa-solid fa-flask"></i> {{localize "DHET.Poison.Brew"}}
+    </button>
+</div>
+<ul class="dhet-list dhet-poisons">
+    {{#each poisons}}
+    <li>
+        <button type="button" class="dhet-poison" data-dhet-action="poison" data-poison="{{key}}" {{#if ../empty}}disabled{{/if}}>
+            <strong>{{name}}</strong><span>{{text}}</span>
+        </button>
+    </li>
+    {{/each}}
+</ul>
+<p class="dhet-muted">{{localize "DHET.Poison.Hint"}}{{#if twinFang}} {{localize "DHET.Poison.TwinFang"}}{{/if}}</p>

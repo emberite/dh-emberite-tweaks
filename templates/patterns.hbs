@@ -1,0 +1,8 @@
+<label class="dhet-field">
+    <span>{{localize "DHET.Patterns.Number"}}</span>
+    <select data-dhet-action="pattern">
+        {{#unless number}}<option value="" selected>—</option>{{/unless}}
+        {{#each numbers}}<option value="{{value}}" {{#if selected}}selected{{/if}}>{{value}}</option>{{/each}}
+    </select>
+</label>
+<p class="dhet-muted">{{localize "DHET.Patterns.Hint"}}</p>

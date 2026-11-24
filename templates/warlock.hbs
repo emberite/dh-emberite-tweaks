@@ -1,0 +1,39 @@
+{{#if favor}}
+<div class="dhet-track">
+    <span class="dhet-label">{{localize "DHET.Warlock.Favor"}}</span>
+    <span class="dhet-pips">
+        {{#each favor.pips}}
+        <button type="button" class="dhet-pip {{#if filled}}filled{{/if}}" data-dhet-action="favor" data-value="{{value}}"
+            data-tooltip="{{value}}"><i class="fa-solid fa-spaghetti-monster-flying"></i></button>
+        {{/each}}
+    </span>
+    <span class="dhet-count">{{favor.value}}/{{favor.max}}</span>
+</div>
+{{/if}}
+<label class="dhet-field">
+    <span>{{localize "DHET.Warlock.Patron"}}</span>
+    <input type="text" value="{{patronName}}" data-dhet-action="patron" data-field="name" placeholder="{{localize 'DHET.Warlock.PatronPlaceholder'}}" />
+</label>
+<label class="dhet-field">
+    <span>{{localize "DHET.Warlock.Sphere"}}</span>
+    <input type="text" value="{{patronSphere}}" data-dhet-action="patron" data-field="sphere" placeholder="{{localize 'DHET.Warlock.SpherePlaceholder'}}" />
+</label>
+<div class="dhet-row">
+    <span class="dhet-muted">{{localize "DHET.Warlock.Die"}}</span>
+    <span class="dhet-die">{{die}}</span>
+</div>
+<div class="dhet-actions">
+    <button type="button" data-dhet-action="aid" class="{{#if aidActive}}on{{/if}}" data-tooltip="{{localize 'DHET.Warlock.AidHint'}}">
+        <i class="fa-solid fa-hands-praying"></i>
+        {{#if aidActive}}{{localize "DHET.Warlock.AidReady"}}{{else}}{{localize "DHET.Warlock.Aid"}}{{/if}}
+    </button>
+    <button type="button" data-dhet-action="tribute" data-tooltip="{{localize 'DHET.Warlock.TributeHint'}}">
+        <i class="fa-solid fa-gift"></i> {{localize "DHET.Warlock.Tribute" amount=tribute}}
+    </button>
+    {{#if fury}}
+    <button type="button" data-dhet-action="fury" class="{{#if fury.active}}on{{/if}}" data-tooltip="{{localize 'DHET.Warlock.FuryHint'}}">
+        <i class="fa-solid fa-fire"></i>
+        {{#if fury.active}}{{localize "DHET.Warlock.FuryActive" dice=fury.dice}}{{else}}{{localize "DHET.Warlock.FuryStart" dice=fury.dice}}{{/if}}
+    </button>
+    {{/if}}
+</div>

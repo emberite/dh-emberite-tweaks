@@ -1,0 +1,19 @@
+<div class="dhet-moon dhet-moon-{{#if phase}}{{phase}}{{else}}none{{/if}}">
+    <div class="dhet-moon-disc" aria-hidden="true"></div>
+    <div class="dhet-moon-text">
+        <strong>{{phaseLabel}}{{#if value}} <span class="dhet-muted">({{value}})</span>{{/if}}</strong>
+        <span>{{phaseEffect}}</span>
+    </div>
+</div>
+<ol class="dhet-phases">
+    {{#each phases}}<li class="{{#if active}}active{{/if}}">{{label}}</li>{{/each}}
+</ol>
+<div class="dhet-actions">
+    <button type="button" data-dhet-action="rollMoon" data-tooltip="{{localize 'DHET.Lunar.RollHint'}}">
+        <i class="fa-solid fa-dice-d6"></i> {{localize "DHET.Lunar.Roll"}}
+    </button>
+    <button type="button" data-dhet-action="advanceMoon" {{#unless value}}disabled{{/unless}}
+        data-tooltip="{{localize 'DHET.Lunar.AdvanceHint'}}">
+        <i class="fa-solid fa-forward"></i> {{localize "DHET.Lunar.Advance"}}{{#if next}} → {{next}}{{/if}}
+    </button>
+</div>

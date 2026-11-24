@@ -1,0 +1,222 @@
+{
+  "DHET": {
+    "Drawer": {
+      "Tab": "Class",
+      "Title": "{actor}'s class features"
+    },
+    "Panel": {
+      "stances": "Martial Stances",
+      "lunar": "Lunar Phases",
+      "hex": "Hex",
+      "warlock": "Patron & Favor",
+      "mark": "Marked for Death",
+      "poison": "Toxic Concoctions",
+      "patterns": "Strange Patterns",
+      "unstoppable": "Unstoppable"
+    },
+    "Open": "Open the feature",
+    "Ping": "Ping on the map",
+    "NoScene": "No scene is being viewed.",
+    "Notify": {
+      "NotEnough": "Not enough {resource}.",
+      "NoStress": "No Stress left to mark.",
+      "NoGM": "A GM needs to be connected to change creatures you don't own.",
+      "ActionFailed": "That didn't work. The console (F12) has the details."
+    },
+    "Stances": {
+      "Focus": "Focus",
+      "None": "Not in a stance",
+      "NoneKnown": "No stances known yet. Use Learn below, or drag stances from the Martial Stances folder of the Subclasses compendium.",
+      "Drop": "Drop",
+      "DropHint": "Drop out of your active stance",
+      "Stacked": "More than one stance is active. Shift or drop to keep only one.",
+      "ShiftStress": "Shift by marking a Stress (Flow State)",
+      "Forget": "Forget this stance",
+      "ForgetConfirm": "Remove <strong>{stance}</strong> from your known stances?",
+      "FavoredTrait": "Favored adds",
+      "Known": "{count} of {limit} stances known",
+      "Learn": "Learn",
+      "NothingToLearn": "No more stances of your tier or lower to learn.",
+      "AtLimit": "You know as many stances as your level allows (two, plus one per level after 1st).",
+      "Refocus": "Refocus",
+      "RefocusHint": "Once per rest, in a moment of calm: clear your Focus, roll a d6 for each point of Instinct and keep the highest",
+      "RefocusFlavor": "Refocus: Focus equals the highest die",
+      "RefocusNone": "{actor} refocuses, but with no Instinct dice to roll their Focus stays empty.",
+      "AlreadyIn": "Already in the {stance} stance.",
+      "ShiftChat": "<strong>{actor}</strong> shifts into the <strong>{stance}</strong> stance.",
+      "DropChat": "<strong>{actor}</strong> drops out of their stance.",
+      "DropDamageChat": "<strong>{actor}</strong> drops out of their stance after taking Severe damage or marking their last Hit Point."
+    },
+    "Lunar": {
+      "Phase": {
+        "new": "New Moon",
+        "waxing": "Waxing Moon",
+        "full": "Full Moon",
+        "waning": "Waning Moon"
+      },
+      "Effect": {
+        "new": "Spend a Hope to negate Minor damage.",
+        "waxing": "+2 to damage rolls.",
+        "full": "+3 to damage thresholds.",
+        "waning": "+1 to Evasion."
+      },
+      "Unrolled": "No phase yet",
+      "Roll": "Roll the moon",
+      "RollHint": "At the beginning of each session, roll a d6 to set this session's phase.",
+      "RollFlavor": "Lunar Phases: this session's moon",
+      "Advance": "1 Hope",
+      "AdvanceHint": "Once per rest, spend a Hope to raise the die by one (a 6 becomes a 1).",
+      "RollFirst": "Roll the moon first.",
+      "AdvanceChat": "<strong>{actor}</strong> spends a Hope to turn the moon: <strong>{phase}</strong>."
+    },
+    "Hex": {
+      "Count": "{count} of {cap} hexed",
+      "Penalty": "−{penalty} damage and Difficulty",
+      "None": "No creature on this scene is hexed.",
+      "Remove": "Lift the hex",
+      "Hex": "Hex targets",
+      "HexHint": "Mark a Stress to Hex your targeted creatures (uses the feature's own action).",
+      "ClearAll": "Lift all",
+      "OverCap": "{actor} now has {count} creatures hexed, more than their Spellcast trait allows ({cap})."
+    },
+    "Warlock": {
+      "Favor": "Favor",
+      "Patron": "Patron",
+      "PatronPlaceholder": "Their name",
+      "Sphere": "Sphere",
+      "SpherePlaceholder": "Nature, Chaos, Wisdom…",
+      "Die": "Patron Die",
+      "Aid": "Call on your patron",
+      "AidReady": "Patron Die on next roll",
+      "AidHint": "Spend a Favor: your Patron Die is added to your next action roll. Click again to cancel without a refund.",
+      "AidEffect": "Patron's Aid",
+      "AidChat": "<strong>{actor}</strong> calls on {patron}: {die} joins their next action roll.",
+      "ThePatron": "their patron",
+      "Tribute": "Tribute (+{amount})",
+      "TributeHint": "Downtime move: show tribute to your patron and gain Favor equal to your Spellcast trait.",
+      "TributeChat": "<strong>{actor}</strong> shows tribute to their patron and gains {amount} Favor.",
+      "NoTribute": "Your Spellcast trait is 0 or less, so tribute gains no Favor.",
+      "Fury": "Patron's Fury",
+      "FuryStart": "Patron's Fury ({dice})",
+      "FuryActive": "Fury: +{dice} damage",
+      "FuryHint": "Spend a Favor: add a Patron Die per tier to your damage until you deal Severe damage or the scene ends.",
+      "FuryChat": "<strong>{actor}</strong> is imbued with their patron's fury: +{dice} damage until they deal Severe damage.",
+      "FuryEndChat": "<strong>{actor}</strong> dealt Severe damage; Patron's Fury ends."
+    },
+    "Mark": {
+      "Dice": "Damage against your mark",
+      "None": "No creature on this scene is Marked for Death.",
+      "Remove": "Clear the mark",
+      "Mark": "Mark target",
+      "MarkHint": "Mark a Stress to mark your targeted creature (uses the feature's own action). The previous mark is cleared.",
+      "BonusOff": "Striking the mark ({dice})",
+      "BonusOn": "On: +{dice} damage",
+      "BonusHint": "Turn on while you attack your marked target: the mark's dice are added to your damage rolls. Turns itself off when no mark remains.",
+      "BonusEffect": "Striking the Mark"
+    },
+    "Poison": {
+      "Tokens": "Tokens",
+      "Brew": "Brew",
+      "BrewHint": "Mark a Stress to place 1d4+1 tokens on the card. Unspent tokens clear on a long rest.",
+      "BrewFlavor": "Toxic Concoctions: new tokens",
+      "NoTokens": "No tokens left.",
+      "Hint": "After a successful weapon attack, spend a token to afflict the target. Poisons with a system action are applied to your targets.",
+      "TwinFang": "Twin Fang: against a target Marked for Death, spend another token for a second poison.",
+      "UsedChat": "<strong>{actor}</strong> afflicts the target with <strong>{poison}</strong>",
+      "ghostPetal": {
+        "Name": "Ghost Petal",
+        "Text": "The target becomes temporarily Vulnerable."
+      },
+      "graveSpore": {
+        "Name": "Grave Spore",
+        "Text": "The target must also mark a Stress."
+      },
+      "leechWeed": {
+        "Name": "Leech Weed",
+        "Text": "You deal an extra 1d6 damage on this attack."
+      },
+      "midnightVine": {
+        "Name": "Midnight Vine",
+        "Text": "The target has disadvantage on attack rolls until it marks a Stress to clear this condition."
+      },
+      "gorgonRoot": {
+        "Name": "Gorgon Root",
+        "Text": "The target becomes temporarily Restrained."
+      },
+      "blightSeed": {
+        "Name": "Blight Seed",
+        "Text": "The target gains a −3 penalty to their damage thresholds until the end of the scene. This effect can't stack."
+      },
+      "fearLeaf": {
+        "Name": "Fear Leaf",
+        "Text": "You deal extra damage equal to the result of your Fear Die on this attack."
+      },
+      "corpseThorn": {
+        "Name": "Corpse Thorn",
+        "Text": "The target gains disadvantage on reaction rolls until the end of the scene."
+      }
+    },
+    "Patterns": {
+      "Number": "Your number",
+      "Hint": "When either Duality Die shows this number, the system asks whether to gain a Hope or clear a Stress. You can change it on a long rest."
+    },
+    "Unstoppable": {
+      "Active": "Unstoppable",
+      "Inactive": "Not Unstoppable",
+      "Become": "Become Unstoppable",
+      "End": "End",
+      "Hint": "The die starts at 1 and rises after each damage roll that deals Hit Points; past its maximum, Unstoppable ends.",
+      "EndChat": "<strong>{actor}</strong>'s Unstoppable Die passed its maximum; they are no longer Unstoppable."
+    },
+    "Settings": {
+      "ShowDrawer": {
+        "Name": "Show the class features drawer",
+        "Hint": "A pull-out tab on the edge of character sheets with panels for the features below. Only for characters that have one of them. The automations keep working with the drawer hidden."
+      },
+      "MartialStances": {
+        "Name": "Brawler: Martial Stances",
+        "Hint": "Martial Artist panel: Focus track, known stances, one-click shifting (Focus, or Stress with Flow State), Refocus, the trait for Favored and learning stances from the compendium."
+      },
+      "OneStance": {
+        "Name": "Brawler: one active stance",
+        "Hint": "Entering a stance (from the drawer or the stance's own action) drops the one you were in."
+      },
+      "StanceDropOut": {
+        "Name": "Brawler: drop stance on Severe damage",
+        "Hint": "Leave the active stance when the character takes Severe damage (3 or more Hit Points at once) or marks their last Hit Point. Needs Martial Stances on."
+      },
+      "Favor": {
+        "Name": "Warlock: Favor and Patron Die",
+        "Hint": "Favor track, patron name and sphere, Patron Die sized by level (d6, d8 from level 5) added to the next action roll for a Favor, the Tribute downtime move, and Patron's Fury dice added to damage until Severe damage is dealt."
+      },
+      "LunarPhases": {
+        "Name": "Witch: Lunar Phases",
+        "Hint": "Roll the moon each session and turn on only the matching phase effect; spend a Hope to advance it. Also keeps the effects in step when the die is changed on the sheet."
+      },
+      "Hexes": {
+        "Name": "Witch: Hex tracker",
+        "Hint": "Lists hexed creatures on the scene against your Spellcast limit, lets you lift hexes and warns when a new hex goes past the limit."
+      },
+      "MarkedForDeath": {
+        "Name": "Assassin: Marked for Death",
+        "Hint": "Shows your marked creature and the right damage dice (tier × d4, d6 with Ambush, d8 with Backstab), with a switch that adds them to your damage."
+      },
+      "OneMark": {
+        "Name": "Assassin: one mark at a time",
+        "Hint": "Marking a new creature clears the mark from the previous one. Needs Marked for Death on."
+      },
+      "ToxicConcoctions": {
+        "Name": "Assassin: Toxic Concoctions",
+        "Hint": "Poison token counter with Brew (mark a Stress, add 1d4+1) and one-click poisons that spend a token, including Leech Weed and Fear Leaf."
+      },
+      "StrangePatterns": {
+        "Name": "Wizard: Strange Patterns number",
+        "Hint": "Pick your Strange Patterns number from a list instead of rerolling the d12 on the sheet. The system itself handles the Hope or Stress when the number comes up."
+      },
+      "Unstoppable": {
+        "Name": "Guardian: Unstoppable",
+        "Hint": "The Unstoppable Die starts at 1, rises after each damage roll that deals Hit Points (d4, d6 from level 5) and ends Unstoppable when it passes its maximum."
+      }
+    }
+  }
+}
