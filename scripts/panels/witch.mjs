@@ -84,12 +84,18 @@ export const lunarPanel = {
     }
 };
 
-/** Keep effects in step when the die is changed on the sheet itself (click / right-click on the die). */
+/**
+ * Keep effects in step when the die is changed on the sheet itself (click / right-click on the die), and when
+ * the subclass reaches mastery and unlocks the feature (until then the pack's defaults are left alone, and the
+ * system suppresses them anyway).
+ */
 Hooks.on('updateItem', async (item, changes, options, userId) => {
-    if (userId !== game.user.id || !enabled('lunarPhases')) return;
-    if (foundry.utils.getProperty(changes, 'system.resource.value') === undefined) return;
-    if (item.parent?.documentName !== 'Actor' || findFeature(item.parent, 'lunarPhases')?.id !== item.id) return;
-    await syncLunarEffects(item);
+    if (userId !== game.user.id || !enabled('lunarPhases') || item.parent?.documentName !== 'Actor') return;
+    const dieChanged = foundry.utils.getProperty(changes, 'system.resource.value') !== undefined;
+    const unlocked = item.type === 'subclass' && foundry.utils.getProperty(changes, 'system.featureState') !== undefined;
+    if (!dieChanged && !unlocked) return;
+    const lunar = findFeature(item.parent, 'lunarPhases');
+    if (lunar && (unlocked || lunar.id === item.id)) await syncLunarEffects(lunar);
 });
 
 /* ---------- Hex ---------- */

@@ -15,12 +15,22 @@ export const L = (key, data) => (data ? game.i18n.format(`DHET.${key}`, data) : 
 export const enabled = key => game.settings.get(MODULE_ID, key);
 
 /**
- * The actor's copy of one of the system's features. Matched by compendium source first, then by its English
- * name, since features added through a class or subclass and hand-made copies may lack the source.
+ * Whether the character can use a feature yet. Subclass features unlock with the subclass: specialization
+ * features need the specialization, mastery features the mastery (the system's own rule, which also hides
+ * them on the sheet and suppresses their effects).
+ */
+export function isAvailable(actor, item) {
+    return actor.system?.isItemAvailable?.(item) ?? true;
+}
+
+/**
+ * The actor's copy of one of the system's features, if the character can use it yet. Matched by compendium
+ * source first, then by its English name, since features added through a class or subclass and hand-made
+ * copies may lack the source.
  */
 export function findFeature(actor, key) {
     if (!actor?.items) return null;
-    const features = actor.items.filter(i => i.type === 'feature');
+    const features = actor.items.filter(i => i.type === 'feature' && isAvailable(actor, i));
     const id = FEATURE_IDS[key];
     const name = FEATURE_NAMES[key]?.toLowerCase();
     return (
@@ -107,7 +117,8 @@ export function stanceSourceEffect(item) {
 }
 
 export function isStance(item) {
-    return item.type === 'feature' && (STANCES[compendiumId(item._stats?.compendiumSource)] != null || !!stanceSourceEffect(item));
+    if (item.type !== 'feature' || (item.parent && !isAvailable(item.parent, item))) return false;
+    return STANCES[compendiumId(item._stats?.compendiumSource)] != null || !!stanceSourceEffect(item);
 }
 
 export function stanceTier(item) {
