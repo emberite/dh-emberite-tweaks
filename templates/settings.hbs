@@ -1,0 +1,21 @@
+<div class="dhet-settings-body">
+    {{#unless gm}}<p class="dhet-set-note"><i class="fa-solid fa-lock"></i> {{localize "DHET.SettingsMenu.PlayerNote"}}</p>{{/unless}}
+    {{#each panes}}
+    <section class="tab {{tab.cssClass}}" data-tab="{{id}}" data-group="primary">
+        {{#each groups}}
+        <fieldset class="dhet-set-group">
+            <legend>{{label}}</legend>
+            {{#each settings}}
+            <label class="dhet-set {{#if child}}child{{/if}} {{#if locked}}locked{{/if}}" {{#if parent}}data-parent="{{parent}}"{{/if}}>
+                <span class="dhet-set-text">
+                    <strong>{{name}}{{#if client}} <span class="dhet-set-badge">{{localize "DHET.SettingsMenu.JustYou"}}</span>{{/if}}</strong>
+                    <small>{{hint}}</small>
+                </span>
+                <input type="checkbox" class="dhet-switch" name="{{key}}" {{checked checked}} {{disabled locked}} />
+            </label>
+            {{/each}}
+        </fieldset>
+        {{/each}}
+    </section>
+    {{/each}}
+</div>

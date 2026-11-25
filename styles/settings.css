@@ -1,0 +1,111 @@
+/* ==========================================================================
+   Emberite Tweaks: settings window
+   ========================================================================== */
+.dhet-settings .window-content {
+  gap: 0;
+}
+.dhet-settings-body {
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.dhet-settings .tab:not(.active) {
+  display: none;
+}
+.dhet-set-note {
+  margin: 0 0 10px;
+  font-size: var(--font-size-12, 12px);
+  opacity: 0.8;
+}
+.dhet-set-group {
+  margin: 0 0 12px;
+  padding: 6px 12px 8px;
+  border-radius: 6px;
+}
+.dhet-set-group legend {
+  padding: 0 6px;
+  font-weight: 700;
+}
+.dhet-set {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 2px;
+  cursor: pointer;
+}
+.dhet-set + .dhet-set {
+  border-top: 1px solid hsl(from currentColor h s l / 0.12);
+}
+.dhet-set.child {
+  margin-left: 22px;
+  padding-left: 12px;
+  border-left: 2px solid hsl(from currentColor h s l / 0.2);
+}
+.dhet-set.child.dhet-off {
+  opacity: 0.45;
+}
+.dhet-set.locked {
+  cursor: default;
+  opacity: 0.7;
+}
+.dhet-set-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.dhet-set-text strong {
+  font-size: var(--font-size-14, 14px);
+}
+.dhet-set-text small {
+  font-size: var(--font-size-12, 12px);
+  line-height: 1.35;
+  opacity: 0.75;
+}
+.dhet-set-badge {
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  vertical-align: 1px;
+  background: hsl(from currentColor h s l / 0.15);
+}
+/* Switches */
+.dhet-settings input.dhet-switch {
+  appearance: none;
+  flex: none;
+  position: relative;
+  width: 40px;
+  height: 22px;
+  margin: 0;
+  border-radius: 999px;
+  background: hsl(from currentColor h s l / 0.25);
+  cursor: pointer;
+  transition: background 150ms;
+}
+.dhet-settings input.dhet-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: transform 150ms;
+}
+.dhet-settings input.dhet-switch:checked {
+  background: var(--color-warm-2, #e8a548);
+}
+.dhet-settings input.dhet-switch:checked::after {
+  transform: translateX(18px);
+}
+.dhet-settings input.dhet-switch:disabled {
+  cursor: default;
+}
+.dhet-settings input.dhet-switch:focus-visible {
+  outline: 2px solid var(--color-warm-2, #e8a548);
+  outline-offset: 2px;
+}

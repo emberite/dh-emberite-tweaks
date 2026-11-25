@@ -16,7 +16,7 @@ export const TEMPLATES = [
     'stances', 'lunar', 'hex', 'warlock', 'mark', 'poison', 'patterns', 'unstoppable',
     'wizard/wizard', 'wizard/step-class', 'wizard/step-ancestry', 'wizard/step-community', 'wizard/step-traits',
     'wizard/step-experiences', 'wizard/step-domains', 'wizard/step-equipment', 'wizard/step-background', 'wizard/step-review',
-    'wizard/levelup', 'wizard/_cardgallery', 'wizard/_pick'
+    'wizard/levelup', 'wizard/_cardgallery', 'wizard/_pick', 'settings'
 ].map(name => `modules/${MODULE_ID}/templates/${name}.hbs`);
 
 export function preloadTemplates() {

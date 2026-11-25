@@ -179,47 +179,47 @@
         "Hint": "A pull-out tab on the edge of character sheets with panels for the features below. Only for characters that have one of them. The automations keep working with the drawer hidden."
       },
       "MartialStances": {
-        "Name": "Brawler: Martial Stances",
+        "Name": "Martial Stances panel",
         "Hint": "Martial Artist panel: Focus track, known stances, one-click shifting (Focus, or Stress with Flow State), Refocus, the trait for Favored and learning stances from the compendium."
       },
       "OneStance": {
-        "Name": "Brawler: one active stance",
+        "Name": "Only one active stance",
         "Hint": "Entering a stance (from the drawer or the stance's own action) drops the one you were in."
       },
       "StanceDropOut": {
-        "Name": "Brawler: drop stance on Severe damage",
+        "Name": "Drop the stance on Severe damage",
         "Hint": "Leave the active stance when the character takes Severe damage (3 or more Hit Points at once) or marks their last Hit Point. Needs Martial Stances on."
       },
       "Favor": {
-        "Name": "Warlock: Favor and Patron Die",
+        "Name": "Favor and Patron Die",
         "Hint": "Favor track, patron name and sphere, Patron Die sized by level (d6, d8 from level 5) added to the next action roll for a Favor, the Tribute downtime move, and Patron's Fury dice added to damage until Severe damage is dealt."
       },
       "LunarPhases": {
-        "Name": "Witch: Lunar Phases",
+        "Name": "Lunar Phases",
         "Hint": "Roll the moon each session and turn on only the matching phase effect; spend a Hope to advance it. Also keeps the effects in step when the die is changed on the sheet."
       },
       "Hexes": {
-        "Name": "Witch: Hex tracker",
+        "Name": "Hex tracker",
         "Hint": "Lists hexed creatures on the scene against your Spellcast limit, lets you lift hexes and warns when a new hex goes past the limit."
       },
       "MarkedForDeath": {
-        "Name": "Assassin: Marked for Death",
+        "Name": "Marked for Death",
         "Hint": "Shows your marked creature and the right damage dice (tier × d4, d6 with Ambush, d8 with Backstab), with a switch that adds them to your damage."
       },
       "OneMark": {
-        "Name": "Assassin: one mark at a time",
+        "Name": "Only one mark at a time",
         "Hint": "Marking a new creature clears the mark from the previous one. Needs Marked for Death on."
       },
       "ToxicConcoctions": {
-        "Name": "Assassin: Toxic Concoctions",
+        "Name": "Toxic Concoctions",
         "Hint": "Poison token counter with Brew (mark a Stress, add 1d4+1) and one-click poisons that spend a token, including Leech Weed and Fear Leaf."
       },
       "StrangePatterns": {
-        "Name": "Wizard: Strange Patterns number",
+        "Name": "Strange Patterns number",
         "Hint": "Pick your Strange Patterns number from a list instead of rerolling the d12 on the sheet. The system itself handles the Hope or Stress when the number comes up."
       },
       "Unstoppable": {
-        "Name": "Guardian: Unstoppable",
+        "Name": "Unstoppable Die",
         "Hint": "The Unstoppable Die starts at 1, rises after each damage roll that deals Hit Points (d4, d6 from level 5) and ends Unstoppable when it passes its maximum."
       },
       "CreationWizard": {
@@ -231,19 +231,19 @@
         "Hint": "Leveling up opens a full-screen wizard: click advancements and pick cards instead of ticking boxes and dragging. It applies the level with the system's own code. Turn off to use the system's dialog."
       },
       "SheetSidebar": {
-        "Name": "Sheet sidebar: full-width resources",
-        "Hint": "Hit Points, Stress and Armor Slots fill the sidebar's width with a heart, bolt and shield instead of text labels. Evasion and Proficiency move onto the portrait as badges."
+        "Name": "Full-width resources",
+        "Hint": "Hit Points, Stress and Armor Slots fill the sidebar's width with a heart, bolt and shield instead of text labels. Evasion and Proficiency get a slim row under the portrait."
       },
       "SheetSidebarNumbers": {
-        "Name": "Sheet sidebar: show current/max numbers",
+        "Name": "Show current/max numbers",
         "Hint": "Show the 3/6 numbers on the resource rows. When off they appear when you point at a row, so you can still type a value."
       },
       "LoadoutRows": {
-        "Name": "Sheet sidebar: loadout as a list",
+        "Name": "Loadout as a list",
         "Hint": "Show the domain card loadout as a list of rows (card art, level banner, name) in the Core Rulebook style instead of a strip of card tiles."
       },
       "ChatCards": {
-        "Name": "Chat: show cards as cards",
+        "Name": "Show cards as cards",
         "Hint": "Domain cards, subclasses, ancestries and communities sent to chat show as their real card (the same one the tooltips show), with the message's buttons below."
       }
     },
@@ -431,6 +431,34 @@
       "armor": "Armor Slots",
       "evasion": "Evasion",
       "proficiency": "Proficiency"
+    },
+    "SettingsMenu": {
+      "Name": "Emberite Tweaks",
+      "Label": "Open settings",
+      "Hint": "All of the module's options, sorted into tabs. Each one can be switched off on its own.",
+      "Title": "Emberite Tweaks",
+      "Save": "Save",
+      "Reset": "Reset to defaults",
+      "Saved": "Emberite Tweaks settings saved.",
+      "JustYou": "just for you",
+      "PlayerNote": "Only the GM can change most of these; your own options can be changed here.",
+      "Tab": {
+        "wizards": "Wizards",
+        "sheet": "Sheet & Chat",
+        "classes": "Class Features"
+      },
+      "Group": {
+        "wizards": "Full-screen wizards",
+        "sidebar": "Character sheet sidebar",
+        "chat": "Chat",
+        "drawer": "Class features drawer",
+        "brawler": "Brawler",
+        "warlock": "Warlock",
+        "witch": "Witch",
+        "assassin": "Assassin",
+        "guardian": "Guardian",
+        "wizard": "Wizard"
+      }
     }
   }
 }

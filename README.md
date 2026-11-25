@@ -124,18 +124,13 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 
 ## Settings
 
-Each tool and feature has its own world setting, all on by default. Turn one off when the system starts doing the same thing:
+**Configure Settings → Emberite Tweaks → Open settings** opens one window with three tabs. Every option is an on/off switch with its explanation, all on by default; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
 
-- **Full-screen character creation**, **Full-screen level up**: off brings back the system's own dialogs.
-- **Sheet sidebar: full-width resources**, **show current/max numbers**, **loadout as a list**
-- **Chat: show cards as cards**
-- **Show the class features drawer** (per player): hides the tab. The automations keep working.
-- **Brawler: Martial Stances**, **Brawler: one active stance**, **Brawler: drop stance on Severe damage**
-- **Warlock: Favor and Patron Die**
-- **Witch: Lunar Phases**, **Witch: Hex tracker**
-- **Assassin: Marked for Death**, **Assassin: one mark at a time**, **Assassin: Toxic Concoctions**
-- **Wizard: Strange Patterns number**
-- **Guardian: Unstoppable**
+- **Wizards:** full-screen character creation; full-screen level up (off brings back the system's own dialogs).
+- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; show cards as cards in chat.
+- **Class Features:** show the class features drawer (each player decides for themselves), then each class's features: Brawler (Martial Stances panel, only one active stance, drop the stance on Severe damage), Warlock (Favor and Patron Die), Witch (Lunar Phases, Hex tracker), Assassin (Marked for Death, only one mark at a time, Toxic Concoctions), Guardian (Unstoppable Die), Wizard (Strange Patterns number).
+
+Only the GM can change the world options; players see them and can change their own.
 
 Features are recognised by the system compendium item they came from, or by their English name, so they work whether they were added through a class or subclass, dragged from the compendium or copied.
 
