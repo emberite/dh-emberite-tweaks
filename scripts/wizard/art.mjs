@@ -143,3 +143,44 @@ export function actorPortrait(actor) {
     const candidates = [actor.img, actor.prototypeToken?.texture?.src];
     return candidates.find(img => !isPlaceholder(img)) ?? null;
 }
+
+/**
+ * A subclass card for its specialization (state 2) or mastery (state 3): the system's own subclass card template,
+ * filled with that stage's features instead of the general description (the system's cards don't show stages
+ * yet). Null when the subclass has no features for that stage.
+ */
+export async function subclassStageCard(sub, state) {
+    const stage = state >= 3 ? 'mastery' : 'specialization';
+    const links = (sub.system.features ?? []).filter(f => f.type === stage);
+    const parts = [];
+    for (const link of links) {
+        const item = await fromUuid(link.item ?? link.uuid);
+        if (!item) continue;
+        const description = await foundry.applications.ux.TextEditor.implementation.enrichHTML(item.system.description ?? '', {
+            relativeTo: item
+        });
+        // The feature's name leads its first paragraph, like the system's other cards.
+        const name = `<strong><em>${foundry.utils.escapeHTML(item.name)}:</em></strong> `;
+        parts.push(/^\s*<p>/i.test(description) ? description.replace(/^\s*<p>/i, `<p>${name}`) : `<p>${name}</p>${description}`);
+    }
+    if (!parts.length) return null;
+
+    const classItem = await fromUuid(sub.system.linkedClass);
+    const domains = CONFIG.DH.DOMAIN.allDomains?.() ?? {};
+    const classDomains = classItem?.system.domains?.slice(0, 2) ?? [];
+    const label = game.i18n.localize(CONFIG.DH.ACTOR.subclassFeatureLabels?.[state >= 3 ? 3 : 2] ?? stage);
+    const html = await foundry.applications.handlebars.renderTemplate(sub.system.constructor.embedTemplate, {
+        item: sub,
+        description: parts.join(''),
+        // The card's trim (normally the class name) names the stage instead.
+        classItem: { name: label },
+        domain1: foundry.utils.mergeObject({ color: 'black' }, domains[classDomains[0]] ?? {}),
+        domain2: foundry.utils.mergeObject({ color: 'black' }, domains[classDomains[1]] ?? domains[classDomains[0]] ?? {})
+    });
+    const theme = game.system.settings?.appearance?.tooltipCardTheme;
+    if (!['dark', 'light'].includes(theme)) return html;
+    const box = document.createElement('div');
+    box.innerHTML = html;
+    box.firstElementChild?.classList.add('themed', `theme-${theme}`);
+    return box.innerHTML;
+}

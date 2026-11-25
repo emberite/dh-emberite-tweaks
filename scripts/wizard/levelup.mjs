@@ -1,7 +1,7 @@
 import { MODULE_ID } from '../rules.mjs';
 import { L } from '../actor.mjs';
 import { describe } from '../view.mjs';
-import { actorPortrait, cardHtml, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
+import { actorPortrait, cardHtml, subclassStageCard, coreActive, coreThemeStyle, domainBanner, isArt, stepBackdrop, subclassCutout } from './art.mjs';
 import { loadCandidates, subclassesOf } from './data.mjs';
 
 const { HandlebarsApplicationMixin, ApplicationV2 } = foundry.applications.api;
@@ -144,6 +144,13 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
         const key = `card:${doc.uuid}`;
         if (!this.descriptions.has(key)) this.descriptions.set(key, await cardHtml(doc));
         return this.descriptions.get(key);
+    }
+
+    /** The subclass card for the stage an upgrade reaches (cached), else its normal card. */
+    async #stageCardOf(sub, state) {
+        const key = `stage:${sub.uuid}:${state}`;
+        if (!this.descriptions.has(key)) this.descriptions.set(key, state >= 2 ? await subclassStageCard(sub, state) : null);
+        return this.descriptions.get(key) ?? this.#cardOf(sub);
     }
 
     async #describe(doc) {
@@ -438,7 +445,7 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                                         state: game.i18n.localize(CONFIG.DH.ACTOR.subclassFeatureLabels?.[state] ?? '')
                                     }),
                                     selected: choice.data.includes(sub.uuid),
-                                    card: await this.#cardOf(sub)
+                                    card: await this.#stageCardOf(sub, state)
                                 };
                             })
                         )
@@ -524,7 +531,11 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                         // Options that are cards show the card (a multiclass shows its chosen subclass).
                         const cardUuid = option === 'multiclass' ? box.secondaryData?.subclass : ['domainCard', 'subclass'].includes(option) ? box.data[0] : null;
                         const doc = cardUuid ? await fromUuid(cardUuid) : null;
-                        const card = doc && (await this.#cardOf(doc));
+                        const card =
+                            doc &&
+                            (option === 'subclass'
+                                ? await this.#stageCardOf(doc, Number(box.secondaryData?.featureState) || 1)
+                                : await this.#cardOf(doc));
                         if (card) cards.push(card);
                         if (option === 'multiclass' && box.data[0]) detail = (await fromUuid(box.data[0]))?.name ?? '';
                         else if (!card && doc) detail = doc.name;
