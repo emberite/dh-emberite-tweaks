@@ -1,5 +1,6 @@
 import { MODULE_ID } from '../rules.mjs';
 import { coreActive } from '../wizard/art.mjs';
+import { frameFor } from './frame.mjs';
 
 /**
  * Chat themes in the Daggerheart Core Rulebook module's design: messages take the colours, fonts and cover art
@@ -61,7 +62,8 @@ function absoluteUrl(value) {
 }
 
 export function applyChatTheme() {
-    const name = game.settings.get(MODULE_ID, 'chatTheme');
+    // The campaign frame's theme when it drives the chat, otherwise the chat's own choice.
+    const name = frameFor('chatTheme') ?? game.settings.get(MODULE_ID, 'chatTheme');
     const root = document.body;
     for (const v of VARS) root.style.removeProperty(`--dhet-chat-${v}`);
     const on = !!name && name !== 'none' && coreActive() && name in chatThemes();

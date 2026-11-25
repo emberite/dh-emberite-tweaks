@@ -118,3 +118,190 @@ body.dhet-chat-glass .chat-message.chat-message .message-header {
 body.dhet-chat-glass .chat-message.chat-message.whisper {
   border-color: hsl(from var(--dhet-chat-bright-accent, #c9b8ff) h s l / 0.6);
 }
+
+/* ==========================================================================
+   Critical rolls: a gold edge that flares once when the card arrives, plus the
+   chosen effect: a slow shine drifting across the card, embers rising from its
+   bottom edge (as on the emberite website), twinkling sparkles, or a softly
+   pulsing glow. Every layer lies over the card and never takes the pointer.
+   Gold follows the chat theme's secondary colour when there is one.
+   ========================================================================== */
+.chat-message.dhet-crit {
+  --dhet-crit: var(--dhet-chat-secondary, #f3c267);
+  position: relative;
+  overflow: hidden;
+}
+.chat-message.dhet-crit::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  box-sizing: border-box;
+  border: 1px solid hsl(from var(--dhet-crit) h s l / 0.6);
+  border-radius: inherit;
+  box-shadow: inset 0 0 18px hsl(from var(--dhet-crit) h s l / 0.25);
+  background: radial-gradient(ellipse at 50% 0%, hsl(from var(--dhet-crit) h s l / 0.16), transparent 65%);
+  animation: dhet-crit-arrive 1.6s ease-out 1;
+}
+@keyframes dhet-crit-arrive {
+  0% {
+    border-color: hsl(from var(--dhet-crit) h s l / 1);
+    box-shadow: inset 0 0 40px hsl(from var(--dhet-crit) h s l / 0.55);
+  }
+}
+
+/* Shine: a band of light sweeps across every 14 seconds. */
+.chat-message.dhet-crit-shine::after {
+  background:
+    linear-gradient(
+        110deg,
+        transparent 38%,
+        hsl(from var(--dhet-crit) h s l / 0.12) 45%,
+        hsl(from var(--dhet-crit) h s calc(l + 12) / 0.3) 50%,
+        hsl(from var(--dhet-crit) h s l / 0.12) 55%,
+        transparent 62%
+      )
+      no-repeat,
+    radial-gradient(ellipse at 50% 0%, hsl(from var(--dhet-crit) h s l / 0.16), transparent 65%);
+  background-size:
+    260% 100%,
+    100% 100%;
+  background-position:
+    160% 0,
+    0 0;
+  animation:
+    dhet-crit-sheen 14s ease-in-out infinite,
+    dhet-crit-arrive 1.6s ease-out 1;
+}
+@keyframes dhet-crit-sheen {
+  0% {
+    background-position:
+      160% 0,
+      0 0;
+  }
+  40%,
+  100% {
+    background-position:
+      -60% 0,
+      0 0;
+  }
+}
+
+/* Glow: the edge breathes in and out. */
+.chat-message.dhet-crit-glow::after {
+  animation:
+    dhet-crit-breathe 5s ease-in-out infinite,
+    dhet-crit-arrive 1.6s ease-out 1;
+}
+@keyframes dhet-crit-breathe {
+  50% {
+    border-color: hsl(from var(--dhet-crit) h s l / 0.85);
+    box-shadow: inset 0 0 30px hsl(from var(--dhet-crit) h s l / 0.42);
+  }
+}
+
+/* Embers and sparkles: particles placed by chatcards.mjs (seeded by the message, so they stay put). */
+.chat-message.dhet-crit > .dhet-crit-fx {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+  container-type: size;
+}
+.dhet-crit-embers > .dhet-crit-fx > i {
+  position: absolute;
+  bottom: -6px;
+  left: var(--x);
+  width: var(--s);
+  height: var(--s);
+  border-radius: 50%;
+  background: hsl(from var(--dhet-crit) h s calc(l + 8));
+  box-shadow: 0 0 8px 2px hsl(from var(--dhet-crit) calc(h - 14) calc(s + 10) calc(l - 8) / 0.7);
+  opacity: 0;
+  animation: dhet-ember-rise var(--d) linear var(--delay) infinite;
+}
+@keyframes dhet-ember-rise {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(var(--dx), calc(-100cqh - 8px));
+    opacity: 0;
+  }
+}
+.dhet-crit-sparkles > .dhet-crit-fx > i {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  translate: -50% -50%;
+  filter: drop-shadow(0 0 3px hsl(from var(--dhet-crit) h s l / 0.9));
+  opacity: 0;
+  scale: 0;
+  animation: dhet-sparkle var(--d) ease-in-out var(--delay) infinite;
+}
+/* The star shape sits on a child, so its clip doesn't cut off the glow. */
+.dhet-crit-sparkles > .dhet-crit-fx > i::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: hsl(from var(--dhet-crit) h s calc(l + 15));
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+}
+@keyframes dhet-sparkle {
+  0%,
+  45%,
+  100% {
+    opacity: 0;
+    scale: 0;
+    rotate: 0deg;
+  }
+  70% {
+    opacity: 0.9;
+    scale: 1;
+    rotate: 45deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-message.dhet-crit::after {
+    animation: none;
+  }
+  .chat-message.dhet-crit > .dhet-crit-fx {
+    display: none;
+  }
+}
+
+/* Duality rolls on glass: each outcome is its own tinted glass (Hope gold, Fear the system's blue-violet,
+   critical and fate purple) with a matching top edge, in place of the system's panels behind the header and
+   content (a faint gold wash for Hope but dark ones for Fear and crits, so Hope looked like any message). */
+body.dhet-chat-glass .chat-message.chat-message.duality.hope {
+  --ct-glass: var(--dhet-chat-secondary, #f3c267);
+}
+body.dhet-chat-glass .chat-message.chat-message.duality.fear {
+  --ct-glass: #8f87ee;
+}
+body.dhet-chat-glass .chat-message.chat-message:is(.duality.critical, .fate) {
+  --ct-glass: #a778b1;
+}
+body.dhet-chat-glass .chat-message.chat-message:is(.duality, .fate) {
+  border-top: 2px solid hsl(from var(--ct-glass) h s l / 0.85);
+  background:
+    linear-gradient(155deg, rgb(255 255 255 / 0.08), transparent 40%),
+    linear-gradient(
+      180deg,
+      hsl(from var(--ct-glass) h s calc(l - 10) / 0.34),
+      hsl(from var(--ct-glass) h s calc(l - 45) / 0.3)
+    );
+}
+body.dhet-chat-glass .chat-message.chat-message:is(.duality, .fate) :is(.message-header, .message-content) {
+  background-color: transparent;
+}

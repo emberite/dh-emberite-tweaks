@@ -242,6 +242,10 @@
         "Name": "Loadout as a list",
         "Hint": "Show the domain card loadout as a list of rows (card art, level banner, name) in the Core Rulebook style instead of a strip of card tiles."
       },
+      "CritEffect": {
+        "Name": "Critical roll effect",
+        "Hint": "Critical successes (matching Hope and Fear dice, an adversary's natural 20) and critical damage get a gold edge that flares when the card arrives, and an effect on their chat card: a slow shine drifting across it, embers rising from its bottom edge, twinkling sparkles or a softly pulsing glow."
+      },
       "ChatCards": {
         "Name": "Show cards as cards",
         "Hint": "Domain cards, subclasses, ancestries and communities sent to chat show as their real card (the same one the tooltips show), with the message's buttons below."
@@ -281,6 +285,38 @@
       "RangeLabels": {
         "Name": "Name the range bands",
         "Hint": "The Core Rulebook module's range bands around a selected token get their names (Very Close, Close, Far, and Very Far outside the last ring), curved along each ring. They show whenever its \"Show Range Bands\" setting shows the rings. Needs the Core Rulebook module."
+      },
+      "TokenHudSpotlight": {
+        "Name": "Spotlight button on the Token HUD",
+        "Hint": "Players ask for the spotlight, or stop asking, from their token's HUD (in combat this is the same request as the combat tracker's hand button). The GM gives or takes the spotlight from any token's HUD, using the system's own spotlight."
+      },
+      "SpotlightIndicator": {
+        "Name": "Show requests on the canvas",
+        "Hint": "The GM sees a small gold hand on the corner of every token asking for the spotlight."
+      },
+      "MinimalCountdowns": {
+        "Name": "Minimal countdowns",
+        "Hint": "While there are no countdowns, the GM's countdown panel shrinks to a small + that opens the countdown editor. Players don't see the panel then anyway."
+      },
+      "CampaignFrame": {
+        "Name": "Campaign frame",
+        "Hint": "The frame this world is played in: the Core Rulebook's core theme or a campaign frame (Hope & Fear's included). It sets the look of everything switched on below at once, for every user. Needs the Core Rulebook module."
+      },
+      "FrameSheets": {
+        "Name": "Sheet theme",
+        "Hint": "Character, adversary and other sheets open in the frame's theme by default for everyone. A theme someone picked for one particular sheet still wins."
+      },
+      "FrameChat": {
+        "Name": "Chat theme",
+        "Hint": "Chat messages take the frame's theme, in place of the chat theme set on the Sheet & Chat tab."
+      },
+      "FrameFearColor": {
+        "Name": "Fear token colours",
+        "Hint": "The Fear tracker takes the frame's colours."
+      },
+      "FrameFearIcon": {
+        "Name": "Fear token icon",
+        "Hint": "The Fear tokens take the frame's icon. The core theme has none, so the Fear tab's icon stays."
       }
     },
     "Wizard": {
@@ -480,8 +516,10 @@
       "PlayerNote": "Only the GM can change most of these; your own options can be changed here.",
       "Tab": {
         "wizards": "Wizards",
+        "frame": "Campaign Frame",
         "sheet": "Sheet & Chat",
         "fear": "Fear & Canvas",
+        "table": "Spotlight",
         "classes": "Class Features"
       },
       "Group": {
@@ -496,7 +534,10 @@
         "guardian": "Guardian",
         "wizard": "Wizard",
         "fear": "The system's Fear tracker",
-        "rangeBands": "Range bands"
+        "rangeBands": "Range bands",
+        "spotlight": "Spotlight",
+        "countdowns": "Countdowns",
+        "frame": "Campaign frame"
       }
     },
     "Chat": {
@@ -504,6 +545,13 @@
     },
     "ChatTheme": {
       "Off": "Off (Foundry's chat)"
+    },
+    "CritEffect": {
+      "None": "Off",
+      "Shine": "Shine",
+      "Embers": "Embers",
+      "Sparkles": "Sparkles",
+      "Glow": "Pulsing glow"
     },
     "Fear": {
       "System": "System",
@@ -546,6 +594,19 @@
       "Style": {
         "banner": "Banner"
       }
+    },
+    "Spotlight": {
+      "Request": "Request the spotlight",
+      "Cancel": "Stop requesting the spotlight",
+      "Give": "Give the spotlight",
+      "Take": "Take the spotlight"
+    },
+    "Countdown": {
+      "Add": "Add Countdown"
+    },
+    "Frame": {
+      "None": "None",
+      "SetByFrame": "Set by the campaign frame while one is chosen (Campaign Frame tab)."
     }
   }
 }

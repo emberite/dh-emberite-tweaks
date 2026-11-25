@@ -14,10 +14,11 @@
             </div>
             {{/if}}
             {{#each settings}}
-            <label class="dhet-set {{#if child}}child{{/if}} {{#if locked}}locked{{/if}}" {{#if parent}}data-parent="{{parent}}"{{/if}}>
+            <label class="dhet-set {{#if child}}child{{/if}} {{#if locked}}locked{{/if}}" {{#if parent}}data-parent="{{parent}}"{{/if}} {{#if framed}}data-framed="{{framed}}"{{/if}}>
                 <span class="dhet-set-text">
                     <strong>{{name}}{{#if client}} <span class="dhet-set-badge">{{localize "DHET.SettingsMenu.JustYou"}}</span>{{/if}}</strong>
                     <small>{{hint}}</small>
+                    {{#if framed}}<small class="dhet-framed-note"><i class="fa-solid fa-map" inert></i> {{localize "DHET.Frame.SetByFrame"}}</small>{{/if}}
                 </span>
                 {{#if choices}}
                 <select class="dhet-set-select" name="{{key}}" {{disabled locked}}>

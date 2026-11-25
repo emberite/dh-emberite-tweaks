@@ -114,3 +114,17 @@
   flex: none;
   width: 210px;
 }
+
+/* An option the campaign frame drives: its own choice is kept but set aside. */
+.dhet-framed-note {
+  display: none;
+  color: var(--color-warm-2, #e8a548);
+  opacity: 1 !important;
+}
+.dhet-set.dhet-framed .dhet-framed-note {
+  display: block;
+}
+.dhet-set.dhet-framed select {
+  opacity: 0.45;
+  pointer-events: none;
+}

@@ -1,6 +1,7 @@
 import { MODULE_ID } from '../rules.mjs';
 import { L } from '../actor.mjs';
 import { chatThemes, readTheme } from './chattheme.mjs';
+import { frameFor } from './frame.mjs';
 
 /**
  * Appearance overrides for the system's Fear tracker (ui.resources): token colours, icon and shape, and a glow at
@@ -200,12 +201,17 @@ export function styleTracker(root, { style, color, icon, shape, glow, atMax }) {
     for (const i of root.querySelectorAll('.fear-tokens i.fear-token')) i.className = `fear-token ${classes}`;
 }
 
-/** The world's current choices. */
+/** Whether a campaign frame has an icon of its own (the core theme doesn't). */
+export const hasFrameIcon = id => id in FRAME_ICONS;
+
+/** The world's current choices, with the campaign frame's colours and icon where it drives them. */
 export function currentLook() {
+    const colorFrame = frameFor('fearColor');
+    const iconFrame = frameFor('fearIcon');
     return {
         style: setting('fearStyle'),
-        color: setting('fearColor'),
-        icon: setting('fearIcon'),
+        color: colorFrame ? `${FRAME}${colorFrame}` : setting('fearColor'),
+        icon: iconFrame && hasFrameIcon(iconFrame) ? `${FRAME}${iconFrame}` : setting('fearIcon'),
         shape: setting('fearShape'),
         glow: setting('fearMaxGlow')
     };

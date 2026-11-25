@@ -73,7 +73,16 @@ A separate tweak to the character sheet's sidebar, with its own switches:
 
 **Chat theme** puts chat messages in the Daggerheart Core Rulebook module's design, in the colours, fonts and faint cover art of one of its themes: the core theme or any campaign frame's (The Witherwild, Five Banners Burning, Beast Feast, The Age of Umbra, Motherboard, Colossus of the Drylands, and Hope & Fear's Castle High, Reign of the Weredragon, Dark Heart of Andaluria and Journey To Horizon). Rolls and the system's own chat cards follow the theme's colours. It reads the themes from the Core Rulebook module, so it needs that module, and themes other modules add to it show up too. Off by default.
 
-**Frosted glass** turns chat messages into tinted, see-through glass that blurs what is behind them. The tint follows the chat theme (a cool grey with the theme off), so it works with or without the Core Rulebook module. Off by default.
+**Frosted glass** turns chat messages into tinted, see-through glass that blurs what is behind them. The tint follows the chat theme (a cool grey with the theme off), so it works with or without the Core Rulebook module. Duality rolls get a glass of their own: gold with Hope, blue-violet with Fear, purple for a critical success. Off by default.
+
+**Critical roll effect** marks critical successes (matching Hope and Fear dice, an adversary's natural 20) and critical damage in chat. Their card gets a gold edge that flares as it arrives, plus one of these effects:
+
+- **Shine** (the default): a slow band of light sweeps across the card.
+- **Embers:** glowing sparks rise from the bottom of the card and drift as they fade.
+- **Sparkles:** small stars twinkle on and off across the card.
+- **Pulsing glow:** the gold edge slowly brightens and dims.
+
+The gold follows the chat theme. Nothing moves for users whose system asks for reduced motion.
 
 ### Fear tracker
 
@@ -88,6 +97,21 @@ The **Fear & Canvas** tab restyles the system's own Fear tracker for everyone at
 ### Range band names
 
 With **Name the range bands** on, the Daggerheart Core Rulebook module's range bands around a selected token get their names: Very Close, Close and Far just inside each ring, and Very Far just outside the last one. The names curve along the rings at the top, bottom and sides. They show and hide with the rings, following that module's own *Show Range Bands* setting, so the module is needed.
+
+### Campaign frame
+
+The **Campaign Frame** tab sets the frame this world is played in, from one list: the Core Rulebook's core theme or any campaign frame (Hope & Fear's included). The frame then drives every option with a frame-specific look, each behind its own switch:
+
+- **Sheet theme:** sheets open in the frame's theme by default for every user. A theme someone picked for one particular sheet still wins.
+- **Chat theme**, **Fear token colours** and **Fear token icon** take the frame's in place of their own choice. Those options show that the frame sets them, and their own choice comes back when you switch the frame off.
+
+It reads the frames from the Core Rulebook module, so it needs that module.
+
+### Spotlight and countdowns
+
+- **Spotlight button on the Token HUD:** players ask for the spotlight, or stop asking, from their own token's HUD. In combat this is the same request as the combat tracker's hand button; outside combat it is saved on the character. The GM gives or takes the spotlight from any token's HUD with the system's own spotlight.
+- **Show requests on the canvas:** the GM sees a small gold hand on the corner of every token asking for the spotlight.
+- **Minimal countdowns:** while there are no countdowns, the GM's countdown panel shrinks to a small **+** that opens the system's countdown editor.
 
 ### Cards in chat
 
@@ -146,14 +170,16 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 
 ## Settings
 
-**Configure Settings → Emberite Tweaks → Open settings** opens one window with four tabs. Every option is an on/off switch or a choice with its explanation. Everything is on by default except the chat theme, frosted glass and the Fear tracker's looks, which start off or on the system's own; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
+**Configure Settings → Emberite Tweaks → Open settings** opens one window with six tabs. Every option is an on/off switch or a choice with its explanation. Everything is on by default except the campaign frame, the chat theme, frosted glass and the Fear tracker's looks, which start off or on the system's own; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
 
 - **Wizards:** full-screen character creation; full-screen level up (off brings back the system's own dialogs).
-- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; chat theme, frosted glass, show cards as cards in chat, right-click to post subclass, ancestry and community.
+- **Campaign Frame:** the world's campaign frame, and whether it sets the sheet theme, the chat theme and the Fear tokens' colours and icon.
+- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; chat theme, frosted glass, critical roll effect, show cards as cards in chat, right-click to post subclass, ancestry and community.
 - **Fear & Canvas:** the Fear tracker's style, token colours, icon and shape, and the glow at maximum Fear (with a live preview); range band names.
+- **Spotlight:** the Token HUD spotlight button and its requests on the canvas; minimal countdowns.
 - **Class Features:** show the class features drawer (each player decides for themselves), then each class's features: Brawler (Martial Stances panel, only one active stance, drop the stance on Severe damage), Warlock (Favor and Patron Die), Witch (Lunar Phases, Hex tracker), Assassin (Marked for Death, only one mark at a time, Toxic Concoctions), Guardian (Unstoppable Die), Wizard (Strange Patterns number).
 
-Only the GM can change the world options; players see them and can change their own.
+All the looks are world options: the GM sets them once for everyone. Only the GM can change the world options; players see them and can change their own (the drawer).
 
 Features are recognised by the system compendium item they came from, or by their English name, so they work whether they were added through a class or subclass, dragged from the compendium or copied.
 

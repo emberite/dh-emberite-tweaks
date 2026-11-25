@@ -2,21 +2,48 @@ import { MODULE_ID } from './rules.mjs';
 import { L } from './actor.mjs';
 import { refreshDrawers } from './drawer.mjs';
 import { rerenderSheets } from './sheet/sidebar.mjs';
-import { rerenderChat } from './sheet/chatcards.mjs';
+import { critEffectChoices, rerenderChat } from './sheet/chatcards.mjs';
 import { applyChatTheme, chatThemes } from './sheet/chattheme.mjs';
 import { syncRangeLabels } from './sheet/rangelabels.mjs';
-import { SYSTEM, colorChoices, iconChoices, rerenderFearTracker, shapeChoices, styleChoices, styleTracker } from './sheet/feartracker.mjs';
+import { refreshSpotlight } from './sheet/spotlight.mjs';
+import { rerenderCountdowns } from './sheet/countdowns.mjs';
+import { NONE, applySheetFrame, frameChoices } from './sheet/frame.mjs';
+import { SYSTEM, colorChoices, hasFrameIcon, iconChoices, rerenderFearTracker, shapeChoices, styleChoices, styleTracker } from './sheet/feartracker.mjs';
 
 /**
  * Every option is a Boolean switch, kept out of Foundry's flat Configure Settings list and shown instead in one
  * "Emberite Tweaks" window with tabs. `parent` makes a setting depend on another (indented, disabled while the
  * parent is off). All are world settings except `showDrawer`, which each player sets for themselves.
  */
+/** A campaign frame setting changed: everything it can drive follows. */
+function refreshFrame() {
+    applyChatTheme();
+    rerenderFearTracker();
+    applySheetFrame().catch(err => console.warn(`${MODULE_ID} | sheet theme`, err));
+}
+
 export const LAYOUT = [
     {
         id: 'wizards',
         icon: 'fa-solid fa-hat-wizard',
         groups: [{ id: 'wizards', settings: [{ key: 'creationWizard' }, { key: 'levelUpWizard' }] }]
+    },
+    {
+        id: 'frame',
+        icon: 'fa-solid fa-map',
+        groups: [
+            {
+                id: 'frame',
+                settings: [
+                    { key: 'campaignFrame', choices: frameChoices, default: NONE, refresh: refreshFrame },
+                    // What the frame drives; each one's own choice is set aside while it does.
+                    { key: 'frameSheets', parent: 'campaignFrame', refresh: refreshFrame },
+                    { key: 'frameChat', parent: 'campaignFrame', refresh: refreshFrame },
+                    { key: 'frameFearColor', parent: 'campaignFrame', refresh: refreshFrame },
+                    { key: 'frameFearIcon', parent: 'campaignFrame', refresh: refreshFrame }
+                ]
+            }
+        ]
     },
     {
         id: 'sheet',
@@ -38,10 +65,12 @@ export const LAYOUT = [
                         // A choice instead of a switch: off, or one of the Core Rulebook module's sheet themes.
                         choices: () => ({ none: L('ChatTheme.Off'), ...chatThemes() }),
                         default: 'none',
+                        framed: 'frameChat',
                         refresh: applyChatTheme
                     },
                     // Layers over the chosen theme (or Foundry's chat) and takes its tint from it.
                     { key: 'chatGlass', default: false, refresh: applyChatTheme },
+                    { key: 'critEffect', choices: critEffectChoices, default: 'shine', refresh: rerenderChat },
                     { key: 'chatCards', refresh: rerenderChat },
                     { key: 'headerToChat', refresh: () => {} }
                 ]
@@ -58,13 +87,27 @@ export const LAYOUT = [
                 preview: 'fear',
                 settings: [
                     { key: 'fearStyle', choices: styleChoices, default: SYSTEM, refresh: rerenderFearTracker },
-                    { key: 'fearColor', choices: colorChoices, default: SYSTEM, refresh: rerenderFearTracker },
-                    { key: 'fearIcon', choices: iconChoices, default: SYSTEM, refresh: rerenderFearTracker },
+                    { key: 'fearColor', choices: colorChoices, default: SYSTEM, framed: 'frameFearColor', refresh: rerenderFearTracker },
+                    { key: 'fearIcon', choices: iconChoices, default: SYSTEM, framed: 'frameFearIcon', refresh: rerenderFearTracker },
                     { key: 'fearShape', choices: shapeChoices, default: SYSTEM, refresh: rerenderFearTracker },
                     { key: 'fearMaxGlow', default: false, refresh: rerenderFearTracker }
                 ]
             },
             { id: 'rangeBands', settings: [{ key: 'rangeLabels', refresh: syncRangeLabels }] }
+        ]
+    },
+    {
+        id: 'table',
+        icon: 'fa-solid fa-hand-sparkles',
+        groups: [
+            {
+                id: 'spotlight',
+                settings: [
+                    { key: 'tokenHudSpotlight', refresh: refreshSpotlight },
+                    { key: 'spotlightIndicator', parent: 'tokenHudSpotlight', refresh: refreshSpotlight }
+                ]
+            },
+            { id: 'countdowns', settings: [{ key: 'minimalCountdowns', refresh: rerenderCountdowns }] }
         ]
     },
     {
@@ -137,7 +180,7 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
         tag: 'form',
         classes: ['dhet-settings'],
         window: { title: 'DHET.SettingsMenu.Title', icon: 'fa-solid fa-sliders', contentClasses: ['standard-form'] },
-        position: { width: 620, height: 'auto' },
+        position: { width: 760, height: 'auto' },
         form: { handler: SettingsMenu.#onSubmit, closeOnSubmit: true },
         actions: { reset: SettingsMenu.#onReset }
     };
@@ -177,6 +220,7 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
                         checked: s.choices ? false : value(s.key),
                         choices: s.choices ? prepareChoices(s.choices(), value(s.key)) : null,
                         parent: s.parent ?? null,
+                        framed: s.framed ?? null,
                         child: !!s.parent,
                         // Players can only change their own (client) settings.
                         locked: !s.client && !gm,
@@ -201,12 +245,27 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
 
     _onRender(context, options) {
         super._onRender(context, options);
-        // Dependent switches follow their parent live.
+        const field = name => this.element.querySelector(`[name="${name}"]`);
+        // The campaign frame chosen in the form (not yet saved), or null.
+        const frame = () => {
+            const value = field('campaignFrame')?.value;
+            return value && value !== NONE ? value : null;
+        };
+        // Whether the frame drives this option in the form: a frame is chosen, its switch is on, and (for the
+        // Fear icon) the frame has one.
+        const framed = row => {
+            const f = frame();
+            if (!f || !field(row.dataset.framed)?.checked) return false;
+            return row.dataset.framed !== 'frameFearIcon' || hasFrameIcon(f);
+        };
+        // Dependent options follow their parent live (a switch that's on, or a choice other than none).
         const sync = () => {
             for (const row of this.element.querySelectorAll('[data-parent]')) {
-                const parent = this.element.querySelector(`input[name="${row.dataset.parent}"]`);
-                row.classList.toggle('dhet-off', parent && !parent.checked);
+                const parent = field(row.dataset.parent);
+                const off = parent?.type === 'checkbox' ? !parent.checked : parent?.value === NONE;
+                row.classList.toggle('dhet-off', !!parent && off);
             }
+            for (const row of this.element.querySelectorAll('[data-framed]')) row.classList.toggle('dhet-framed', framed(row));
         };
         this.element.addEventListener('change', sync);
         sync();
@@ -214,12 +273,16 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
         // The Fear tracker preview follows the unsaved choices.
         const preview = this.element.querySelector('[data-preview="fear"]');
         if (preview) {
-            const field = name => this.element.querySelector(`[name="${name}"]`);
+            const rowOf = name => field(name)?.closest('[data-framed]');
+            const value = name => {
+                const row = rowOf(name);
+                return row && framed(row) ? `frame:${frame()}` : field(name)?.value;
+            };
             const update = () =>
                 styleTracker(preview, {
                     style: field('fearStyle')?.value,
-                    color: field('fearColor')?.value,
-                    icon: field('fearIcon')?.value,
+                    color: value('fearColor'),
+                    icon: value('fearIcon'),
                     shape: field('fearShape')?.value,
                     glow: field('fearMaxGlow')?.checked,
                     atMax: true

@@ -74,8 +74,82 @@ async function onHeaderContext(event) {
     return postStageCard(item, stage);
 }
 
+/* -------------------------------------------- */
+/*  Critical roll effects                       */
+/* -------------------------------------------- */
+
+/** The effects a critical roll's chat card can get, see styles/chat.css. */
+export const CRIT_EFFECTS = ['shine', 'embers', 'sparkles', 'glow'];
+
+export function critEffectChoices() {
+    return {
+        none: L('CritEffect.None'),
+        ...Object.fromEntries(CRIT_EFFECTS.map(e => [e, L(`CritEffect.${e[0].toUpperCase()}${e.slice(1)}`)]))
+    };
+}
+
+/** A small random generator seeded from the message id, so a card's embers stay put when chat re-renders. */
+function seeded(id) {
+    let h = 2166136261;
+    for (const c of id ?? '') h = Math.imul(h ^ c.charCodeAt(0), 16777619);
+    return () => {
+        h = Math.imul(h ^ (h >>> 15), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return ((h ^= h >>> 16) >>> 0) / 4294967296;
+    };
+}
+
+/** The particles for embers (rising sparks, as on the emberite website) and sparkles (twinkling stars). */
+function particles(effect, id) {
+    const rand = seeded(id);
+    const fx = document.createElement('div');
+    fx.className = 'dhet-crit-fx';
+    fx.setAttribute('aria-hidden', 'true');
+    const count = effect === 'embers' ? 14 : 12;
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('i');
+        const style =
+            effect === 'embers'
+                ? {
+                      '--x': `${((i + rand()) / count) * 100}%`,
+                      '--dx': `${Math.round(10 + rand() * 30) * (rand() < 0.3 ? -1 : 1)}px`,
+                      '--s': `${2 + Math.floor(rand() * 3)}px`,
+                      '--d': `${(4 + rand() * 5).toFixed(1)}s`,
+                      '--delay': `${(-rand() * 9).toFixed(1)}s`
+                  }
+                : {
+                      '--x': `${(4 + rand() * 92).toFixed(1)}%`,
+                      '--y': `${(6 + rand() * 88).toFixed(1)}%`,
+                      '--s': `${8 + Math.floor(rand() * 7)}px`,
+                      '--d': `${(3 + rand() * 3).toFixed(1)}s`,
+                      '--delay': `${(-rand() * 6).toFixed(1)}s`
+                  };
+        for (const [k, v] of Object.entries(style)) p.style.setProperty(k, v);
+        fx.append(p);
+    }
+    return fx;
+}
+
+/**
+ * Critical rolls (a duality roll's matching dice, an adversary's natural 20, critical damage) get the chosen
+ * effect on their chat card, see styles/chat.css. Only when the roll is visible to this user.
+ */
+function markCritical(message, html) {
+    const effect = game.settings.get(MODULE_ID, 'critEffect');
+    const crit =
+        CRIT_EFFECTS.includes(effect) &&
+        message.isContentVisible &&
+        (html.classList.contains('critical') || message.rolls.some(r => r?.isCritical));
+    html.classList.remove('dhet-crit', ...CRIT_EFFECTS.map(e => `dhet-crit-${e}`));
+    html.querySelector(':scope > .dhet-crit-fx')?.remove();
+    if (!crit) return;
+    html.classList.add('dhet-crit', `dhet-crit-${effect}`);
+    if (effect === 'embers' || effect === 'sparkles') html.append(particles(effect, message.id));
+}
+
 export function registerChatCards() {
     Hooks.on('renderChatMessageHTML', (message, html) => {
+        markCritical(message, html);
         cardify(message, html).catch(err => console.warn(`${MODULE_ID} | chat card failed`, err));
     });
     Hooks.on('renderCharacterSheet', app => {

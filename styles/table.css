@@ -1,0 +1,74 @@
+/* ==========================================================================
+   Emberite Tweaks: spotlight button on the Token HUD, minimal countdowns
+   ========================================================================== */
+
+/* --- Token HUD spotlight button ------------------------------------------------------------------ */
+#token-hud .control-icon.dhet-spotlight-hud {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#token-hud .control-icon.dhet-spotlight-hud.active {
+  color: var(--golden, #c5a45e);
+  border-color: var(--golden, #c5a45e);
+  box-shadow: 0 0 6px rgb(197 164 94 / 0.55);
+  text-shadow: 0 0 8px var(--golden, #c5a45e);
+}
+
+/* --- Minimal countdowns: a + that widens to "Add Countdown" on hover ---------------------------- */
+.daggerheart.dh-style.countdowns.dhet-countdowns-minimal {
+  width: 36px !important;
+  min-width: 36px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 !important;
+  align-self: flex-end;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: width 250ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.daggerheart.dh-style.countdowns.dhet-countdowns-minimal:hover {
+  width: 165px !important;
+}
+.daggerheart.dh-style.countdowns.dhet-countdowns-minimal .countdowns-header {
+  display: flex !important;
+  height: 36px;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+.daggerheart.dh-style.countdowns.dhet-countdowns-minimal .countdowns-header > :not(.dhet-add-countdown),
+.daggerheart.dh-style.countdowns.dhet-countdowns-minimal .countdowns-container {
+  display: none !important;
+}
+.dhet-add-countdown {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  width: 100%;
+  height: 36px;
+  padding-left: 11px;
+  font-size: 16px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.dhet-add-countdown:hover {
+  color: #fff;
+}
+.dhet-add-countdown span {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  transition:
+    max-width 250ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 250ms,
+    margin-left 250ms;
+}
+.dhet-countdowns-minimal:hover .dhet-add-countdown span {
+  max-width: 120px;
+  opacity: 1;
+  margin-left: 8px;
+}
