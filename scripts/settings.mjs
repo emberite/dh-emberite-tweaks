@@ -27,7 +27,7 @@ export const LAYOUT = [
                     { key: 'loadoutRows', refresh: rerenderSheets }
                 ]
             },
-            { id: 'chat', settings: [{ key: 'chatCards', refresh: rerenderChat }] }
+            { id: 'chat', settings: [{ key: 'chatCards', refresh: rerenderChat }, { key: 'headerToChat', refresh: () => {} }] }
         ]
     },
     {

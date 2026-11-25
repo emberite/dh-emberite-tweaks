@@ -73,6 +73,8 @@ A separate tweak to the character sheet's sidebar, with its own switches:
 
 With **Chat: show cards as cards** on, domain cards, subclasses, ancestries and communities sent to chat show as their real card (the one the system's tooltips show), with the message's buttons below.
 
+Right-click the subclass, ancestry or community under the character's name on the sheet to send its card to chat. A subclass that has reached specialization or mastery asks which card to send: foundation, specialization or mastery.
+
 ## Class features drawer
 
 The tab sits on the sheet's right edge and follows the window when you move, resize or minimise it. If the sheet is too close to the right side of the screen, the drawer opens on the left instead. Clicking the tab folds the drawer away; the next sheet you open remembers whether it was open. Only the character's owners and the GM see it.
@@ -127,7 +129,7 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 **Configure Settings → Emberite Tweaks → Open settings** opens one window with three tabs. Every option is an on/off switch with its explanation, all on by default; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
 
 - **Wizards:** full-screen character creation; full-screen level up (off brings back the system's own dialogs).
-- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; show cards as cards in chat.
+- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; show cards as cards in chat, right-click to post subclass, ancestry and community.
 - **Class Features:** show the class features drawer (each player decides for themselves), then each class's features: Brawler (Martial Stances panel, only one active stance, drop the stance on Severe damage), Warlock (Favor and Patron Die), Witch (Lunar Phases, Hex tracker), Assassin (Marked for Death, only one mark at a time, Toxic Concoctions), Guardian (Unstoppable Die), Wizard (Strange Patterns number).
 
 Only the GM can change the world options; players see them and can change their own.

@@ -245,6 +245,10 @@
       "ChatCards": {
         "Name": "Show cards as cards",
         "Hint": "Domain cards, subclasses, ancestries and communities sent to chat show as their real card (the same one the tooltips show), with the message's buttons below."
+      },
+      "HeaderToChat": {
+        "Name": "Right-click to post subclass, ancestry and community",
+        "Hint": "Right-click their names under the character's name on the sheet to send their card to chat. A subclass with specialization or mastery asks which one to send."
       }
     },
     "Wizard": {
@@ -459,6 +463,9 @@
         "guardian": "Guardian",
         "wizard": "Wizard"
       }
+    },
+    "Chat": {
+      "WhichStage": "Which {subclass} card do you want to send?"
     }
   }
 }
