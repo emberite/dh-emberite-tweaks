@@ -5,7 +5,7 @@ import { chatThemes } from './chattheme.mjs';
 /**
  * One campaign frame for the whole world, picked by the GM. It drives every option that has a frame-specific
  * look, each behind its own switch: the default sheet theme (copied into every user's own sheet theme defaults,
- * since Foundry keeps those per user), the chat theme, and the Fear tokens' colours and icon. While the frame
+ * since Foundry keeps those per user), the chat theme, the Fear tokens' colours and icon, and the token ring (see rings.mjs). While the frame
  * drives an option, that option's own choice is kept but not used.
  */
 
@@ -16,7 +16,8 @@ export const FRAME_PARTS = {
     sheets: 'frameSheets',
     chatTheme: 'frameChat',
     fearColor: 'frameFearColor',
-    fearIcon: 'frameFearIcon'
+    fearIcon: 'frameFearIcon',
+    rings: 'frameRings'
 };
 
 const get = key => game.settings.get(MODULE_ID, key);

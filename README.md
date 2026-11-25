@@ -103,6 +103,7 @@ With **Name the range bands** on, the Daggerheart Core Rulebook module's range b
 The **Campaign Frame** tab sets the frame this world is played in, from one list: the Core Rulebook's core theme or any campaign frame (Hope & Fear's included). The frame then drives every option with a frame-specific look, each behind its own switch:
 
 - **Sheet theme:** sheets open in the frame's theme by default for every user. A theme someone picked for one particular sheet still wins.
+- **Token ring:** Foundry's dynamic token ring becomes the frame's ring from the Core Rulebook or Hope & Fear module; a frame without a ring uses the core Daggerheart ring. Foundry loads rings with the world, so the GM is asked to reload everyone after a change.
 - **Chat theme**, **Fear token colours** and **Fear token icon** take the frame's in place of their own choice. Those options show that the frame sets them, and their own choice comes back when you switch the frame off.
 
 It reads the frames from the Core Rulebook module, so it needs that module.
@@ -173,7 +174,7 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 **Configure Settings → Emberite Tweaks → Open settings** opens one window with six tabs. Every option is an on/off switch or a choice with its explanation. Everything is on by default except the campaign frame, the chat theme, frosted glass and the Fear tracker's looks, which start off or on the system's own; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
 
 - **Wizards:** full-screen character creation; full-screen level up (off brings back the system's own dialogs).
-- **Campaign Frame:** the world's campaign frame, and whether it sets the sheet theme, the chat theme and the Fear tokens' colours and icon.
+- **Campaign Frame:** the world's campaign frame, and whether it sets the sheet theme, the chat theme, the Fear tokens' colours and icon, and the token ring.
 - **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; chat theme, frosted glass, critical roll effect, show cards as cards in chat, right-click to post subclass, ancestry and community.
 - **Fear & Canvas:** the Fear tracker's style, token colours, icon and shape, and the glow at maximum Fear (with a live preview); range band names.
 - **Spotlight:** the Token HUD spotlight button and its requests on the canvas; minimal countdowns.

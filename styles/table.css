@@ -48,10 +48,17 @@
   gap: 0;
   width: 100%;
   height: 36px;
-  padding-left: 11px;
+  padding: 0;
   font-size: 16px;
   cursor: pointer;
   white-space: nowrap;
+}
+.dhet-add-countdown i {
+  /* A cell as wide as the collapsed box, so the + sits in its centre. */
+  flex: 0 0 36px;
+  width: 36px;
+  margin: 0;
+  text-align: center;
 }
 .dhet-add-countdown:hover {
   color: #fff;
@@ -70,5 +77,4 @@
 .dhet-countdowns-minimal:hover .dhet-add-countdown span {
   max-width: 120px;
   opacity: 1;
-  margin-left: 8px;
 }

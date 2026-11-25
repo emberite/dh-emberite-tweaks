@@ -14,6 +14,7 @@ import { registerRangeLabels } from './sheet/rangelabels.mjs';
 import { registerSpotlight } from './sheet/spotlight.mjs';
 import { registerCountdowns } from './sheet/countdowns.mjs';
 import { registerFrame } from './sheet/frame.mjs';
+import { registerRings } from './sheet/rings.mjs';
 
 /**
  * Load the stylesheet with a version query. Foundry links module CSS by bare path, and a caching proxy would
@@ -42,6 +43,7 @@ Hooks.once('init', () => {
     registerSpotlight();
     registerCountdowns();
     registerFrame();
+    registerRings();
     preloadTemplates();
 
     game.modules.get(MODULE_ID).api = {

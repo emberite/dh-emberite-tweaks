@@ -8,6 +8,7 @@ import { syncRangeLabels } from './sheet/rangelabels.mjs';
 import { refreshSpotlight } from './sheet/spotlight.mjs';
 import { rerenderCountdowns } from './sheet/countdowns.mjs';
 import { NONE, applySheetFrame, frameChoices } from './sheet/frame.mjs';
+import { applyRingFrame } from './sheet/rings.mjs';
 import { SYSTEM, colorChoices, hasFrameIcon, iconChoices, rerenderFearTracker, shapeChoices, styleChoices, styleTracker } from './sheet/feartracker.mjs';
 
 /**
@@ -20,6 +21,7 @@ function refreshFrame() {
     applyChatTheme();
     rerenderFearTracker();
     applySheetFrame().catch(err => console.warn(`${MODULE_ID} | sheet theme`, err));
+    applyRingFrame().catch(err => console.warn(`${MODULE_ID} | token ring`, err));
 }
 
 export const LAYOUT = [
@@ -40,7 +42,8 @@ export const LAYOUT = [
                     { key: 'frameSheets', parent: 'campaignFrame', refresh: refreshFrame },
                     { key: 'frameChat', parent: 'campaignFrame', refresh: refreshFrame },
                     { key: 'frameFearColor', parent: 'campaignFrame', refresh: refreshFrame },
-                    { key: 'frameFearIcon', parent: 'campaignFrame', refresh: refreshFrame }
+                    { key: 'frameFearIcon', parent: 'campaignFrame', refresh: refreshFrame },
+                    { key: 'frameRings', parent: 'campaignFrame', refresh: refreshFrame }
                 ]
             }
         ]

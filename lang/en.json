@@ -317,6 +317,10 @@
       "FrameFearIcon": {
         "Name": "Fear token icon",
         "Hint": "The Fear tokens take the frame's icon. The core theme has none, so the Fear tab's icon stays."
+      },
+      "FrameRings": {
+        "Name": "Token ring",
+        "Hint": "Foundry's dynamic token ring becomes the frame's ring, from the Core Rulebook or Hope & Fear module (the core ring for a frame without one). Changing it reloads everyone, after asking."
       }
     },
     "Wizard": {
