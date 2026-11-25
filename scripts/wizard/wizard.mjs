@@ -451,6 +451,7 @@ export class CreationWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                                     selected: chosen.has(card.uuid),
                                     action: 'pickDomainCard',
                                     extra: {
+                                        glow: domainsConfig[domain]?.color ?? null,
                                         level: card.system.level,
                                         type: card.system.type
                                             ? game.i18n.localize(CONFIG.DH.DOMAIN.cardTypes?.[card.system.type]?.label ?? card.system.type)

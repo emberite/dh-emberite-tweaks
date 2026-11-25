@@ -241,6 +241,10 @@
       "LoadoutRows": {
         "Name": "Sheet sidebar: loadout as a list",
         "Hint": "Show the domain card loadout as a list of rows (card art, level banner, name) in the Core Rulebook style instead of a strip of card tiles."
+      },
+      "ChatCards": {
+        "Name": "Chat: show cards as cards",
+        "Hint": "Domain cards, subclasses, ancestries and communities sent to chat show as their real card (the same one the tooltips show), with the message's buttons below."
       }
     },
     "Wizard": {

@@ -20,6 +20,17 @@ function restyle(app) {
     aside.classList.toggle('dhet-sidebar', layout);
     aside.classList.toggle('dhet-sidebar-numbers', layout && game.settings.get(MODULE_ID, 'sheetSidebarNumbers'));
     aside.classList.toggle('dhet-loadout-rows', game.settings.get(MODULE_ID, 'loadoutRows'));
+    // A domain card's name uses the card, like its image (in either loadout layout).
+    for (const name of aside.querySelectorAll('.loadout-section li.inventory-item .item-name')) {
+        if (name.dataset.dhetUse) continue;
+        name.dataset.dhetUse = 'true';
+        name.addEventListener('click', event => {
+            event.preventDefault();
+            name.closest('li')?.querySelector('[data-action="useItem"]')?.dispatchEvent(
+                new MouseEvent('click', { bubbles: true, cancelable: true, shiftKey: event.shiftKey, ctrlKey: event.ctrlKey, altKey: event.altKey })
+            );
+        });
+    }
     // Loadout rows draw the card art as a band behind the name (the system pins the image itself to a thumbnail).
     for (const li of aside.querySelectorAll('.loadout-section li.inventory-item')) {
         const src = li.querySelector('.img-portrait img.item-img, .img-portrait img')?.getAttribute('src');
@@ -50,20 +61,21 @@ function restyle(app) {
         row.prepend(icon);
     });
 
-    // Evasion and Proficiency become badges on the portrait (first and last number in the status row).
+    // Evasion and Proficiency get a slim row of their own under the portrait (first and last number in the
+    // status row), rather than covering the character's art.
     const numbers = [...status.querySelectorAll('.status-number')].filter(n => !n.classList.contains('armor-slots'));
-    const portrait = aside.querySelector('.portrait');
-    if (portrait && numbers.length >= 2) {
+    const info = aside.querySelector('.info-section');
+    if (info && numbers.length >= 2) {
         const value = n => n.querySelector('.status-value')?.textContent.trim() ?? '';
-        const badges = document.createElement('div');
-        badges.className = 'dhet-badges';
-        badges.innerHTML = [
-            ['evasion', value(numbers[0]), L('Sheet.evasion')],
-            ['proficiency', value(numbers[numbers.length - 1]), L('Sheet.proficiency')]
+        const row = document.createElement('div');
+        row.className = 'dhet-stats';
+        row.innerHTML = [
+            ['evasion', 'fa-solid fa-shield-halved', value(numbers[0]), L('Sheet.evasion')],
+            ['proficiency', 'fa-solid fa-hand-fist', value(numbers[numbers.length - 1]), L('Sheet.proficiency')]
         ]
-            .map(([key, v, label]) => `<div class="dhet-badge dhet-badge-${key}" data-tooltip="${label}"><span class="dhet-badge-shield"><strong>${v}</strong></span><small>${label}</small></div>`)
+            .map(([key, icon, v, label]) => `<div class="dhet-stat dhet-stat-${key}"><i class="${icon}"></i><strong>${v}</strong><small>${label}</small></div>`)
             .join('');
-        portrait.append(badges);
+        info.prepend(row);
         status.classList.add('dhet-moved');
     }
 }

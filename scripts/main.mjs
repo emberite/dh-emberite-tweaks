@@ -6,6 +6,7 @@ import { preloadTemplates } from './view.mjs';
 import { syncLunarEffects } from './panels/witch.mjs';
 import { openCreationWizard, openLevelUpWizard, registerWizard } from './wizard/register.mjs';
 import { registerSidebar, rerenderSheets } from './sheet/sidebar.mjs';
+import { registerChatCards, rerenderChat } from './sheet/chatcards.mjs';
 
 /**
  * Load the stylesheet with a version query. Foundry links module CSS by bare path, and a caching proxy would
@@ -76,6 +77,15 @@ function registerSettings() {
             onChange: rerenderSheets
         });
     }
+    game.settings.register(MODULE_ID, 'chatCards', {
+        name: 'DHET.Settings.ChatCards.Name',
+        hint: 'DHET.Settings.ChatCards.Hint',
+        scope: 'world',
+        config: true,
+        type: Boolean,
+        default: true,
+        onChange: rerenderChat
+    });
     game.settings.register(MODULE_ID, 'drawerOpen', {
         scope: 'client',
         config: false,
@@ -90,6 +100,7 @@ Hooks.once('init', () => {
     registerDrawer();
     registerWizard();
     registerSidebar();
+    registerChatCards();
     preloadTemplates();
 
     game.modules.get(MODULE_ID).api = {

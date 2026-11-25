@@ -245,6 +245,7 @@ export class LevelUpWizard extends HandlebarsApplicationMixin(ApplicationV2) {
                         img: card.img,
                         selected: selectedUuids.includes(card.uuid),
                         action: 'pickCard',
+                        glow: domainsConfig[domain]?.color ?? null,
                         card: await this.#cardOf(card)
                     }))
                 )

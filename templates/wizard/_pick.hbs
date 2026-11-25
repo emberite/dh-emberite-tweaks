@@ -1,4 +1,4 @@
-<div class="dhet-wz-pick {{#if selected}}selected{{/if}} {{#if second}}second{{/if}}" role="button" tabindex="0"
+<div class="dhet-wz-pick {{#if selected}}selected{{/if}} {{#if second}}second{{/if}}" role="button" tabindex="0" {{#if glow}}style="--pick-glow: {{glow}}"{{/if}}
     data-action="{{action}}" data-uuid="{{uuid}}" {{#if slot}}data-slot="{{slot}}"{{/if}}
     {{#if path}}data-path="{{path}}"{{/if}} {{#if state}}data-state="{{state}}" data-multiclass="{{isMulticlass}}"{{/if}}>
     {{#if card}}{{{card}}}{{else}}

@@ -65,8 +65,13 @@ A separate tweak to the character sheet's sidebar, with its own switches:
 
 - **Full-width resources:** Hit Points, Stress and Armor Slots each take a full-width row, marked with a heart, a bolt and a shield instead of text labels. It works with both of the system's displays (bars and slots). Armor keeps its gear button for armor management.
 - **Current/max numbers** on those rows can be switched off; they then appear when you point at a row, so you can still type a value.
-- **Evasion and Proficiency** move onto the portrait as two shield badges.
-- **Loadout as a list:** the domain card loadout as rows in the Core Rulebook style (the domain's level banner, the card's art behind its name) instead of a strip of card tiles.
+- **Evasion and Proficiency** get a slim row of their own under the portrait.
+- **Loadout as a list:** the domain card loadout as rows in the Core Rulebook style (the domain's level banner, the card's art behind its name, a glow in the domain's colour) instead of a strip of card tiles.
+- Clicking a domain card's **name** in the loadout uses it, like clicking its image.
+
+### Cards in chat
+
+With **Chat: show cards as cards** on, domain cards, subclasses, ancestries and communities sent to chat show as their real card (the one the system's tooltips show), with the message's buttons below.
 
 ## Class features drawer
 
@@ -123,6 +128,7 @@ Each tool and feature has its own world setting, all on by default. Turn one off
 
 - **Full-screen character creation**, **Full-screen level up**: off brings back the system's own dialogs.
 - **Sheet sidebar: full-width resources**, **show current/max numbers**, **loadout as a list**
+- **Chat: show cards as cards**
 - **Show the class features drawer** (per player): hides the tab. The automations keep working.
 - **Brawler: Martial Stances**, **Brawler: one active stance**, **Brawler: drop stance on Severe damage**
 - **Warlock: Favor and Patron Die**

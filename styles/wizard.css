@@ -1346,7 +1346,16 @@ body.dhet-wizard-open .dhet-drawer {
   filter: drop-shadow(0 0 6px hsl(from var(--wz-bright) h s l / 0.45));
 }
 .dhet-wz-pick.selected {
-  box-shadow: 0 0 0 3px var(--wz-gold), 0 0 30px hsl(from var(--wz-gold) h s l / 0.55);
+  box-shadow: 0 0 0 3px var(--pick-glow, var(--wz-gold)), 0 0 30px hsl(from var(--pick-glow, var(--wz-gold)) h s l / 0.6);
+}
+/* Domain cards glow in their domain's colour (hover too). */
+.dhet-wz-pick[style*='--pick-glow']:hover,
+.dhet-wz-pick[style*='--pick-glow']:focus-visible {
+  filter: drop-shadow(0 0 8px hsl(from var(--pick-glow) h s l / 0.7));
+}
+.dhet-wz-pick[style*='--pick-glow'] .dhet-wz-check {
+  background: var(--pick-glow);
+  color: #fff;
 }
 .dhet-wz-pick.selected.second {
   box-shadow: 0 0 0 3px var(--wz-bright), 0 0 30px hsl(from var(--wz-bright) h s l / 0.55);

@@ -159,61 +159,65 @@
   display: none;
 }
 
-/* Evasion and Proficiency moved to the portrait. */
+/* Evasion and Proficiency: a slim row under the portrait, styled like the threshold strip. */
 .dhet-sidebar .status-section.dhet-moved {
   display: none;
 }
-.dhet-sidebar .portrait {
-  position: relative;
-}
-.dhet-badges {
-  position: absolute;
-  left: 6px;
-  right: 6px;
-  bottom: 8px;
+.dhet-stats {
   display: flex;
-  justify-content: space-between;
-  pointer-events: none;
-  z-index: 3;
+  margin: 8px 12px 0;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid hsl(from var(--dhet-sb-accent) h s l / 0.6);
+  background: linear-gradient(to right, transparent, hsl(from var(--dhet-sb-accent) h s l / 0.35), transparent);
 }
-.dhet-badge {
-  pointer-events: auto;
+.dhet-stat {
+  flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.7));
+  justify-content: center;
+  gap: 7px;
+  height: 30px;
 }
-.dhet-badge-shield {
-  width: 48px;
-  height: 52px;
-  display: grid;
-  place-items: center;
-  padding-bottom: 6px;
-  color: var(--dhet-sb-text);
-  background: var(--dh-c-trait-shield-icon, none) center / contain no-repeat;
+.dhet-stat + .dhet-stat {
+  border-left: 1px solid hsl(from var(--dhet-sb-accent) h s l / 0.6);
 }
-/* Without the Core Rulebook's shield art, a plain shield shape. */
-.dhet-sidebar:not(:is(.dh-c-style *)) .dhet-badge-shield {
-  background: var(--dhet-sb-deep);
-  border: 2px solid var(--dhet-sb-gold);
-  clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+.dhet-stat i {
+  font-size: 14px;
+  color: var(--dhet-sb-gold);
 }
-.dhet-badge strong {
-  font-size: 1.35rem;
-  line-height: 1;
+.dhet-stat strong {
+  font-size: 1.2rem;
   font-weight: 800;
+  color: var(--dhet-sb-text);
 }
-.dhet-badge small {
-  margin-top: -3px;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: var(--dhet-sb-accent);
-  color: var(--dh-c-resources-label-color, var(--dhet-sb-text));
-  font-size: 0.55rem;
+.dhet-stat small {
+  font-size: 0.65rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  white-space: nowrap;
+  color: hsl(from var(--dhet-sb-text) h s l / 0.75);
+}
+
+/* Armor matches the Hit Points and Stress rows (the system sizes the armor box separately). */
+.dhet-sidebar .info-section .resources-section .status-bar.armor-slots.dhet-res-armor .status-value {
+  height: 28px;
+  width: auto;
+  font-size: 1.1rem;
+}
+.dhet-sidebar .info-section .resources-section .status-bar.armor-slots.dhet-res-armor .status-value input[type='number'],
+.dhet-sidebar .info-section .resources-section .status-bar.armor-slots.dhet-res-armor .status-value .bar-label {
+  font-size: 1.1rem;
+  height: 24px;
+  width: 34px;
+}
+.dhet-sidebar .info-section .resources-section .status-bar.armor-slots.dhet-res-armor .progress-bar {
+  border-radius: 6px;
+  border-bottom: 1px solid var(--dhet-sb-accent);
+}
+.dhet-sidebar .info-section .resources-section .status-bar.armor-slots.dhet-res-armor .status-label {
+  height: 28px;
+  width: 28px;
 }
 
 /* ---------- loadout as rows (Core Rulebook look) ---------- */
@@ -255,7 +259,8 @@
   height: auto;
   translate: none;
   animation: none;
-  opacity: 0.6;
+  opacity: 0.38;
+  filter: brightness(0.75) saturate(0.9);
   z-index: 0;
   pointer-events: none;
   background: var(--dhet-card-art, none) center 30% / cover no-repeat;
@@ -332,4 +337,29 @@
   inset: auto;
   gap: 6px;
   opacity: 1;
+}
+
+/* Loadout rows glow in their domain's colour. */
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item:hover {
+  box-shadow: 0 0 10px hsl(from var(--domain-color, #888) h s l / 0.8), inset 0 0 0 1px hsl(from var(--domain-color, #888) h s l / 0.6);
+}
+
+/* ---------- chat messages as real cards ---------- */
+.dhet-chat-card {
+  container-type: inline-size;
+  width: 100%;
+  margin-bottom: 6px;
+}
+.dhet-chat-card .dh-card {
+  --card-width: calc(100cqi - 2px);
+}
+.daggerheart.chat.domain-card.dhet-carded {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Clicking a domain card's name in the sidebar uses it, like clicking its image. */
+.character-sidebar-sheet .loadout-section li.inventory-item .item-name {
+  cursor: pointer;
 }
