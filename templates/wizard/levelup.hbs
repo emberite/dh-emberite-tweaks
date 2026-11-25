@@ -128,8 +128,13 @@
             </div>
             {{/if}}
             {{#if upgrades}}
-            <div class="dhet-wz-cardrow">
-                {{#each upgrades}}{{> "modules/dh-emberite-tweaks/templates/wizard/_pick.hbs"}}{{/each}}
+            {{!-- Same column structure as the domain card galleries, so the cards come out the same size. --}}
+            <div class="dhet-wz-domains-cols">
+                <section class="dhet-wz-domain">
+                    <div class="dhet-wz-cardgrid">
+                        {{#each upgrades}}{{> "modules/dh-emberite-tweaks/templates/wizard/_pick.hbs"}}{{/each}}
+                    </div>
+                </section>
             </div>
             {{/if}}
             {{#if multiclass}}
