@@ -4,6 +4,8 @@ import { refreshDrawers } from './drawer.mjs';
 import { rerenderSheets } from './sheet/sidebar.mjs';
 import { rerenderChat } from './sheet/chatcards.mjs';
 import { applyChatTheme, chatThemes } from './sheet/chattheme.mjs';
+import { syncRangeLabels } from './sheet/rangelabels.mjs';
+import { SYSTEM, colorChoices, iconChoices, rerenderFearTracker, shapeChoices, styleChoices, styleTracker } from './sheet/feartracker.mjs';
 
 /**
  * Every option is a Boolean switch, kept out of Foundry's flat Configure Settings list and shown instead in one
@@ -38,10 +40,31 @@ export const LAYOUT = [
                         default: 'none',
                         refresh: applyChatTheme
                     },
+                    // Layers over the chosen theme (or Foundry's chat) and takes its tint from it.
+                    { key: 'chatGlass', default: false, refresh: applyChatTheme },
                     { key: 'chatCards', refresh: rerenderChat },
                     { key: 'headerToChat', refresh: () => {} }
                 ]
             }
+        ]
+    },
+    {
+        id: 'fear',
+        icon: 'fa-solid fa-skull',
+        groups: [
+            {
+                id: 'fear',
+                // A sample row of tokens in the window that follows the choices below before they are saved.
+                preview: 'fear',
+                settings: [
+                    { key: 'fearStyle', choices: styleChoices, default: SYSTEM, refresh: rerenderFearTracker },
+                    { key: 'fearColor', choices: colorChoices, default: SYSTEM, refresh: rerenderFearTracker },
+                    { key: 'fearIcon', choices: iconChoices, default: SYSTEM, refresh: rerenderFearTracker },
+                    { key: 'fearShape', choices: shapeChoices, default: SYSTEM, refresh: rerenderFearTracker },
+                    { key: 'fearMaxGlow', default: false, refresh: rerenderFearTracker }
+                ]
+            },
+            { id: 'rangeBands', settings: [{ key: 'rangeLabels', refresh: syncRangeLabels }] }
         ]
     },
     {
@@ -71,6 +94,15 @@ export const LAYOUT = [
 
 const ALL = LAYOUT.flatMap(tab => tab.groups.flatMap(g => g.settings));
 const settingKey = key => key.charAt(0).toUpperCase() + key.slice(1);
+
+/** Choices as options; a nested object is an <optgroup> of them. */
+function prepareChoices(choices, value) {
+    return Object.entries(choices).map(([id, label]) =>
+        typeof label === 'object'
+            ? { group: id, options: prepareChoices(label, value) }
+            : { id, label, selected: id === value }
+    );
+}
 
 export function registerSettings() {
     for (const s of ALL) {
@@ -135,14 +167,15 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
                 id: tab.id,
                 groups: tab.groups.map(g => ({
                     label: L(`SettingsMenu.Group.${g.id}`),
+                    preview: g.preview ?? null,
+                    // Sample tokens for the preview: six of eight Fear marked.
+                    tokens: g.preview ? Array.from({ length: 8 }, (_, i) => ({ index: i, inactive: i >= 6 })) : null,
                     settings: g.settings.map(s => ({
                         key: s.key,
                         name: L(`Settings.${settingKey(s.key)}.Name`),
                         hint: L(`Settings.${settingKey(s.key)}.Hint`),
                         checked: s.choices ? false : value(s.key),
-                        choices: s.choices
-                            ? Object.entries(s.choices()).map(([id, label]) => ({ id, label, selected: id === value(s.key) }))
-                            : null,
+                        choices: s.choices ? prepareChoices(s.choices(), value(s.key)) : null,
                         parent: s.parent ?? null,
                         child: !!s.parent,
                         // Players can only change their own (client) settings.
@@ -177,6 +210,23 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
         };
         this.element.addEventListener('change', sync);
         sync();
+
+        // The Fear tracker preview follows the unsaved choices.
+        const preview = this.element.querySelector('[data-preview="fear"]');
+        if (preview) {
+            const field = name => this.element.querySelector(`[name="${name}"]`);
+            const update = () =>
+                styleTracker(preview, {
+                    style: field('fearStyle')?.value,
+                    color: field('fearColor')?.value,
+                    icon: field('fearIcon')?.value,
+                    shape: field('fearShape')?.value,
+                    glow: field('fearMaxGlow')?.checked,
+                    atMax: true
+                });
+            this.element.addEventListener('change', update);
+            update();
+        }
     }
 
     static async #onSubmit(event, form, formData) {
@@ -190,9 +240,11 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
         ui.notifications.info(L('SettingsMenu.Saved'));
     }
 
-    /** Back to the defaults (everything on), in the form only: Save applies it. */
+    /** Back to the defaults, in the form only: Save applies it. */
     static #onReset() {
-        for (const input of this.element.querySelectorAll('input[type="checkbox"]:not(:disabled)')) input.checked = true;
+        for (const input of this.element.querySelectorAll('input[type="checkbox"]:not(:disabled)')) {
+            input.checked = ALL.find(x => x.key === input.name)?.default ?? true;
+        }
         for (const select of this.element.querySelectorAll('select:not(:disabled)')) {
             const entry = ALL.find(x => x.key === select.name);
             if (entry) select.value = entry.default;

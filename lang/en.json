@@ -253,6 +253,34 @@
       "ChatTheme": {
         "Name": "Chat theme",
         "Hint": "Chat messages in the Daggerheart Core Rulebook module's design, in the colours, fonts and cover art of its core theme or a campaign frame's (including those added by Hope & Fear). Needs the Core Rulebook module."
+      },
+      "ChatGlass": {
+        "Name": "Frosted glass",
+        "Hint": "Chat messages become tinted, see-through glass that blurs what is behind them. The tint follows the chat theme above (a cool grey with the theme off), so it works with or without the Core Rulebook module. Off by default."
+      },
+      "FearStyle": {
+        "Name": "Tracker style",
+        "Hint": "\"Banner\" draws the Fear tokens as diamond pips on a dark bar with a gold rim, filled for each Fear the GM holds. It has no icons or shapes; colours still apply. The bar display (set in the system's appearance settings) keeps its own look."
+      },
+      "FearColor": {
+        "Name": "Token colours",
+        "Hint": "Recolours the Fear tokens and bar. Pick a palette, or the colours of the Core Rulebook module's core theme or a campaign frame (including Hope & Fear's). \"System\" keeps the system's blue."
+      },
+      "FearIcon": {
+        "Name": "Token icon",
+        "Hint": "The icon on each Fear token, in place of the system's skull. Every campaign frame has one of its own."
+      },
+      "FearShape": {
+        "Name": "Token shape",
+        "Hint": "Circle is the system's; squircle, square or diamond instead."
+      },
+      "FearMaxGlow": {
+        "Name": "Glow at maximum Fear",
+        "Hint": "The tokens and bar pulse when Fear is full (the world's maximum, homebrew included)."
+      },
+      "RangeLabels": {
+        "Name": "Name the range bands",
+        "Hint": "The Core Rulebook module's range bands around a selected token get their names (Very Close, Close, Far, and Very Far outside the last ring), curved along each ring. They show whenever its \"Show Range Bands\" setting shows the rings. Needs the Core Rulebook module."
       }
     },
     "Wizard": {
@@ -453,6 +481,7 @@
       "Tab": {
         "wizards": "Wizards",
         "sheet": "Sheet & Chat",
+        "fear": "Fear & Canvas",
         "classes": "Class Features"
       },
       "Group": {
@@ -465,7 +494,9 @@
         "witch": "Witch",
         "assassin": "Assassin",
         "guardian": "Guardian",
-        "wizard": "Wizard"
+        "wizard": "Wizard",
+        "fear": "The system's Fear tracker",
+        "rangeBands": "Range bands"
       }
     },
     "Chat": {
@@ -473,6 +504,48 @@
     },
     "ChatTheme": {
       "Off": "Off (Foundry's chat)"
+    },
+    "Fear": {
+      "System": "System",
+      "Group": {
+        "Palettes": "Palettes",
+        "Icons": "Icons",
+        "Frames": "Campaign frames"
+      },
+      "Color": {
+        "crimson": "Crimson",
+        "ember": "Ember",
+        "gold": "Gold",
+        "emerald": "Emerald",
+        "frost": "Frost",
+        "violet": "Violet",
+        "rose": "Rose",
+        "shadow": "Shadow"
+      },
+      "Icon": {
+        "skullCrossbones": "Skull and crossbones",
+        "ghost": "Ghost",
+        "eye": "Eye",
+        "spider": "Spider",
+        "dragon": "Dragon",
+        "fire": "Fire",
+        "bolt": "Bolt",
+        "moon": "Moon",
+        "heartCrack": "Broken heart",
+        "hourglass": "Hourglass",
+        "crow": "Crow",
+        "masks": "Masks",
+        "star": "Star",
+        "circle": "Dot"
+      },
+      "Shape": {
+        "squircle": "Squircle",
+        "square": "Square",
+        "diamond": "Diamond"
+      },
+      "Style": {
+        "banner": "Banner"
+      }
     }
   }
 }

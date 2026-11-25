@@ -1,0 +1,259 @@
+/* ==========================================================================
+   Emberite Tweaks: Fear tracker appearance
+   The system's tracker is #resources > #resource-fear. The settings window's preview (.dhet-fear-preview)
+   copies its look so the overrides below apply to both.
+   ========================================================================== */
+
+/* --- Preview in the settings window: the system's token and bar look -------------------------------- */
+.dhet-fear-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 4px 0 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: url('../../../systems/daggerheart/assets/parchments/dh-parchment-dark.png') center / cover, #1a1a24;
+  color: #efe6d8;
+}
+.dhet-fear-preview .fear-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 0.25rem;
+}
+.dhet-fear-preview .fear-token {
+  font-size: var(--font-size-16, 16px);
+  border: 1.5px double #b8a06a;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  background-color: rgba(9, 71, 179, 0.75);
+  color: #efe6d8;
+  flex-grow: 0;
+  text-shadow: none;
+}
+.dhet-fear-preview i.fear-token {
+  width: 100%;
+  border: none;
+}
+.dhet-fear-preview .fear-token.inactive {
+  filter: grayscale(1) !important;
+  opacity: 0.5;
+}
+.dhet-fear-preview .resource-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+}
+.dhet-fear-preview .progress-bar {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  appearance: none;
+  border: 1px solid #b8a06a;
+  border-radius: 999px;
+  background: #18162e;
+}
+.dhet-fear-preview .progress-bar::-webkit-progress-bar {
+  background: #18162e;
+  border-radius: 999px;
+}
+.dhet-fear-preview .progress-bar::-webkit-progress-value {
+  background: linear-gradient(90deg, rgba(2, 0, 38, 1) 0%, rgba(199, 1, 252, 1) 100%);
+  border-radius: 999px;
+}
+.dhet-fear-preview .progress-bar::-moz-progress-bar {
+  background: linear-gradient(90deg, rgba(2, 0, 38, 1) 0%, rgba(199, 1, 252, 1) 100%);
+  border-radius: 999px;
+}
+.dhet-fear-preview .resource-bar .label {
+  position: relative;
+  font-weight: 600;
+}
+
+/* --- Colours ------------------------------------------------------------------------------------------
+   Each token gets --dhet-fear-token (a step from --dhet-fear-from to --dhet-fear-to), replacing the system's
+   blue and its per-token hue shift. Frames also set a rim (--dhet-fear-border) and icon colour (--dhet-fear-ink). */
+:is(#resources.dhet-fear-colored #resource-fear, .dhet-fear-preview.dhet-fear-colored) .fear-tokens a.fear-token {
+  --primary-color-fear: var(--dhet-fear-token);
+  background-color: var(--dhet-fear-token);
+  color: var(--dhet-fear-ink, #efe6d8);
+}
+:is(#resources.dhet-fear-colored #resource-fear, .dhet-fear-preview.dhet-fear-colored) .fear-tokens a.fear-token:not(.inactive) {
+  filter: none !important;
+}
+:is(#resources.dhet-fear-colored #resource-fear, .dhet-fear-preview.dhet-fear-colored) .fear-tokens i.fear-token {
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
+}
+/* A frame's rim colour. */
+:is(#resources.dhet-fear-rim #resource-fear, .dhet-fear-preview.dhet-fear-rim) :is(a.fear-token, .progress-bar) {
+  border-color: var(--dhet-fear-border);
+}
+:is(#resources.dhet-fear-colored #resource-fear, .dhet-fear-preview.dhet-fear-colored) .progress-bar::-webkit-progress-value {
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--dhet-fear-from) 25%, black) 0%,
+    var(--dhet-fear-from) 35%,
+    var(--dhet-fear-to) 100%
+  );
+}
+:is(#resources.dhet-fear-colored #resource-fear, .dhet-fear-preview.dhet-fear-colored) .progress-bar::-moz-progress-bar {
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--dhet-fear-from) 25%, black) 0%,
+    var(--dhet-fear-from) 35%,
+    var(--dhet-fear-to) 100%
+  );
+}
+#resources.dhet-fear-colored #resource-fear.isGM .fear-token:hover {
+  box-shadow: 0 0 8px var(--dhet-fear-to);
+}
+
+/* --- Shapes (a circle is the system's) ------------------------------------------------------------- */
+:is(#resources.dhet-fear-squircle #resource-fear, .dhet-fear-preview.dhet-fear-squircle) .fear-token {
+  border-radius: 30%;
+}
+:is(#resources.dhet-fear-square #resource-fear, .dhet-fear-preview.dhet-fear-square) .fear-token {
+  border-radius: 3px;
+}
+:is(#resources.dhet-fear-diamond #resource-fear, .dhet-fear-preview.dhet-fear-diamond) a.fear-token {
+  border-radius: 4px;
+  transform: rotate(45deg) scale(0.8);
+}
+:is(#resources.dhet-fear-diamond #resource-fear, .dhet-fear-preview.dhet-fear-diamond) i.fear-token {
+  border-radius: 4px;
+  transform: rotate(-45deg);
+}
+
+/* --- Glow at maximum Fear -------------------------------------------------------------------------- */
+@keyframes dhet-fear-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 2px 0 var(--dhet-fear-glow);
+  }
+  50% {
+    box-shadow: 0 0 12px 4px var(--dhet-fear-glow);
+  }
+}
+:is(#resources.dhet-fear-glow #resource-fear, .dhet-fear-preview.dhet-fear-glow) :is(a.fear-token, .progress-bar) {
+  --dhet-fear-glow: var(--dhet-fear-token, var(--dhet-fear-to, rgb(199, 1, 252)));
+  animation: dhet-fear-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(#resources.dhet-fear-glow #resource-fear, .dhet-fear-preview.dhet-fear-glow) :is(a.fear-token, .progress-bar) {
+    animation: none;
+    box-shadow: 0 0 10px 3px var(--dhet-fear-glow);
+  }
+}
+
+/* --- Banner style ----------------------------------------------------------------------------------
+   The token row becomes a dark hexagonal bar with a gold rim, and each token a small diamond: filled when
+   the Fear is marked, an outline when not. The icon is hidden. A colour choice fills the marked pips and a
+   frame's secondary colour becomes the rim. */
+#resources.dhet-fear-banner::before {
+  display: none;
+}
+#resources.dhet-fear-banner:not(.performance-low, .noblur) {
+  backdrop-filter: none;
+}
+:is(#resources.dhet-fear-banner #resource-fear, .dhet-fear-preview.dhet-fear-banner) .fear-tokens {
+  --dhet-banner-rim: var(--dhet-fear-border, #e9b95b);
+  --dhet-banner-cut: 16px;
+  position: relative;
+  isolation: isolate;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  gap: 2px;
+  padding: 7px calc(var(--dhet-banner-cut) + 10px);
+  background: var(--dhet-banner-rim);
+  clip-path: polygon(
+    var(--dhet-banner-cut) 0,
+    calc(100% - var(--dhet-banner-cut)) 0,
+    100% 50%,
+    calc(100% - var(--dhet-banner-cut)) 100%,
+    var(--dhet-banner-cut) 100%,
+    0 50%
+  );
+  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.5));
+}
+/* The dark face, inset from the rim with the same pointed ends. */
+:is(#resources.dhet-fear-banner #resource-fear, .dhet-fear-preview.dhet-fear-banner) .fear-tokens::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: linear-gradient(180deg, #3a3530, #24211e 55%, #2d2925);
+  clip-path: polygon(
+    calc(var(--dhet-banner-cut) - 1px) 0,
+    calc(100% - var(--dhet-banner-cut) + 1px) 0,
+    100% 50%,
+    calc(100% - var(--dhet-banner-cut) + 1px) 100%,
+    calc(var(--dhet-banner-cut) - 1px) 100%,
+    0 50%
+  );
+}
+:is(#resources.dhet-fear-banner #resource-fear, .dhet-fear-preview.dhet-fear-banner) .fear-tokens a.fear-token {
+  flex: 0 1 2rem;
+  width: auto;
+  min-width: 1rem;
+  max-width: 2rem;
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  transform: none;
+  opacity: 1;
+  filter: none !important;
+  animation: none;
+}
+:is(#resources.dhet-fear-banner #resource-fear, .dhet-fear-preview.dhet-fear-banner) .fear-tokens i.fear-token {
+  display: none;
+}
+/* The pip: a rimmed diamond with a filled core when marked. */
+:is(#resources.dhet-fear-banner #resource-fear, .dhet-fear-preview.dhet-fear-banner) .fear-tokens a.fear-token::before {
+  content: '';
+  width: 52%;
+  aspect-ratio: 1;
+  box-sizing: border-box;
+  padding: 3px;
+  border: 2px solid var(--dhet-banner-rim);
+  border-radius: 3px;
+  background: var(--dhet-fear-token, var(--dhet-banner-rim)) content-box;
+  transform: rotate(45deg);
+  transition:
+    background-color 150ms,
+    box-shadow 150ms;
+}
+:is(#resources.dhet-fear-banner #resource-fear, .dhet-fear-preview.dhet-fear-banner) .fear-tokens a.fear-token.inactive::before {
+  border-color: #efe3c8;
+  background: none;
+}
+#resources.dhet-fear-banner #resource-fear.isGM .fear-tokens a.fear-token:hover {
+  box-shadow: none;
+}
+#resources.dhet-fear-banner #resource-fear.isGM .fear-tokens a.fear-token:hover::before {
+  box-shadow: 0 0 8px var(--dhet-banner-rim);
+}
+:is(#resources.dhet-fear-banner.dhet-fear-glow #resource-fear, .dhet-fear-preview.dhet-fear-banner.dhet-fear-glow)
+  .fear-tokens
+  a.fear-token::before {
+  --dhet-fear-glow: var(--dhet-fear-token, var(--dhet-banner-rim));
+  animation: dhet-fear-pulse 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(#resources.dhet-fear-banner.dhet-fear-glow #resource-fear, .dhet-fear-preview.dhet-fear-banner.dhet-fear-glow)
+    .fear-tokens
+    a.fear-token::before {
+    animation: none;
+    box-shadow: 0 0 8px 2px var(--dhet-fear-glow);
+  }
+}

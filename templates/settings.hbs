@@ -5,6 +5,14 @@
         {{#each groups}}
         <fieldset class="dhet-set-group">
             <legend>{{label}}</legend>
+            {{#if preview}}
+            <div class="dhet-fear-preview" data-preview="{{preview}}">
+                <div class="fear-tokens">
+                    {{#each tokens}}<a class="fear-token{{#if inactive}} inactive{{/if}}" data-index="{{index}}" style="filter: hue-rotate(calc(({{index}} / 8) * 75deg))"><i class="fear-token fas fa-skull"></i></a>{{/each}}
+                </div>
+                <div class="resource-bar"><progress class="progress-bar" value="6" max="8"></progress><span class="label">6 / 8</span></div>
+            </div>
+            {{/if}}
             {{#each settings}}
             <label class="dhet-set {{#if child}}child{{/if}} {{#if locked}}locked{{/if}}" {{#if parent}}data-parent="{{parent}}"{{/if}}>
                 <span class="dhet-set-text">
@@ -13,7 +21,15 @@
                 </span>
                 {{#if choices}}
                 <select class="dhet-set-select" name="{{key}}" {{disabled locked}}>
-                    {{#each choices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+                    {{#each choices}}
+                    {{#if group}}
+                    <optgroup label="{{group}}">
+                        {{#each options}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+                    </optgroup>
+                    {{else}}
+                    <option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>
+                    {{/if}}
+                    {{/each}}
                 </select>
                 {{else}}
                 <input type="checkbox" class="dhet-switch" name="{{key}}" {{checked checked}} {{disabled locked}} />

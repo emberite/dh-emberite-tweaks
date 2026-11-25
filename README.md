@@ -73,6 +73,22 @@ A separate tweak to the character sheet's sidebar, with its own switches:
 
 **Chat theme** puts chat messages in the Daggerheart Core Rulebook module's design, in the colours, fonts and faint cover art of one of its themes: the core theme or any campaign frame's (The Witherwild, Five Banners Burning, Beast Feast, The Age of Umbra, Motherboard, Colossus of the Drylands, and Hope & Fear's Castle High, Reign of the Weredragon, Dark Heart of Andaluria and Journey To Horizon). Rolls and the system's own chat cards follow the theme's colours. It reads the themes from the Core Rulebook module, so it needs that module, and themes other modules add to it show up too. Off by default.
 
+**Frosted glass** turns chat messages into tinted, see-through glass that blurs what is behind them. The tint follows the chat theme (a cool grey with the theme off), so it works with or without the Core Rulebook module. Off by default.
+
+### Fear tracker
+
+The **Fear & Canvas** tab restyles the system's own Fear tracker for everyone at the table. Every option starts on **System**, which leaves the tracker as the system draws it, and the tab shows a live preview before you save.
+
+- **Tracker style:** *Banner* draws the tokens as diamond pips on a dark bar with a gold rim and pointed ends, filled for each Fear the GM holds.
+- **Token colours:** a palette (Crimson, Ember, Gold, Emerald, Frost, Violet, Rose, Shadow), or the colours of the Core Rulebook's core theme or any campaign frame, Hope & Fear's included. Frame colours are read from the Core Rulebook module, so they need it.
+- **Token icon:** in place of the skull, a plain icon or one for each campaign frame (a leaf for The Witherwild, a flag for Five Banners Burning, a drumstick for Beast Feast, a ghost for The Age of Umbra, a microchip for Motherboard, a mountain for Colossus of the Drylands, a rook for Castle High, a dragon for Reign of the Weredragon, a heart for Dark Heart of Andaluria and a compass for Journey To Horizon).
+- **Token shape:** squircle, square or diamond.
+- **Glow at maximum Fear:** the tokens or bar pulse when Fear is full.
+
+### Range band names
+
+With **Name the range bands** on, the Daggerheart Core Rulebook module's range bands around a selected token get their names: Very Close, Close and Far just inside each ring, and Very Far just outside the last one. The names curve along the rings at the top, bottom and sides. They show and hide with the rings, following that module's own *Show Range Bands* setting, so the module is needed.
+
 ### Cards in chat
 
 With **Chat: show cards as cards** on, domain cards, subclasses, ancestries and communities sent to chat show as their real card (the one the system's tooltips show), with the message's buttons below.
@@ -130,10 +146,11 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 
 ## Settings
 
-**Configure Settings → Emberite Tweaks → Open settings** opens one window with three tabs. Every option is an on/off switch with its explanation (the chat theme is a choice), all on by default except the chat theme; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
+**Configure Settings → Emberite Tweaks → Open settings** opens one window with four tabs. Every option is an on/off switch or a choice with its explanation. Everything is on by default except the chat theme, frosted glass and the Fear tracker's looks, which start off or on the system's own; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
 
 - **Wizards:** full-screen character creation; full-screen level up (off brings back the system's own dialogs).
-- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; chat theme, show cards as cards in chat, right-click to post subclass, ancestry and community.
+- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; chat theme, frosted glass, show cards as cards in chat, right-click to post subclass, ancestry and community.
+- **Fear & Canvas:** the Fear tracker's style, token colours, icon and shape, and the glow at maximum Fear (with a live preview); range band names.
 - **Class Features:** show the class features drawer (each player decides for themselves), then each class's features: Brawler (Martial Stances panel, only one active stance, drop the stance on Severe damage), Warlock (Favor and Patron Die), Witch (Lunar Phases, Hex tracker), Assassin (Marked for Death, only one mark at a time, Toxic Concoctions), Guardian (Unstoppable Die), Wizard (Strange Patterns number).
 
 Only the GM can change the world options; players see them and can change their own.

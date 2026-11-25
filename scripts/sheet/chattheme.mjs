@@ -40,7 +40,7 @@ export function chatThemes() {
 }
 
 /** Read a sheet theme's --dh-c-* values (the core theme is the sheet without a theme class). */
-function readTheme(name) {
+export function readTheme(name) {
     const probe = document.createElement('div');
     const themed = name !== 'daggerheart-core' ? ` themed theme-${name}` : '';
     probe.className = `application sheet daggerheart dh-c-style theme-dark${themed}`;
@@ -66,6 +66,7 @@ export function applyChatTheme() {
     for (const v of VARS) root.style.removeProperty(`--dhet-chat-${v}`);
     const on = !!name && name !== 'none' && coreActive() && name in chatThemes();
     root.classList.toggle('dhet-chat-themed', on);
+    root.classList.toggle('dhet-chat-glass', !!game.settings.get(MODULE_ID, 'chatGlass'));
     if (!on) return;
     for (const [v, value] of Object.entries(readTheme(name))) {
         if (value) root.style.setProperty(`--dhet-chat-${v}`, v === 'cover-image' ? absoluteUrl(value) : value);
