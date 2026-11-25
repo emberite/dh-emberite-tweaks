@@ -21,7 +21,8 @@
   align-items: stretch;
   justify-content: flex-start;
   gap: 6px;
-  margin: 10px 12px 2px;
+  /* Pulled toward the stats row above and the thresholds below (the info section adds a 10px gap). */
+  margin: -4px 12px -4px;
 }
 .dhet-sidebar .resources-section > .dhet-res {
   display: flex;

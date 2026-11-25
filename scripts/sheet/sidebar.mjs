@@ -70,10 +70,10 @@ function restyle(app) {
         const row = document.createElement('div');
         row.className = 'dhet-stats';
         row.innerHTML = [
-            ['evasion', 'fa-solid fa-shield-halved', value(numbers[0]), L('Sheet.evasion')],
-            ['proficiency', 'fa-solid fa-hand-fist', value(numbers[numbers.length - 1]), L('Sheet.proficiency')]
+            ['evasion', value(numbers[0]), L('Sheet.evasion')],
+            ['proficiency', value(numbers[numbers.length - 1]), L('Sheet.proficiency')]
         ]
-            .map(([key, icon, v, label]) => `<div class="dhet-stat dhet-stat-${key}"><i class="${icon}"></i><strong>${v}</strong><small>${label}</small></div>`)
+            .map(([key, v, label]) => `<div class="dhet-stat dhet-stat-${key}"><strong>${v}</strong><small>${label}</small></div>`)
             .join('');
         info.prepend(row);
         status.classList.add('dhet-moved');
