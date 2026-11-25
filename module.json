@@ -2,7 +2,7 @@
   "id": "dh-emberite-tweaks",
   "title": "Emberite Tweaks",
   "description": "Quality-of-life tools for Daggerheart: a full-screen character creation wizard that lets you pick illustrated cards instead of dragging them, and a pull-out drawer on character sheets that automates class features the system leaves to the table (Brawler stances, Warlock Favor and Patron Die, Witch hexes and lunar phases, Assassin marks and poisons, the Guardian's Unstoppable Die). Each tool can be switched off on its own.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "compatibility": {
     "minimum": "14",
     "verified": "14.370"
@@ -16,7 +16,7 @@
   ],
   "url": "https://github.com/emberite/dh-emberite-tweaks",
   "manifest": "https://github.com/emberite/dh-emberite-tweaks/releases/latest/download/module.json",
-  "download": "https://github.com/emberite/dh-emberite-tweaks/releases/download/v0.2.0/module.zip",
+  "download": "https://github.com/emberite/dh-emberite-tweaks/releases/download/v0.3.0/module.zip",
   "bugs": "https://github.com/emberite/dh-emberite-tweaks/issues",
   "readme": "README.md",
   "license": "LICENSE",
