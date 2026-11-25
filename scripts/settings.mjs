@@ -3,6 +3,7 @@ import { L } from './actor.mjs';
 import { refreshDrawers } from './drawer.mjs';
 import { rerenderSheets } from './sheet/sidebar.mjs';
 import { rerenderChat } from './sheet/chatcards.mjs';
+import { applyChatTheme, chatThemes } from './sheet/chattheme.mjs';
 
 /**
  * Every option is a Boolean switch, kept out of Foundry's flat Configure Settings list and shown instead in one
@@ -27,7 +28,20 @@ export const LAYOUT = [
                     { key: 'loadoutRows', refresh: rerenderSheets }
                 ]
             },
-            { id: 'chat', settings: [{ key: 'chatCards', refresh: rerenderChat }, { key: 'headerToChat', refresh: () => {} }] }
+            {
+                id: 'chat',
+                settings: [
+                    {
+                        key: 'chatTheme',
+                        // A choice instead of a switch: off, or one of the Core Rulebook module's sheet themes.
+                        choices: () => ({ none: L('ChatTheme.Off'), ...chatThemes() }),
+                        default: 'none',
+                        refresh: applyChatTheme
+                    },
+                    { key: 'chatCards', refresh: rerenderChat },
+                    { key: 'headerToChat', refresh: () => {} }
+                ]
+            }
         ]
     },
     {
@@ -65,8 +79,8 @@ export function registerSettings() {
             hint: `DHET.Settings.${settingKey(s.key)}.Hint`,
             scope: s.client ? 'client' : 'world',
             config: false,
-            type: Boolean,
-            default: true,
+            type: s.choices ? String : Boolean,
+            default: s.default ?? true,
             onChange: s.refresh ?? refreshDrawers
         });
     }
@@ -125,7 +139,10 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
                         key: s.key,
                         name: L(`Settings.${settingKey(s.key)}.Name`),
                         hint: L(`Settings.${settingKey(s.key)}.Hint`),
-                        checked: value(s.key),
+                        checked: s.choices ? false : value(s.key),
+                        choices: s.choices
+                            ? Object.entries(s.choices()).map(([id, label]) => ({ id, label, selected: id === value(s.key) }))
+                            : null,
                         parent: s.parent ?? null,
                         child: !!s.parent,
                         // Players can only change their own (client) settings.
@@ -167,7 +184,7 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
         const gm = game.user.isGM;
         for (const s of ALL) {
             if (!s.client && !gm) continue;
-            const next = !!data[s.key];
+            const next = s.choices ? String(data[s.key] ?? s.default) : !!data[s.key];
             if (game.settings.get(MODULE_ID, s.key) !== next) await game.settings.set(MODULE_ID, s.key, next);
         }
         ui.notifications.info(L('SettingsMenu.Saved'));
@@ -176,6 +193,10 @@ export class SettingsMenu extends HandlebarsApplicationMixin(ApplicationV2) {
     /** Back to the defaults (everything on), in the form only: Save applies it. */
     static #onReset() {
         for (const input of this.element.querySelectorAll('input[type="checkbox"]:not(:disabled)')) input.checked = true;
+        for (const select of this.element.querySelectorAll('select:not(:disabled)')) {
+            const entry = ALL.find(x => x.key === select.name);
+            if (entry) select.value = entry.default;
+        }
         this.element.dispatchEvent(new Event('change', { bubbles: true }));
     }
 }

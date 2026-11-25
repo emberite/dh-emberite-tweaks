@@ -69,6 +69,10 @@ A separate tweak to the character sheet's sidebar, with its own switches:
 - **Loadout as a list:** the domain card loadout as rows in the Core Rulebook style (the domain's level banner, the card's art behind its name, a glow in the domain's colour) instead of a strip of card tiles.
 - Clicking a domain card's **name** in the loadout uses it, like clicking its image.
 
+### Chat themes
+
+**Chat theme** puts chat messages in the Daggerheart Core Rulebook module's design, in the colours, fonts and faint cover art of one of its themes: the core theme or any campaign frame's (The Witherwild, Five Banners Burning, Beast Feast, The Age of Umbra, Motherboard, Colossus of the Drylands, and Hope & Fear's Castle High, Reign of the Weredragon, Dark Heart of Andaluria and Journey To Horizon). Rolls and the system's own chat cards follow the theme's colours. It reads the themes from the Core Rulebook module, so it needs that module, and themes other modules add to it show up too. Off by default.
+
 ### Cards in chat
 
 With **Chat: show cards as cards** on, domain cards, subclasses, ancestries and communities sent to chat show as their real card (the one the system's tooltips show), with the message's buttons below.
@@ -126,10 +130,10 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 
 ## Settings
 
-**Configure Settings → Emberite Tweaks → Open settings** opens one window with three tabs. Every option is an on/off switch with its explanation, all on by default; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
+**Configure Settings → Emberite Tweaks → Open settings** opens one window with three tabs. Every option is an on/off switch with its explanation (the chat theme is a choice), all on by default except the chat theme; turn one off when the system starts doing the same thing. Options that depend on another sit under it and grey out while it's off.
 
 - **Wizards:** full-screen character creation; full-screen level up (off brings back the system's own dialogs).
-- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; show cards as cards in chat, right-click to post subclass, ancestry and community.
+- **Sheet & Chat:** full-width resources, show current/max numbers, loadout as a list; chat theme, show cards as cards in chat, right-click to post subclass, ancestry and community.
 - **Class Features:** show the class features drawer (each player decides for themselves), then each class's features: Brawler (Martial Stances panel, only one active stance, drop the stance on Severe damage), Warlock (Favor and Patron Die), Witch (Lunar Phases, Hex tracker), Assassin (Marked for Death, only one mark at a time, Toxic Concoctions), Guardian (Unstoppable Die), Wizard (Strange Patterns number).
 
 Only the GM can change the world options; players see them and can change their own.

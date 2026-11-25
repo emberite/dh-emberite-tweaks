@@ -1,0 +1,82 @@
+/* ==========================================================================
+   Emberite Tweaks: chat themes
+   Messages in the Core Rulebook module's design, in the colours, fonts and
+   cover art of the chosen sheet theme (copied onto <body> as --dhet-chat-*).
+   The system's own chat colours are variables, so they follow the theme too.
+   ========================================================================== */
+
+body.dhet-chat-themed .chat-message {
+  --ct-white: var(--dhet-chat-white, #f5f3f0);
+  --ct-accent: var(--dhet-chat-accent, #4d66b3);
+  --ct-deep: var(--dhet-chat-deep-accent, #0f1424);
+  --ct-bright: var(--dhet-chat-bright-accent, #adbfff);
+  --ct-gold: var(--dhet-chat-secondary, #d7c093);
+
+  /* The system's chat palette, pointed at the theme. */
+  --golden: var(--ct-gold);
+  --golden-10: hsl(from var(--ct-gold) h s l / 0.1);
+  --golden-40: hsl(from var(--ct-gold) h s l / 0.4);
+  --golden-60: hsl(from var(--ct-gold) h s l / 0.6);
+  --golden-90: hsl(from var(--ct-gold) h s l / 0.9);
+  --golden-bg: hsl(from var(--ct-gold) h s l / 0.1);
+  --golden-secondary: hsl(from var(--ct-gold) h s calc(l - 8));
+  --dark-golden: hsl(from var(--ct-gold) h s calc(l - 62));
+  --dark-blue: var(--ct-deep);
+  --dark-blue-10: hsl(from var(--ct-deep) h s l / 0.1);
+  --dark-blue-40: hsl(from var(--ct-deep) h s l / 0.4);
+  --dark-blue-60: hsl(from var(--ct-deep) h s l / 0.6);
+  --dark-blue-90: hsl(from var(--ct-deep) h s l / 0.9);
+  --semi-transparent-dark-blue: hsl(from var(--ct-deep) h s l / 0.35);
+  --color-text-primary: var(--ct-white);
+
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid hsl(from var(--ct-accent) h s l / 0.7);
+  border-top: 2px solid var(--ct-gold);
+  border-radius: 4px;
+  background: radial-gradient(circle at 50% 0%, hsl(from var(--ct-deep) h s calc(l + 6)), #0b0c0e 80%);
+  color: var(--ct-white);
+  font-family: var(--dhet-chat-font-body, 'Overpass'), var(--font-body, 'Signika'), sans-serif;
+  box-shadow: 0 0 8px hsl(from var(--ct-accent) h s l / 0.25);
+}
+
+/* The theme's cover art, faint, behind each message. */
+body.dhet-chat-themed .chat-message::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--dhet-chat-cover-image, none) var(--dhet-chat-cover-position, center top) / cover no-repeat;
+  opacity: calc(var(--dhet-chat-cover-opacity, 0.3) * 0.7);
+  mask-image: linear-gradient(180deg, black, transparent 85%);
+}
+
+body.dhet-chat-themed .chat-message .message-header .message-sender {
+  font-family: var(--dhet-chat-font-title, 'Lexend'), var(--dh-font-title, serif);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ct-gold);
+}
+body.dhet-chat-themed .chat-message .message-header .message-metadata,
+body.dhet-chat-themed .chat-message .message-header .message-timestamp {
+  color: hsl(from var(--ct-white) h s l / 0.6);
+}
+body.dhet-chat-themed .chat-message .message-header {
+  border-bottom: 1px solid hsl(from var(--ct-accent) h s l / 0.45);
+}
+body.dhet-chat-themed .chat-message .message-content {
+  color: var(--ct-white);
+}
+body.dhet-chat-themed .chat-message .message-content a.content-link,
+body.dhet-chat-themed .chat-message .message-content a.inline-roll {
+  border-color: hsl(from var(--ct-accent) h s l / 0.6);
+  background: hsl(from var(--ct-deep) h s calc(l + 8) / 0.8);
+  color: var(--ct-white);
+}
+/* Whispers and blind rolls keep a hint of the theme's bright accent. */
+body.dhet-chat-themed .chat-message.whisper {
+  border-color: var(--ct-bright);
+}

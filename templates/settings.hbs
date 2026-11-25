@@ -11,7 +11,13 @@
                     <strong>{{name}}{{#if client}} <span class="dhet-set-badge">{{localize "DHET.SettingsMenu.JustYou"}}</span>{{/if}}</strong>
                     <small>{{hint}}</small>
                 </span>
+                {{#if choices}}
+                <select class="dhet-set-select" name="{{key}}" {{disabled locked}}>
+                    {{#each choices}}<option value="{{id}}" {{#if selected}}selected{{/if}}>{{label}}</option>{{/each}}
+                </select>
+                {{else}}
                 <input type="checkbox" class="dhet-switch" name="{{key}}" {{checked checked}} {{disabled locked}} />
+                {{/if}}
             </label>
             {{/each}}
         </fieldset>

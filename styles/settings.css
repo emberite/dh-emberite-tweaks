@@ -109,3 +109,8 @@
   outline: 2px solid var(--color-warm-2, #e8a548);
   outline-offset: 2px;
 }
+
+.dhet-settings select.dhet-set-select {
+  flex: none;
+  width: 210px;
+}

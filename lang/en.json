@@ -249,6 +249,10 @@
       "HeaderToChat": {
         "Name": "Right-click to post subclass, ancestry and community",
         "Hint": "Right-click their names under the character's name on the sheet to send their card to chat. A subclass with specialization or mastery asks which one to send."
+      },
+      "ChatTheme": {
+        "Name": "Chat theme",
+        "Hint": "Chat messages in the Daggerheart Core Rulebook module's design, in the colours, fonts and cover art of its core theme or a campaign frame's (including those added by Hope & Fear). Needs the Core Rulebook module."
       }
     },
     "Wizard": {
@@ -466,6 +470,9 @@
     },
     "Chat": {
       "WhichStage": "Which {subclass} card do you want to send?"
+    },
+    "ChatTheme": {
+      "Off": "Off (Foundry's chat)"
     }
   }
 }
