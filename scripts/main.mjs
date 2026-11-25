@@ -5,6 +5,7 @@ import { PANELS, refreshDrawers, registerDrawer, toggleDrawer } from './drawer.m
 import { preloadTemplates } from './view.mjs';
 import { syncLunarEffects } from './panels/witch.mjs';
 import { openCreationWizard, openLevelUpWizard, registerWizard } from './wizard/register.mjs';
+import { registerSidebar, rerenderSheets } from './sheet/sidebar.mjs';
 
 /**
  * Load the stylesheet with a version query. Foundry links module CSS by bare path, and a caching proxy would
@@ -14,7 +15,7 @@ function loadStyles() {
     const version = game.modules.get(MODULE_ID)?.version ?? Date.now();
     const style = document.createElement('style');
     style.id = `${MODULE_ID}-styles`;
-    style.textContent = ['emberite-tweaks', 'wizard']
+    style.textContent = ['emberite-tweaks', 'wizard', 'sheet']
         .map(file => `@import url("modules/${MODULE_ID}/styles/${file}.css?v=${encodeURIComponent(version)}") layer(modules);`)
         .join('\n');
     document.head.append(style);
@@ -63,6 +64,18 @@ function registerSettings() {
             onChange: refreshDrawers
         });
     }
+    // Sheet sidebar layout: its own feature, with its own toggles.
+    for (const key of ['sheetSidebar', 'sheetSidebarNumbers', 'loadoutRows']) {
+        game.settings.register(MODULE_ID, key, {
+            name: `DHET.Settings.${settingKey(key)}.Name`,
+            hint: `DHET.Settings.${settingKey(key)}.Hint`,
+            scope: 'world',
+            config: true,
+            type: Boolean,
+            default: true,
+            onChange: rerenderSheets
+        });
+    }
     game.settings.register(MODULE_ID, 'drawerOpen', {
         scope: 'client',
         config: false,
@@ -76,6 +89,7 @@ Hooks.once('init', () => {
     registerSettings();
     registerDrawer();
     registerWizard();
+    registerSidebar();
     preloadTemplates();
 
     game.modules.get(MODULE_ID).api = {

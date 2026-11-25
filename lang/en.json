@@ -229,6 +229,18 @@
       "LevelUpWizard": {
         "Name": "Full-screen level up",
         "Hint": "Leveling up opens a full-screen wizard: click advancements and pick cards instead of ticking boxes and dragging. It applies the level with the system's own code. Turn off to use the system's dialog."
+      },
+      "SheetSidebar": {
+        "Name": "Sheet sidebar: full-width resources",
+        "Hint": "Hit Points, Stress and Armor Slots fill the sidebar's width with a heart, bolt and shield instead of text labels. Evasion and Proficiency move onto the portrait as badges."
+      },
+      "SheetSidebarNumbers": {
+        "Name": "Sheet sidebar: show current/max numbers",
+        "Hint": "Show the 3/6 numbers on the resource rows. When off they appear when you point at a row, so you can still type a value."
+      },
+      "LoadoutRows": {
+        "Name": "Sheet sidebar: loadout as a list",
+        "Hint": "Show the domain card loadout as a list of rows (card art, level banner, name) in the Core Rulebook style instead of a strip of card tiles."
       }
     },
     "Wizard": {
@@ -408,6 +420,13 @@
       "NewCards": "Your new domain cards",
       "CardsChosen": "{count} of {max} chosen",
       "CardsFull": "You've chosen {max} cards. Click a chosen card to swap it."
+    },
+    "Sheet": {
+      "hp": "Hit Points",
+      "stress": "Stress",
+      "armor": "Armor Slots",
+      "evasion": "Evasion",
+      "proficiency": "Proficiency"
     }
   }
 }

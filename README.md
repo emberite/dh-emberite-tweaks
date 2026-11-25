@@ -59,6 +59,15 @@ The review lists every level's choices next to the cards you chose, and **Level 
 
 ![The level-up review with the chosen cards](docs/screenshots/10-levelup-review.webp)
 
+## Sheet sidebar
+
+A separate tweak to the character sheet's sidebar, with its own switches:
+
+- **Full-width resources:** Hit Points, Stress and Armor Slots each take a full-width row, marked with a heart, a bolt and a shield instead of text labels. It works with both of the system's displays (bars and slots). Armor keeps its gear button for armor management.
+- **Current/max numbers** on those rows can be switched off; they then appear when you point at a row, so you can still type a value.
+- **Evasion and Proficiency** move onto the portrait as two shield badges.
+- **Loadout as a list:** the domain card loadout as rows in the Core Rulebook style (the domain's level banner, the card's art behind its name) instead of a strip of card tiles.
+
 ## Class features drawer
 
 The tab sits on the sheet's right edge and follows the window when you move, resize or minimise it. If the sheet is too close to the right side of the screen, the drawer opens on the left instead. Clicking the tab folds the drawer away; the next sheet you open remembers whether it was open. Only the character's owners and the GM see it.
@@ -113,6 +122,7 @@ The tab sits on the sheet's right edge and follows the window when you move, res
 Each tool and feature has its own world setting, all on by default. Turn one off when the system starts doing the same thing:
 
 - **Full-screen character creation**, **Full-screen level up**: off brings back the system's own dialogs.
+- **Sheet sidebar: full-width resources**, **show current/max numbers**, **loadout as a list**
 - **Show the class features drawer** (per player): hides the tab. The automations keep working.
 - **Brawler: Martial Stances**, **Brawler: one active stance**, **Brawler: drop stance on Severe damage**
 - **Warlock: Favor and Patron Die**

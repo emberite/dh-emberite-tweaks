@@ -1,0 +1,335 @@
+/* ==========================================================================
+   Emberite Tweaks: character sheet sidebar
+   Full-width Hit Points / Stress / Armor rows with icons, optional numbers,
+   Evasion and Proficiency as badges on the portrait, and the loadout as rows.
+   Colours follow the Core Rulebook theme variables when present.
+   ========================================================================== */
+
+.dhet-sidebar {
+  --dhet-sb-accent: var(--dh-c-accent, var(--golden, #f3c267));
+  --dhet-sb-gold: var(--dh-c-secondary, var(--golden, #f3c267));
+  --dhet-sb-bright: var(--dh-c-bright-accent, #adbfff);
+  --dhet-sb-deep: var(--dh-c-deep-accent, var(--dark-blue, #18162e));
+  --dhet-sb-text: var(--dh-c-white, #efe6d8);
+}
+
+/* ---------- full-width resource rows ---------- */
+.dhet-sidebar .info-section .resources-section,
+.dhet-sidebar .info-section.pip-display .resources-section {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 6px;
+  margin: 10px 12px 2px;
+}
+.dhet-sidebar .resources-section > .dhet-res {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+.dhet-res-icon {
+  flex: none;
+  width: 22px;
+  font-size: 18px;
+  text-align: center;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7));
+}
+.dhet-res-hp .dhet-res-icon {
+  color: #e2524f;
+}
+.dhet-res-stress .dhet-res-icon {
+  color: var(--dhet-sb-gold);
+}
+.dhet-res-armor .dhet-res-icon {
+  color: var(--dhet-sb-bright);
+}
+
+/* Bars: the progress bar fills its value box, so the box spans the row. */
+.dhet-sidebar .dhet-res .status-value {
+  flex: 1;
+  width: auto;
+  height: 28px;
+  padding: 0 8px;
+  font-size: 1.1rem;
+}
+.dhet-sidebar .dhet-res .status-value input[type='number'],
+.dhet-sidebar .dhet-res .status-value .bar-label {
+  font-size: 1.1rem;
+  height: 24px;
+  width: 34px;
+}
+.dhet-sidebar .dhet-res .progress-bar,
+.dhet-sidebar .dhet-res .progress-bar::-webkit-progress-bar,
+.dhet-sidebar .dhet-res .progress-bar::-webkit-progress-value {
+  border-radius: 6px;
+}
+.dhet-sidebar .dhet-res .progress-bar {
+  border-bottom: 1px solid var(--dhet-sb-accent);
+}
+/* Text labels give way to the icons. Armor keeps a small gear for armor management. */
+.dhet-sidebar .dhet-res-hp .status-label,
+.dhet-sidebar .dhet-res-stress .status-label,
+.dhet-sidebar .dhet-res-hp .slot-label .label,
+.dhet-sidebar .dhet-res-stress .slot-label .label,
+.dhet-sidebar .dhet-res-armor .status-label h4,
+.dhet-sidebar .dhet-res-armor .slot-label .label {
+  display: none;
+}
+.dhet-sidebar .dhet-res-armor .status-label,
+.dhet-sidebar .dhet-res-armor.status-bar .status-label {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+}
+.dhet-sidebar .dhet-res-armor.status-bar {
+  width: auto;
+}
+/* No armor equipped: a dash in a full-width box. */
+.dhet-sidebar .dhet-res-armor.status-number {
+  flex-direction: row;
+  width: auto;
+}
+.dhet-sidebar .dhet-res-armor.status-number .status-value {
+  flex: 1;
+  width: auto;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid var(--dhet-sb-accent);
+}
+.dhet-sidebar .dhet-res-armor.status-number .status-label {
+  display: none;
+}
+
+/* Pips: the pip row spans the width; the value sits at its end. */
+.dhet-sidebar .dhet-res .slot-value {
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  width: auto;
+  height: auto;
+}
+.dhet-sidebar .dhet-res .slot-bar,
+.dhet-sidebar aside[data-application-part='sidebar'] .resources-section .slot-bar {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: auto;
+  border-radius: 6px;
+}
+.dhet-sidebar .dhet-res .slot-bar .slot:not(:has(i)) {
+  flex: 1;
+  max-width: 34px;
+}
+.dhet-sidebar .dhet-res .slot-label {
+  width: auto;
+  border-radius: 6px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.dhet-sidebar .dhet-res .slot-label .value {
+  border-left: none;
+  padding-left: 0;
+}
+
+/* Numbers off: hidden until you point at the row (they stay editable). */
+.dhet-sidebar:not(.dhet-sidebar-numbers) .dhet-res .status-value > :not(progress) {
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.dhet-sidebar:not(.dhet-sidebar-numbers) .dhet-res:hover .status-value > :not(progress),
+.dhet-sidebar:not(.dhet-sidebar-numbers) .dhet-res .status-value:focus-within > :not(progress) {
+  opacity: 1;
+}
+.dhet-sidebar:not(.dhet-sidebar-numbers) .dhet-res .slot-label .value {
+  display: none;
+}
+.dhet-sidebar:not(.dhet-sidebar-numbers) .dhet-res-hp .slot-label,
+.dhet-sidebar:not(.dhet-sidebar-numbers) .dhet-res-stress .slot-label {
+  display: none;
+}
+
+/* Evasion and Proficiency moved to the portrait. */
+.dhet-sidebar .status-section.dhet-moved {
+  display: none;
+}
+.dhet-sidebar .portrait {
+  position: relative;
+}
+.dhet-badges {
+  position: absolute;
+  left: 6px;
+  right: 6px;
+  bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  pointer-events: none;
+  z-index: 3;
+}
+.dhet-badge {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.7));
+}
+.dhet-badge-shield {
+  width: 48px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  padding-bottom: 6px;
+  color: var(--dhet-sb-text);
+  background: var(--dh-c-trait-shield-icon, none) center / contain no-repeat;
+}
+/* Without the Core Rulebook's shield art, a plain shield shape. */
+.dhet-sidebar:not(:is(.dh-c-style *)) .dhet-badge-shield {
+  background: var(--dhet-sb-deep);
+  border: 2px solid var(--dhet-sb-gold);
+  clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%);
+}
+.dhet-badge strong {
+  font-size: 1.35rem;
+  line-height: 1;
+  font-weight: 800;
+}
+.dhet-badge small {
+  margin-top: -3px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--dhet-sb-accent);
+  color: var(--dh-c-resources-label-color, var(--dhet-sb-text));
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ---------- loadout as rows (Core Rulebook look) ---------- */
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list {
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  gap: 6px;
+  margin: 0.5rem 0.5rem;
+  padding: 0;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 8px;
+  min-height: 46px;
+  height: auto;
+  padding: 4px 8px 4px 0;
+  flex: none;
+  overflow: hidden;
+  border: 1px solid var(--dh-c-deep-accent, #0f1424);
+  border-top: 3px solid var(--dh-c-secondary, var(--golden, #f3c267));
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(90deg, hsl(from var(--domain-color, #555) h s calc(l - 25)), hsl(from var(--dh-c-deep-accent, #0f1424) h s l / 0.9) 55%);
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item::after {
+  /* The card art as a faded band on the right. */
+  content: '';
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: auto;
+  right: 0;
+  width: 62%;
+  height: auto;
+  translate: none;
+  animation: none;
+  opacity: 0.6;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--dhet-card-art, none) center 30% / cover no-repeat;
+  mask-image: linear-gradient(90deg, transparent, black 60%);
+}
+/* The level banner, as on the Core Rulebook's card tiles, sits at the row's start. */
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item::before {
+  position: relative;
+  left: auto;
+  translate: none;
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  width: 32px;
+  height: 40px;
+  margin-left: 6px;
+  padding-top: 0.35em;
+  font-size: 0.85rem;
+  aspect-ratio: auto;
+}
+/* Card art as a faded band behind the name. */
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item .img-portrait {
+  /* Kept as an invisible click target over the level banner (it uses the card). */
+  grid-row: 1 / span 2;
+  grid-column: 1;
+  position: relative;
+  opacity: 0;
+  z-index: 3;
+  border-radius: 0;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item .img-portrait img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: center 30%;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item .img-portrait .roll-img {
+  display: none;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item > :not(.img-portrait) {
+  position: relative;
+  z-index: 1;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item .item-name {
+  grid-column: 2;
+  grid-row: 1;
+  display: block;
+  position: relative;
+  inset: auto;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--dh-c-white, #efe6d8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+  background: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  writing-mode: horizontal-tb;
+  transform: none;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item .item-labels {
+  grid-column: 2;
+  grid-row: 2;
+  display: flex;
+  position: relative;
+  inset: auto;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+.application.sheet.daggerheart .character-sidebar-sheet.dhet-loadout-rows.dhet-loadout-rows .loadout-section ul.items-sidebar-list li.inventory-item .controls {
+  grid-column: 3;
+  grid-row: 1 / span 2;
+  display: flex;
+  position: relative;
+  inset: auto;
+  gap: 6px;
+  opacity: 1;
+}
